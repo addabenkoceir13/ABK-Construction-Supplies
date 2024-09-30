@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\Debt\DebtController;
+use App\Http\Controllers\Subcategory\SubcategoryController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -40,6 +42,8 @@ Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboa
 Route::group(['middleware' => ['auth']], function () {
 
   Route::resource('building-materals', CategoryController::class);
+  Route::resource('debt', DebtController::class);
+  Route::resource('subcategory', SubcategoryController::class);
 
 
 
@@ -50,7 +54,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-  
 
   Route::get('/layouts/without-menu', 'App\Http\Controllers\layouts\WithoutMenu@index')->name('layouts-without-menu');
   Route::get('/layouts/without-navbar', 'App\Http\Controllers\layouts\WithoutNavbar@index')->name('layouts-without-navbar');

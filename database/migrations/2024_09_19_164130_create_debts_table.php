@@ -16,8 +16,15 @@ return new class extends Migration
         Schema::create('debts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('supplier_id')->constrained('suppliers')->cascadeOnDelete();
             $table->string('fullname');
-            $table->string('number');
+            $table->string('phone');
+            $table->date('date_debut_debt');
+            $table->decimal('total_debt_amount', 20, 2)->nullable();
+            $table->decimal('rest_debt_amount', 20, 2)->nullable();
+            $table->date('date_end_debt')->nullable();
+            $table->enum('status',['paid', 'unpaid'])->default('unpaid');
+            $table->longText('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

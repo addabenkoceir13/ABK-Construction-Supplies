@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Account settings - Account')
+@section('title', __('Building Materials'))
 
 @section('content')
 <h4 class="fw-bold py-3 mb-4">

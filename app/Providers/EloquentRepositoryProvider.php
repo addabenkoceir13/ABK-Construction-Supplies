@@ -8,6 +8,8 @@ use App\Repositories\Debt\DebtRepository;
 use App\Repositories\Debt\EloquentDebt;
 use App\Repositories\DebtProduct\DebtProductRepository;
 use App\Repositories\DebtProduct\EloquentDebtProduct;
+use App\Repositories\Supplier\EloquentSupplier;
+use App\Repositories\Supplier\SupplierRepository;
 use Illuminate\Support\ServiceProvider;
 
 class EloquentRepositoryProvider extends ServiceProvider
@@ -22,6 +24,7 @@ class EloquentRepositoryProvider extends ServiceProvider
       $this->app->bind(CategoryRepository::class, EloquentCategory::class);
       $this->app->bind(DebtRepository::class, EloquentDebt::class);
       $this->app->bind(DebtProductRepository::class, EloquentDebtProduct::class);
+      $this->app->bind(SupplierRepository::class, EloquentSupplier::class);
     }
 
     /**

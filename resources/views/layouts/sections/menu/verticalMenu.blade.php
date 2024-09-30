@@ -8,7 +8,7 @@
               {{-- @include('_partials.macros',["width"=>25,"withbg"=>'#696cff']) --}}
           </span>
           <span class="app-brand-text demo menu-text fw-bold text-capitalize ms-2">
-              {{ config('app.locale') == 'en' ? "MohAdda" : "محمد عدة"  }}
+              {{ config('app.locale') == 'en' ? config('variables.NameSiteFr') : config('variables.NameSiteAr')  }}
           </span>
       </a>
 
@@ -34,11 +34,17 @@
 
       <li class="menu-item {{ request()->routeIs('building-materals.index') ? 'active' : '' }}">
         <a href="{{ route('building-materals.index') }}" class="menu-link">
-            {{-- <i class="menu-icon tf-icons bx bx-collection"></i> --}}
             <i class='menu-icon bx bx-cube-alt'></i>
             <div>{{ __('Building Materials') }}</div>
         </a>
-    </li>
+      </li>
+
+      <li class="menu-item {{ str_contains(request()->route()->getName(),'debt') ? 'active' : '' }} ">
+        <a href="{{ route('debt.index') }}" class="menu-link">
+            <i class='menu-icon bx bx-credit-card-front'></i>
+            <div>{{ __('Debts') }}</div>
+        </a>
+      </li>
 
       <li class="menu-item {{ str_contains(request()->route()->getName(),'layouts') ? 'active open' : '' }}">
         <a class="menu-link menu-toggle" >

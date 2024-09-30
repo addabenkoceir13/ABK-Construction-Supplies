@@ -3,11 +3,11 @@
 namespace App\Repositories\Debt;
 
 use App\Models\Debt;
-use App\Repositories\DebtProduct\DebtProductRepository;
+use App\Repositories\Debt\DebtRepository;
 
 
 
-class EloquentDebt implements DebtProductRepository
+class EloquentDebt implements DebtRepository
 {
     /**
      * {@inheritdoc}

@@ -16,7 +16,7 @@ class DebtProduct extends Model
         'name',
         'quantity',
         'amount',
-        'total_amount',
+        'date_debt',
         'status',
     ];
 

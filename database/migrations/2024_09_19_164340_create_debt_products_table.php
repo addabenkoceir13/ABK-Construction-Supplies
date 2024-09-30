@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('quantity');
             $table->decimal('amount', 20, 2);
-            $table->decimal('total_amount', 20, 2);
+            $table->date('date_debt');
             $table->enum('status', [1,0])->default(0);
             $table->timestamps();
             $table->softDeletes();
