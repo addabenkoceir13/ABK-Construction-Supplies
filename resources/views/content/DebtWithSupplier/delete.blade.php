@@ -5,7 +5,7 @@
         <h5 class="modal-title" id="exampleModalLabel1">{{ __('Delete  debt') }} | {{ $debt->fullname }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ route('debt.destroy',  $debt->id) }}" method="POST">
+      <form action="{{ route('debt-supplier.destroy',  $debt->id) }}" method="POST">
         @csrf
         @method('DELETE')
         <div class="modal-body">

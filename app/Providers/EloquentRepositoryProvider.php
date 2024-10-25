@@ -8,6 +8,8 @@ use App\Repositories\Debt\DebtRepository;
 use App\Repositories\Debt\EloquentDebt;
 use App\Repositories\DebtProduct\DebtProductRepository;
 use App\Repositories\DebtProduct\EloquentDebtProduct;
+use App\Repositories\SubCategories\EloquentSubCategory;
+use App\Repositories\SubCategories\SubCategoryRepository;
 use App\Repositories\Supplier\EloquentSupplier;
 use App\Repositories\Supplier\SupplierRepository;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +24,7 @@ class EloquentRepositoryProvider extends ServiceProvider
     public function register()
     {
       $this->app->bind(CategoryRepository::class, EloquentCategory::class);
+      $this->app->bind(SubCategoryRepository::class, EloquentSubCategory::class);
       $this->app->bind(DebtRepository::class, EloquentDebt::class);
       $this->app->bind(DebtProductRepository::class, EloquentDebtProduct::class);
       $this->app->bind(SupplierRepository::class, EloquentSupplier::class);

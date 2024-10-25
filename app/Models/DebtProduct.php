@@ -13,7 +13,8 @@ class DebtProduct extends Model
 
     protected $fillable = [
         'debt_id',
-        'name',
+        'subcategory_id',
+        'name_category',
         'quantity',
         'amount',
         'date_debt',
@@ -23,5 +24,10 @@ class DebtProduct extends Model
     public function getDebt()
     {
         return $this->belongsTo(Debt::class);
+    }
+
+    public function getSubcategory()
+    {
+      return $this->belongsTo(Subcategory::class);
     }
 }

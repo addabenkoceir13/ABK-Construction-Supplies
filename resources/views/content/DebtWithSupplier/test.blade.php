@@ -34,7 +34,7 @@
                 <label for="phone" class="form-label">{{ __('Phone') }}</label>
                 <div class="input-group input-group-merge">
                   <span id="basic-icon-default-phone2" class="input-group-text"><i class="bx bx-phone"></i></span>
-                  <input dir="rtl" type="tel" id="phone" name="phone"  class="form-control phone-mask @error('phone') is-invalid @enderror" value="{{ $debt->phone }}" />
+                  <input type="tel" id="phone" name="phone"  class="form-control phone-mask @error('phone') is-invalid @enderror" value="{{ $debt->phone }}" />
                 </div>
                 @error('phone')
                   <span class="alert alert-danger " role="alert">
@@ -46,7 +46,7 @@
                 <label for="date_debut_debt" class="form-label">{{ __('Date Debut Debt') }}</label>
                 <div class="input-group input-group-merge">
                   <span id="basic-icon-default-phone2" class="input-group-text"><i class='bx bx-calendar-check'></i></span>
-                  <input dir="rtl" type="date" id="date_debut_debt" name="date_debut_debt"  class="form-control @error('date_debut_debt') is-invalid @enderror" min="2020-01-01" value="{{ $debt->date_debut_debt }}" />
+                  <input type="date" id="date_debut_debt" name="date_debut_debt"  class="form-control @error('date_debut_debt') is-invalid @enderror" min="2020-01-01" value="{{ $debt->date_debut_debt }}" />
                 </div>
                 @error('date_debut_debt')
                   <span class="alert alert-danger" role="alert">
@@ -73,21 +73,16 @@
                     <input type="hidden" name="id[]" value="{{ $item->id }}">
                     <div class="col-md-3 mb-3">
                       <label for="name-product" class="form-label">{{ __('Name Product') }}</label>
-                      <select id="name-product-edit-{{ $item->id }}" class="form-select name-product" name="name_product[]" required>
-                        <option value="{{ $item->name_category }}" selected>{{ $item->name_category }}</option>
+                      <select id="name-product" class="form-select" name="name_product[]" required>
+                        <option value="{{ $item->name }}" selected>{{ $item->name }}</option>
                         @foreach ($categories as $category)
-                          <option value="{{ $category->name }}" data-id="{{ $category->id }}" >{{ $category->name }}</option>
+                          <option value="{{ $category->name }}">{{ $category->name }}</option>
                         @endforeach
                       </select>
                     </div>
                     <div class="col-md-3 mb-3">
-                      <div class="col-md-12" id="empty-quantity-{{ $item->id }}">
-                        <input type="hidden"  name="subcategory_ids[]" value="{{ $item->subcategory_id  }}" >
-                        <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                        <input type="text" id="quantity" step="0.01" name="quantity[]" class="form-control disabled" min="0" value="{{ $item->quantity }}" >
-                      </div>
-                      <div id="inpute-edit-{{ $item->id }}" class="inpute-edit col-md-12">
-                      </div>
+                      <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
+                      <input type="number" id="quantity" name="quantity[]" class="form-control" min="0" value="{{ $item->quantity }}" required>
                     </div>
                     <div class="col-md-3 mb-3">
                       <label for="amount_due" class="form-label">{{ __('Amount Due') }}</label>
@@ -125,6 +120,7 @@
 @endsection
 
 @section('page-script')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 {{-- ! js for model modify (edit.blade.php) in order to add inputs --}}
 <script>
@@ -133,18 +129,20 @@
       $(document).on('click', '[id^=add-product-edit-]', function() {
           let debtId = $(this).attr('id').split('-').pop(); // Extract the debt id from the button's ID
           let productRowEdit = `
-          <div class="row g-1 product-row-new-edit">
+          <div class="row g-1 product-row-edit">
             <input type="hidden" name="id[]" value="0">
               <div class="col-md-3 mb-3">
                   <label class="form-label">{{ __('Name Product') }}</label>
-                  <select id="name-product" class="form-select name-product" name="name_product[]" required>
+                  <select class="form-select" name="name_product[]" required>
                       <option value="">{{ __('Choose a product') }}</option>
                       @foreach ($categories as $category)
-                        <option value="{{ $category->name }}" data-id="{{ $category->id }}">{{ $category->name }}</option>
+                        <option value="{{ $category->name }}">{{ $category->name }}</option>
                       @endforeach
                   </select>
               </div>
-              <div id="inpute-new-edit" class="col-md-3 mb-3 inpute-new-edit">
+              <div class="col-md-3 mb-3">
+                  <label class="form-label">{{ __('Quantity') }}</label>
+                  <input type="number" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
               </div>
               <div class="col-md-3 mb-3">
                   <label class="form-label">{{ __('Amount Due') }}</label>
@@ -173,114 +171,6 @@
       $(document).on('click', '.remove-row-edit', function() {
           $(this).closest('.product-row-edit').remove();
       });
-
-      $(document).on('change', '[id^=name-product-edit-]', function() {
-          let debtId = $(this).attr('id').split('-').pop(); // Extract the debt id from the button's ID
-          var selectedOption = $(this).find('option:selected');
-          var id = selectedOption.data('id');
-          var name = $(this).val();
-
-
-          $(this).closest('.product-row-edit').find('#inpute-edit-'+ debtId).empty();
-
-          $.ajax({
-            url: '{{ route('subcategory.show', '01') }}',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type:'GET',
-            data: { id: id },
-            dataType: 'JSON',
-            success:function(response){
-              $(this).closest('.product-row-edit').find('#empty-quantity-'+ debtId).remove();
-                if (response.data[0].input_type == 'number') {
-                    let InputCreate = `
-                        <div>
-                            <input type="hidden"  name="subcategory_ids[]" value="${response.data[0].id}" >
-                            <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                            <input type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
-                        </div>
-                    `;
-                    $(this).closest('.product-row-edit').find('#inpute-edit-'+ debtId).append(InputCreate);
-                } else {
-                    let datas = response.data;
-                    let InputCreate = `
-                        <input type="hidden"  name="subcategory_ids[]"  class="subcategory_id-${debtId}" id="subcategory_id-${debtId}" >
-                        <label class="form-label">{{ __('Quantity') }}</label>
-                        <select class="form-select" name="quantity[]" id="subcategory-${debtId}" required>
-                            <option value="">{{ __('Choose a quantity') }}</option>
-                    `;
-                    for (let index = 0; index < datas.length; index++) {
-                        InputCreate += `<option value="${datas[index].name}" data-id="${datas[index].id}" >${datas[index].name}</option>`;
-                    }
-                    InputCreate += `</select>`;
-                    $(this).closest('.product-row-edit').find('#inpute-edit-'+ debtId).append(InputCreate);
-                }
-            }.bind(this) // Bind the correct context for "this"
-          });
-
-      });
-
-      $(document).on('change', '[id^=subcategory-]', function() {
-        let debtId = $(this).attr('id').split('-').pop(); // Extract the debt id from the button's ID
-        var selectedOption = $(this).find('option:selected');
-        var id = selectedOption.data('id');
-        var name = $(this).val();
-        $(this).closest('.product-row-edit').find('#subcategory_id-'+ debtId).val(id);
-      });
-
-
-      $(document).on('change', '#name-product', function() {
-        var selectedOption = $(this).find('option:selected');
-        var id = selectedOption.data('id');
-        var name = $(this).val();
-
-        // Clear the existing inputs before adding new ones
-        $(this).closest('.product-row-new-edit').find('.inpute-new-edit').empty();
-
-        $.ajax({
-          url: '{{ route('subcategory.show', '01') }}',
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-          type:'GET',
-          data: { id: id },
-          dataType: 'JSON',
-          success:function(response){
-              if (response.data[0].input_type == 'number') {
-                  let InputCreate = `
-                      <div>
-                          <input type="hidden"  name="subcategory_ids[]" value="${response.data[0].id}" >
-                          <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                          <input type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
-                      </div>
-                  `;
-                  $(this).closest('.product-row-new-edit').find('.inpute-new-edit').append(InputCreate);
-              } else {
-                  let datas = response.data;
-                  let InputCreate = `
-                      <input type="hidden"  name="subcategory_ids[]"  class="subcategory_id" id="subcategory_id" value="">
-                      <label class="form-label">{{ __('Quantity') }}</label>
-                      <select class="form-select" name="quantity[]" id="subcategory" required>
-                          <option value="">{{ __('Choose a quantity') }}</option>
-                  `;
-                  for (let index = 0; index < datas.length; index++) {
-                      InputCreate += `<option value="${datas[index].name}" data-id="${datas[index].id}" >${datas[index].name}</option>`;
-                  }
-                  InputCreate += `</select>`;
-                  $(this).closest('.product-row-new-edit').find('.inpute-new-edit').append(InputCreate);
-              }
-          }.bind(this) // Bind the correct context for "this"
-        });
-      });
-
-      $(document).on('change', '#subcategory', function() {
-        var selectedOption = $(this).find('option:selected');
-        var id = selectedOption.data('id');
-        var name = $(this).val();
-        $(this).closest('.product-row-new-edit').find('.subcategory_id').val(id);
-      });
-
   });
 </script>
 @endsection

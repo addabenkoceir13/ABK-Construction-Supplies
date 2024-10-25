@@ -13,12 +13,13 @@
       {{ __('Add Debt') }}
     </button>
   </h5>
-  @include('content.Debt.create')
+  @include('content.DebtWithSupplier.create')
   <div class="table-responsive text-nowrap">
     <table id="datatable-debt" class="table table-hover is-stripedt">
       <thead>
           <tr>
               <th >#</th>
+              <th >{{ __('Supplier') }}</th>
               <th >{{ __('Name') }}</th>
               <th >{{ __('Phone') }}</th>
               <th >{{ __('Debts') }}</th>
@@ -32,6 +33,7 @@
         @foreach ($debts as $debt)
           <tr>
             <td>{{ $loop->iteration }}</td>
+            <td>{{ $debt->getSupplier->fullname }}</td>
             <td>{{ $debt->fullname }}</td>
             <td>{{ $debt->phone }}</td>
             <td>
@@ -72,10 +74,10 @@
               @endif
             </td>
             <td>
-              <a href="{{ route('debt.show', $debt->id) }}" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-show me-1'></i> <span>{{ __('View Debt') }}</span>">
+              <a href="{{ route('debt-supplier.show', $debt->id) }}" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-show me-1'></i> <span>{{ __('View Debt') }}</span>">
                 <span class="badge bg-label-info"><i class='bx bx-show me-1'></i></span>
               </a>
-              <a href="{{ route('debt.edit', $debt->id) }}" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-edit bx-xs' ></i> <span>{{ __('Modify Debt') }}</span>">
+              <a href="{{ route('debt-supplier.edit', $debt->id) }}" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-edit bx-xs' ></i> <span>{{ __('Modify Debt') }}</span>">
                 <span class="badge bg-label-success"><i class="bx bx-edit-alt me-1"></i></span>
               </a>
               <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalDeleteDebt{{ $debt->id }}">
@@ -88,8 +90,8 @@
               </a>
             </td>
           </tr>
-          @include('content.Debt.delete')
-          @include('content.Debt.payDebt')
+          @include('content.DebtWithSupplier.delete')
+          @include('content.DebtWithSupplier.payDebt')
         @endforeach
       </tbody>
       <tfoot>

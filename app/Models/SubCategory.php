@@ -11,15 +11,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SubCategory extends Model
 {
     use HasFactory, SoftDeletes, SoftCascadeTrait;
-
+    protected $table = 'subcategories';
     protected $fillable = [
-      'name',
-      'type',
       'category_id',
+      'name',
+      'input_type',
     ];
 
-    public function  category(): BelongsTo
+    public function  getCategory(): BelongsTo
     {
-      return $this->belongsTo(category::class);
+      return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function getDebtProducts()
+    {
+      return $this->hasMany(DebtProduct::class);
     }
 }

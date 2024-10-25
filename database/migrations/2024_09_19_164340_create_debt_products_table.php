@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('debt_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('debt_id')->constrained('debts')->cascadeOnDelete();
-            $table->string('name');
-            $table->integer('quantity');
+            $table->foreignId('subcategory_id')->constrained('subcategories')->cascadeOnDelete();
+            $table->string('name_category');
+            $table->string('quantity');
             $table->decimal('amount', 20, 2);
             $table->date('date_debt');
             $table->enum('status', [1,0])->default(0);

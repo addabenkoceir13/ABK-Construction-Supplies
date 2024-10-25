@@ -10,6 +10,8 @@ interface DebtRepository
      */
     public function all();
 
+    public function getSupplier();
+
     /**
      * {@inheritdoc}
      */

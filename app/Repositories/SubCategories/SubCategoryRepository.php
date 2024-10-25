@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\Supplier;
+namespace App\Repositories\SubCategories;
 
-interface SupplierRepository
+interface SubCategoryRepository
 {
     /**
      * Get all available Coupon.
@@ -10,13 +10,12 @@ interface SupplierRepository
      */
     public function all();
 
-    public function SelectSupplier();
-    
-    public function SupplierActive();
     /**
      * {@inheritdoc}
      */
     public function find($id);
+
+    public function get($id);
 
     /**
      * {@inheritdoc}

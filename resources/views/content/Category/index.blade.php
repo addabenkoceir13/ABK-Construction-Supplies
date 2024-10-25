@@ -31,16 +31,15 @@
             <td>{{ $category->name }}</td>
             <td>{{ $category->created_at->format('d-m-Y') }}</td>
             <td>
+              @include('content.Category.edit')
               <a  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalEditBuilding{{ $category->id }}">
                 <span class="badge bg-label-success"><i class="bx bx-edit-alt me-1"></i></span>
               </a>
-              <a  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalDeleteBuilding{{ $category->id }}">
+              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalDeleteBuilding{{ $category->id }}">
                 <span class="badge bg-label-danger"><i class="bx bx-trash me-1"></i></span>
               </a>
             </td>
         </tr>
-        @include('content.Category.edit')
-        @include('content.Category.destroy')
         @endforeach
       </tbody>
       <tfoot>
@@ -80,8 +79,9 @@
                 });
             });
     }
-});
-
+  });
 </script>
 @endsection
+
+
 

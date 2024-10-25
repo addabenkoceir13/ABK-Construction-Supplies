@@ -7,12 +7,26 @@
         <h5 class="modal-title" id="modalCenterTitle">{{ __('Add Debt') }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ route('debt.store') }}" method="POST">
+      <form action="{{ route('debt-supplier.store') }}" method="POST">
         @csrf
         <div class="modal-body">
           <div class="row">
-            <input type="hidden" name="supplier_id" value="{{ $supplier->id }}">
+
             <div class="row g-2">
+              <div class="col-md-6 mb-3">
+                <label for="name-product" class="form-label">{{ __('Supplier') }}</label>
+                  <select class="form-select" name="supplier_id" required>
+                    <option value="">{{ __('Choose a Supplier') }}</option>
+                    @foreach ($suppliers as $supplier)
+                      <option value="{{ $supplier->id }}" >{{ $supplier->fullname }}</option>
+                    @endforeach
+                  </select>
+                  @error('fullname')
+                    <span class="alert alert-danger " role="alert">
+                      {{ $message }}
+                    </span>
+                  @enderror
+              </div>
               <div class="col-md-6 mb-3">
                 <label for="fullname" class="form-label">{{ __('Customer Name') }}</label>
                 <div class="input-group input-group-merge">

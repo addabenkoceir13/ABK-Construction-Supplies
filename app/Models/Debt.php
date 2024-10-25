@@ -18,6 +18,7 @@ class Debt extends Model
       'phone',
       'date_debut_debt',
       'total_debt_amount',
+      'debt_paid',
       'rest_debt_amount',
       'date_end_debt',
       'status',
@@ -30,4 +31,11 @@ class Debt extends Model
     {
         return $this->hasMany(DebtProduct::class);
     }
+
+    public function getSupplier()
+    {
+      return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+
+
 }

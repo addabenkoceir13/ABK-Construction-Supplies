@@ -12,7 +12,7 @@
   <div class="card mb-4">
     <h5 class="card-header">{{ __('Modify Debt') }}</h5>
     <div class="card-body">
-      <form action="{{ route('debt.update', $debt->id) }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('debt-supplier.update', $debt->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
         <div class="modal-body">

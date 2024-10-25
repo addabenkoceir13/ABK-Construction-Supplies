@@ -1,5 +1,5 @@
 <!-- Modal 1-->
-<div class="modal fade" id="modalDeleteBuilding{{ $category->id }}" aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modalDeleteBuilding{{ $category->id }}" aria-labelledby="modalToggleLabel" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -13,7 +13,8 @@
           {{ __('Do you really want to delete this material?') }}
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-outline-danger" data-bs-target="#modalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">{{ __('Delete') }}</button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
+          <button type="submit" class="btn btn-outline-danger">{{ __('Delete') }}</button>
         </div>
       <form>
     </div>

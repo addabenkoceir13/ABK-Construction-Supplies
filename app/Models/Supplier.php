@@ -16,4 +16,9 @@ class Supplier extends Model
       'phone',
       'status',
   ];
+
+  public function debts()
+  {
+      return $this->hasMany(Debt::class);
+  }
 }

@@ -10,10 +10,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Category extends Model
 {
     use HasFactory, SoftDeletes, SoftCascadeTrait;
-
+    protected $table = 'categories';
     protected $fillable = [
       'name',
     ];
 
-    
+    public function getSubcategories()
+    {
+      return $this->hasMany(SubCategory::class);
+    }
+
+
 }

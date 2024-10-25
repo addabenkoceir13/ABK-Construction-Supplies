@@ -16,6 +16,11 @@ class EloquentDebt implements DebtRepository
     {
         return Debt::all();
     }
+
+    public function getSupplier()
+    {
+        return Debt::where('supplier_id', '!=', '1')->orderBy('id', 'DESC')->get();
+    }
     /**
      * {@inheritdoc}
      */

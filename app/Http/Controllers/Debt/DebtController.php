@@ -63,6 +63,7 @@ class DebtController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+      // dd($request->all());
         $validator = Validator::make($request->all(), [
             'fullname'  => ['required','string','max:255'],
             'phone'     => ['required','numeric'],
@@ -80,6 +81,7 @@ class DebtController extends Controller
             $quantities = $request->input('quantity');
             $amounts    = $request->input('amount_due');
             $dateDebts  = $request->input('date_debt');
+            $subcategoryIds  = $request->input('subcategory_ids');
             $total      = 0;
 
             $dataDebt = array_replace( [
@@ -97,6 +99,7 @@ class DebtController extends Controller
 
             foreach ($products as $index => $product) {
               // Process each product, quantity, and amount
+                $subcategory_id  = $subcategoryIds[$index];
                 $quantity  = $quantities[$index];
                 $amount    = $amounts[$index];
                 $dateDebt  = $dateDebts[$index];
@@ -104,7 +107,8 @@ class DebtController extends Controller
 
                 $dataDebtProduct = array_replace( [
                     'debt_id'   => $debt->id,
-                    'name'      => $products[$index],
+                    'subcategory_id'   => $subcategory_id,
+                    'name_category'      => $products[$index],
                     'quantity'  => $quantity,
                     'amount'    => $amount,
                     'date_debt' => $dateDebt,
@@ -115,6 +119,7 @@ class DebtController extends Controller
 
             $dataDebtTotal = array_replace( [
                 'total_debt_amount' => $total,
+                'rest_debt_amount' => $total,
             ]);
 
             $this->debt->update($debt->id, $dataDebtTotal);
@@ -170,6 +175,7 @@ class DebtController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         // dd($request->all());
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'fullname'  => ['required','string','max:255'],
             'phone'     => ['required','numeric'],
@@ -187,6 +193,7 @@ class DebtController extends Controller
             $quantities = $request->input('quantity');
             $amounts    = $request->input('amount_due');
             $dateDebts  = $request->input('date_debt');
+            $subcategoryIds  = $request->input('subcategory_ids');
             $Ids        = $request->input('id');
             $total      = 0;
 
@@ -200,39 +207,78 @@ class DebtController extends Controller
 
             $debt = $this->debt->update($id, $dataDebt);
 
-            foreach ($products as $index => $product) {
-                // Process each product, quantity, and amount
-                $quantity  = $quantities[$index];
-                $amount    = $amounts[$index];
-                $dateDebt  = $dateDebts[$index];
-                $idOld     = $Ids[$index];
-                $total    += $amount;
+            for ($index=0; $index < count($products); $index++) {
+                $subcategory_id  = $subcategoryIds[$index];
+                $quantity        = $quantities[$index];
+                $amount          = $amounts[$index];
+                $dateDebt        = $dateDebts[$index];
+                $idOld           = $Ids[$index];
+            
+                $total += $amount;
 
-                $dataDebtProduct = array_replace( [
-                    'name'      => $products[$index],
-                    'quantity'  => $quantity,
-                    'amount'    => $amount,
-                    'date_debt' => $dateDebt,
-                ]);
+                $dataDebtProduct = [
+                  'subcategory_id' => $subcategory_id,
+                  'name_category'  => $products[$index],
+                  'quantity'       => $quantities[$index],
+                  'amount'         => $amounts[$index],
+                  'date_debt'      => $dateDebts[$index],
+              ];
 
                 if ($idOld == 0) {
-                    $dataDebtProduct = array_replace( [
-                        'debt_id'   => $id,
-                        'name'      => $products[$index],
-                        'quantity'  => $quantity,
-                        'amount'    => $amount,
-                        'date_debt' => $dateDebt,
-                    ]);
-
-                    $this->debtProduct->create(data: $dataDebtProduct);
-                }
-                else {
-                    $this->debtProduct->Update($id,$dataDebtProduct);
-                }
+                  $dataDebtProduct['debt_id'] = $id;
+                  $this->debtProduct->create( $dataDebtProduct);
+              }
+              else {
+                  $dataDebtProduct = array_replace( [
+                    'subcategory_id'   => $subcategory_id,
+                    'name_category'    => $products[$index],
+                    'quantity'  => $quantities[$index],
+                    'amount'    => $amounts[$index],
+                    'date_debt' => $dateDebts[$index],
+                  ]);
+                  $this->debtProduct->update($idOld,$dataDebtProduct);
+              }
 
             }
+
+            // foreach ($products as $index => $product) {
+            //     // Process each product, quantity, and amount
+            //     $subcategory_id  = $subcategoryIds[$index];
+            //     $quantity  = $quantities[$index];
+            //     $amount    = $amounts[$index];
+            //     $dateDebt  = $dateDebts[$index];
+            //     $idOld     = $Ids[$index];
+
+            //     $total    += $amount;
+
+            //     if ($idOld == 0) {
+            //         $dataDebtProduct = array_replace( [
+            //             'debt_id'   => $id,
+            //             'subcategory_id'   => $subcategory_id,
+            //             'name_category' => $products[$index],
+            //             'quantity'  => $quantities[$index],
+            //             'amount'    => $amounts[$index],
+            //             'date_debt' => $dateDebts[$index],
+            //         ]);
+
+            //         $this->debtProduct->create(data: $dataDebtProduct);
+            //     }
+            //     else {
+            //         $dataDebtProduct = array_replace( [
+            //           'subcategory_id'   => $subcategory_id,
+            //           'name_category'    => $products[$index],
+            //           'quantity'  => $quantities[$index],
+            //           'amount'    => $amounts[$index],
+            //           'date_debt' => $dateDebts[$index],
+            //         ]);
+            //         $this->debtProduct->update($id,$dataDebtProduct);
+            //     }
+
+            // }
+
             $dataDebtTotal = array_replace( [
                 'total_debt_amount' => $total,
+                'rest_debt_amount' => $total,
             ]);
 
             $this->debt->update($id, $dataDebtTotal);
@@ -245,8 +291,8 @@ class DebtController extends Controller
         catch (\Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
-            // toastr()->error($e->getMessage());
-            // return redirect()->back();
+            toastr()->error($e->getMessage());
+            return redirect()->back();
         }
     }
 
@@ -258,6 +304,84 @@ class DebtController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
+        try {
+            $this->debt->delete($id);
+            toastr()->success(__('Debt deleted successfully'));
+            return redirect()->route('debt.index');
+        }
+        catch (\Exception $e) {
+          DB::rollBack();
+          toastr()->error($e->getMessage());
+          return redirect()->back();
+      }
+    }
+
+    public function payDebt(Request $request,$id)
+    {
+      try {
+        DB::beginTransaction();
+        $debt = $this->debt->find($id);
+
+        $DebtPaid = $request->debt_paid;
+        $idsDebtProsucts = $request->id_debt_product;
+
+        foreach ($idsDebtProsucts as $idDebtProduct) {
+          $data = array_replace(['status' => 1]);
+          $debtProduct = $this->debtProduct->update($idDebtProduct, $data);
+        }
+
+        $restDebtAmount =  $debt->rest_debt_amount;
+
+
+        if ($DebtPaid == $debt->total_debt_amount) {
+          $dataDebt = array_replace([
+            'status'            => config('constant.DEBTS_STATUS.PAID'),
+            'debt_paid'         => $DebtPaid,
+            'rest_debt_amount'  => $debt->total_debt_amount - $DebtPaid,
+            'date_end_debt'     => now()->format('Y-m-d'),
+          ]);
+          $this->debt->update($id, $dataDebt);
+        }
+        elseif(($debt->debt_paid + $DebtPaid) == $debt->total_debt_amount) {
+            $dataDebt = array_replace([
+              'status'            => config('constant.DEBTS_STATUS.PAID'),
+              'debt_paid'         => $debt->debt_paid + $DebtPaid,
+              'rest_debt_amount'  => $debt->rest_debt_amount - $DebtPaid,
+              'date_end_debt'     => now()->format('Y-m-d'),
+            ]);
+            $this->debt->update($id, $dataDebt);
+        }
+        elseif(($debt->debt_paid + $DebtPaid) < $debt->total_debt_amount) {
+            $dataDebt = array_replace([
+              'debt_paid'         => $debt->debt_paid + $DebtPaid,
+              'rest_debt_amount'  => $debt->rest_debt_amount - $DebtPaid,
+              'date_end_debt'     => now()->format('Y-m-d'),
+            ]);
+            $this->debt->update($id, $dataDebt);
+        }
+        elseif(($debt->debt_paid + $DebtPaid) > $debt->total_debt_amount){
+            toastr()->error(__('The amount paid exceeds the amount owed.'));
+            return redirect()->route('debt.index');
+        }
+
+          // $dataDebt = array_replace([
+          //   'rest_debt_amount'  => $debt->total_debt_amount - $restDebt ,
+          //   'date_end_debt'     => now()->format('Y-m-d'),
+          // ]);
+          // $this->debt->update($id, $dataDebt);
+        
+
+        toastr()->success(__('Debt paid successfully'));
+        DB::commit();
+        return redirect()->route('debt.index');
+      }
+      catch (\Exception $e) {
+        DB::rollBack();
+        toastr()->error($e->getMessage());
+        return redirect()->back();
+    }
+      // $debts = $this->debt->paginate(10);
+
+      // return view('content.debt.pay', compact('debts'));
     }
 }

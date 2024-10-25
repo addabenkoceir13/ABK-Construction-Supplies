@@ -126,9 +126,11 @@
   "Date updated" : "تاريخ تعديل",
   "Do you really want to delete this debt?" : "هل تريد حقًا حذف هذا الدين؟",
   "Delete  debt" : "حذف الديون",
-  "" : "",
-  "" : "",
-  "" : "",
-  "" : "",
-  "" : ""
+  "Pay a debt" : "دفع الدين",
+  "Choose a quantity" : "إختر كمية",
+  "The amount paid exceeds the amount owed." : "المبلغ المدفوع يتجاوز المبلغ المستحق",
+  "Debt paid" : "الدين مدفوع",
+  "Debts Supplier" : "توصيل الديون",
+  "Supplier":"سائق توصيل",
+  "Choose a Supplier":"اختر سائق توصيل "
 }

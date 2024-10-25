@@ -1,36 +1,30 @@
 <?php
 
-namespace App\Repositories\Supplier;
-
-use App\Models\Supplier;
-use App\Repositories\Supplier\SupplierRepository;
+namespace App\Repositories\SubCategories;
 
 
+use App\Models\SubCategory;
 
-class EloquentSupplier implements SupplierRepository
+class EloquentSubCategory implements SubCategoryRepository
 {
     /**
      * {@inheritdoc}
      */
     public function all()
     {
-        return Supplier::all();
-    }
-
-    public function SelectSupplier()
-    {
-        return Supplier::whereId(1)->first();
-    }
-    public function SupplierActive()
-    {
-        return Supplier::whereStatus('active')->get();
+        return SubCategory::all();
     }
     /**
      * {@inheritdoc}
      */
     public function find($id)
     {
-        return Supplier::find($id);
+        return SubCategory::find($id);
+    }
+
+    public function get($id)
+    {
+        return SubCategory::where('category_id', $id)->get();
     }
 
     /**
@@ -39,9 +33,9 @@ class EloquentSupplier implements SupplierRepository
      */
     public function create(array $data)
     {
-        $Supplier = Supplier::create($data);
+        $SubCategory = SubCategory::create($data);
 
-        return $Supplier;
+        return $SubCategory;
     }
 
     /**
@@ -49,11 +43,11 @@ class EloquentSupplier implements SupplierRepository
      */
     public function update($id, array $data)
     {
-        $Supplier = $this->find($id);
+        $SubCategory = $this->find($id);
 
-        $Supplier->update($data);
+        $SubCategory->update($data);
 
-        return $Supplier;
+        return $SubCategory;
     }
 
     /**
@@ -61,9 +55,9 @@ class EloquentSupplier implements SupplierRepository
      */
     public function delete($id)
     {
-        $Supplier = $this->find($id);
+        $SubCategory = $this->find($id);
 
-        return $Supplier->delete();
+        return $SubCategory->delete();
     }
 
     /**
@@ -73,7 +67,7 @@ class EloquentSupplier implements SupplierRepository
      */
     public function paginate($perPage, $search = null)
     {
-        $query = Supplier::query();
+        $query = SubCategory::query();
 
         $result = $query->orderBy('id', 'desc')
             ->paginate($perPage);
