@@ -12,17 +12,17 @@ class Debt extends Model
     use HasFactory, SoftDeletes, SoftCascadeTrait;
 
     protected $fillable = [
-      'user_id',
-      'supplier_id',
-      'fullname',
-      'phone',
-      'date_debut_debt',
-      'total_debt_amount',
-      'debt_paid',
-      'rest_debt_amount',
-      'date_end_debt',
-      'status',
-      'note',
+        'user_id',
+        'supplier_id',
+        'fullname',
+        'phone',
+        'date_debut_debt',
+        'total_debt_amount',
+        'debt_paid',
+        'rest_debt_amount',
+        'date_end_debt',
+        'status',
+        'note',
     ];
 
     protected $softCascade = ['getDebtProduct'];
@@ -35,6 +35,20 @@ class Debt extends Model
     public function getSupplier()
     {
       return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+
+    public static  function getTotalDebt()
+    {
+        return static::sum('total_debt_amount');
+    }
+    public static  function getTotalPaidDebt()
+    {
+        return static::sum('debt_paid');
+    }
+
+    public static  function getTotalRestDebt()
+    {
+        return static::sum('rest_debt_amount');
     }
 
 

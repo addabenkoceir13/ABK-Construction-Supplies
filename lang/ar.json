@@ -145,6 +145,9 @@
   "Delivery driver deleted successfully":"تم حذف سائق التوصيل بنجاح",
   "Total Amount:":"المبلغ الإجمالي:",
   "Debt paid successfully":"تم سداد الدين بنجاح",
+  "Total debts":"المجموع الكلي للدين",
+  "Total outstanding not debts":"إجمالي الديون غير مدفوع",
+  "Total debt paid":"إجمالي الدين المدفوع",
   "":"",
   "":""
 }
