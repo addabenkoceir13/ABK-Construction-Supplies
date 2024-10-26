@@ -108,7 +108,7 @@
                 <span class="badge bg-label-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Delete  debt') }}</span>">
                 <i class="bx bx-trash me-1"></i></span>
               </a>
-              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#PayDebtModal{{ $debt->id }}">
+              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#PayDebtModal{{ $debt->id }}" data-row-id="{{ $debt->id }}">
                 <span class="badge bg-label-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Pay a debt') }}</span>">
                 <i class='bx bx-money'></i></span>
               </a>
@@ -296,6 +296,37 @@
 
 
 
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    // Initialize total amount
+    let totalAmount = 0;
+    let currentRowId = null;
+    let currentModelId = null;
+
+    // Function to update the displayed total in the modal
+    function updateModalTotal() {
+      $('.modal-total-amount').text(totalAmount.toFixed(2));
+      $('.total-value').val(totalAmount.toFixed(2));
+    }
+    $('.pay-btn').on('click', function () {
+      currentRowId = $(this).data('row-id');
+      totalAmount = 0;
+    });
+
+    $(document).on('change', '.debt-checkbox', function () {
+      currentModelId = $(this).data('row-id');
+      const amount = parseFloat($(this).data('amount'));
+
+      if ($(this).is(':checked')) {
+        totalAmount += amount;
+      } else {
+        totalAmount -= amount;
+      }
+      updateModalTotal();
+    });
   });
 </script>
 

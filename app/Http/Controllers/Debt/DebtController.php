@@ -365,16 +365,9 @@ class DebtController extends Controller
             return redirect()->route('debt.index');
         }
 
-          // $dataDebt = array_replace([
-          //   'rest_debt_amount'  => $debt->total_debt_amount - $restDebt ,
-          //   'date_end_debt'     => now()->format('Y-m-d'),
-          // ]);
-          // $this->debt->update($id, $dataDebt);
-
-
         toastr()->success(__('Debt paid successfully'));
         DB::commit();
-        return redirect()->route('debt.index');
+        return redirect()->back();
       }
       catch (\Exception $e) {
         DB::rollBack();

@@ -171,7 +171,7 @@ class DebtWithSupplierController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, $id): RedirectResponse
+  public function update(Request $request, $id)
   {
       // dd($request->all());
       // dd($request->all());
@@ -240,41 +240,6 @@ class DebtWithSupplierController extends Controller
 
           }
 
-          // foreach ($products as $index => $product) {
-          //     // Process each product, quantity, and amount
-          //     $subcategory_id  = $subcategoryIds[$index];
-          //     $quantity  = $quantities[$index];
-          //     $amount    = $amounts[$index];
-          //     $dateDebt  = $dateDebts[$index];
-          //     $idOld     = $Ids[$index];
-
-          //     $total    += $amount;
-
-          //     if ($idOld == 0) {
-          //         $dataDebtProduct = array_replace( [
-          //             'debt_id'   => $id,
-          //             'subcategory_id'   => $subcategory_id,
-          //             'name_category' => $products[$index],
-          //             'quantity'  => $quantities[$index],
-          //             'amount'    => $amounts[$index],
-          //             'date_debt' => $dateDebts[$index],
-          //         ]);
-
-          //         $this->debtProduct->create(data: $dataDebtProduct);
-          //     }
-          //     else {
-          //         $dataDebtProduct = array_replace( [
-          //           'subcategory_id'   => $subcategory_id,
-          //           'name_category'    => $products[$index],
-          //           'quantity'  => $quantities[$index],
-          //           'amount'    => $amounts[$index],
-          //           'date_debt' => $dateDebts[$index],
-          //         ]);
-          //         $this->debtProduct->update($id,$dataDebtProduct);
-          //     }
-
-          // }
-
           $dataDebtTotal = array_replace( [
               'total_debt_amount' => $total,
               'rest_debt_amount' => $total,
@@ -285,7 +250,7 @@ class DebtWithSupplierController extends Controller
           toastr()->success(__('Debt updated successfully'));
 
           DB::commit();
-          return redirect()->route('debt.index')->withSuccess(__('Debt updated successfully'));
+          return redirect()->route('debt-supplier.index')->withSuccess(__('Debt updated successfully'));
       }
       catch (\Exception $e) {
           DB::rollBack();
@@ -363,7 +328,7 @@ class DebtWithSupplierController extends Controller
           return redirect()->route('debt.index');
       }
 
-        
+
       toastr()->success(__('Debt paid successfully'));
       DB::commit();
       return redirect()->back();

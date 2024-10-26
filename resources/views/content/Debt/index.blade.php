@@ -66,7 +66,7 @@
       </thead>
       <tbody>
         @foreach ($debts as $debt)
-          <tr>
+          <tr data-row-id="{{ $debt->id }}">
             <td>{{ $loop->iteration }}</td>
             <td>{{ $debt->fullname }}</td>
             <td>{{ $debt->phone }}</td>
@@ -77,7 +77,7 @@
                     <tr  >
                       <td>{{ $item->name_category }}</td>
                       <td>{{ $item->quantity }}</td>
-                      <td>{{ $item->amount }} {{ __('DZ') }}</td>
+                      <td>{{ number_format($item->amount, 2)  }} {{ __('DZ') }}</td>
                       <td>
                         <div class="dropdown">
                           <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
@@ -92,7 +92,7 @@
                   @endforeach
                   <tr>
                     <td colspan="2">{{ __('Total') }}</td>
-                    <td>{{ $debt->total_debt_amount }} {{ __('DZ') }}</td>
+                    <td>{{ number_format($debt->total_debt_amount, 2)  }} {{ __('DZ') }}</td>
                     <td></td>
                   </tr>
               </tbody>
@@ -118,7 +118,7 @@
                 <span class="badge bg-label-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Delete  debt') }}</span>">
                 <i class="bx bx-trash me-1"></i></span>
               </a>
-              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#PayDebtModal{{ $debt->id }}">
+              <a href="javascript:void(0);" class="pay-btn" data-bs-toggle="modal" data-bs-target="#PayDebtModal{{ $debt->id }}" data-row-id="{{ $debt->id }}">
                 <span class="badge bg-label-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Pay a debt') }}</span>">
                 <i class='bx bx-money'></i></span>
               </a>
@@ -365,8 +365,37 @@ $(document).ready(function() {
           })
       });
 
+  });
+</script>
 
+<script>
+  $(document).ready(function () {
+    // Initialize total amount
+    let totalAmount = 0;
+    let currentRowId = null;
+    let currentModelId = null;
 
+    // Function to update the displayed total in the modal
+    function updateModalTotal() {
+      $('.modal-total-amount').text(totalAmount.toFixed(2));
+      $('.total-value').val(totalAmount.toFixed(2));
+    }
+    $('.pay-btn').on('click', function () {
+      currentRowId = $(this).data('row-id');
+      totalAmount = 0;
+    });
+
+    $(document).on('change', '.debt-checkbox', function () {
+      currentModelId = $(this).data('row-id');
+      const amount = parseFloat($(this).data('amount'));
+
+      if ($(this).is(':checked')) {
+        totalAmount += amount;
+      } else {
+        totalAmount -= amount;
+      }
+      updateModalTotal();
+    });
   });
 </script>
 

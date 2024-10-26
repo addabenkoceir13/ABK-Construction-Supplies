@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="PayDebtModal{{ $debt->id }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="PayDebtModal{{ $debt->id }}"  tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -51,16 +51,26 @@
           <div class="row g-2">
             <div class="col-md-6 mb-3">
               <label for="amount" class="form-label">{{ __('Amount') }}</label>
-              <input type="number" id="amount" name="debt_paid" class="form-control" placeholder="{{ __('Amount') }}" required>
+              <input type="number" id="total-value" name="debt_paid" class="form-control total-value" placeholder="{{ __('Amount') }}" required>
+              {{ __('Total Amount:') }} <span class="modal-total-amount" id="modal-total-amount">0.00</span>
             </div>
             <div class="col-md-6">
               @foreach ($debt->getDebtProduct  as $item)
-                <div class="form-check mt-3 ">
-                  <input class="form-check-input" type="checkbox" name="id_debt_product[]" value="{{ $item->id }}" id="Check-{{ $item->id }}" {{ $item->status == 0 ? '' : 'checked disabled' }} />
-                  <label class="form-check-label" for="Check-{{ $item->id }}">
-                    {{ $item->name_category }} | {{ $item->amount }}
-                  </label>
-                </div>
+              <div class="form-check mt-3">
+                <input
+                  class="form-check-input debt-checkbox"
+                  type="checkbox"
+                  name="id_debt_product[]"
+                  data-amount="{{ $item->amount }}"
+                  data-row-id="{{ $debt->id }}"
+                  value="{{ $item->id }}"
+                  id="Check-{{ $item->id }}"
+                  {{ $item->status == 0 ? '' : 'checked disabled' }}
+                />
+                <label class="form-check-label" for="Check-{{ $item->id }}">
+                    {{ $item->name_category }} | {{ number_format($item->amount, 2) }} {{ __('DZ') }}
+                </label>
+              </div>
               @endforeach
               </div>
             </div>

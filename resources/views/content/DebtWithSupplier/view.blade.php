@@ -14,6 +14,12 @@
     <div class="card-body">
       <h5 class="mb-3"><i class='bx bx-info-circle me-1' ></i>{{ __('information Client') }}</h5>
         <div class="row">
+          <div class="col-md-12 mb-3">
+            <h5>
+              <small class="text-light fw-semibold"><i class="bx bx-user mx-1"></i>{{ __('Supplier') }} : </small>
+              <span class="me-2">{{ $debt->getSupplier->fullname }}</span>
+            </h5>
+          </div>
           <div class="col-md-6 mb-3">
             <h5>
               <small class="text-light fw-semibold"><i class="bx bx-user mx-1"></i>{{ __('Customer Name') }} : </small>
@@ -35,7 +41,7 @@
           <div class="col-md-6 mb-3">
             <h5>
               <small class="text-light fw-semibold"><i class='bx bx-money mx-1'></i>{{ __('Total debt') }} : </small>
-              <span>{{ $debt->total_debt_amount }} {{ __('DZ') }}</span>
+              <span>{{ number_format($debt->total_debt_amount,2)  }} {{ __('DZ') }}</span>
             </h5>
           </div>
           <div class="col-md-6 mb-3">
@@ -47,7 +53,7 @@
           <div class="col-md-6 mb-3">
             <h5>
               <small class="text-light fw-semibold"><i class='bx bx-money mx-1'></i>{{ __('Remaining debt') }} : </small>
-              <span>{{ is_null($debt->rest_debt_amount) ? 0.00 : $debt->rest_debt_amount }} {{ __('DZ') }}</span>
+              <span>{{ is_null($debt->rest_debt_amount) ? 0.00 : number_format($debt->rest_debt_amount,2)  }} {{ __('DZ') }}</span>
             </h5>
           </div>
 
