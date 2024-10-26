@@ -198,7 +198,10 @@
                         <div>
                             <input type="hidden"  name="subcategory_ids[]" value="${response.data[0].id}" >
                             <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                            <input type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
+                            <div class="input-group input-group-merge">
+                              <input  type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
+                              <span class="input-group-text">${response.data[0].name}</span>
+                            </div>
                         </div>
                     `;
                     $(this).closest('.product-row-edit').find('#inpute-edit-'+ debtId).append(InputCreate);
@@ -252,7 +255,10 @@
                       <div>
                           <input type="hidden"  name="subcategory_ids[]" value="${response.data[0].id}" >
                           <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                          <input type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
+                          <div class="input-group input-group-merge">
+                            <input  type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
+                            <span class="input-group-text">${response.data[0].name}</span>
+                          </div>
                       </div>
                   `;
                   $(this).closest('.product-row-new-edit').find('.inpute-new-edit').append(InputCreate);

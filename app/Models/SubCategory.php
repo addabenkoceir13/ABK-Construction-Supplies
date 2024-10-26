@@ -27,4 +27,9 @@ class SubCategory extends Model
     {
       return $this->hasMany(DebtProduct::class);
     }
+
+    public function getDisplayNameAttribute()
+    {
+        return in_array($this->name, ['1/4','2/4','3/4','4/4 = 1']) ?  'ريموك' : $this->name;
+    }
 }

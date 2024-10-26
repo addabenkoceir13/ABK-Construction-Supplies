@@ -3,6 +3,33 @@
 @section('title', __('Debts'))
 
 @section('content')
+<style>
+  /* Style for the search input box */
+  .dataTables_filter input {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 6px;
+      width: 200px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  /* Focus effect for search input */
+  .dataTables_filter input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+
+  /* Style for the pagination select dropdown */
+  .dataTables_length select {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 6px;
+      width: auto;
+      outline: none;
+  }
+</style>
+
 <h4 class="fw-bold py-3 mb-4">
   <span class="text-muted fw-light">{{ __('Debts') }} /</span> {{ __('Debts') }}
 </h4>
@@ -14,7 +41,16 @@
     </button>
   </h5>
   @include('content.Debt.create')
+
   <div class="table-responsive text-nowrap">
+    <div class="mb-3 col-md-4">
+      <label for="statusFilter" class="form-label">{{ __('Filter by Status') }}</label>
+      <select id="statusFilter" class="form-select">
+          <option value="">{{ __('All') }}</option>
+          <option value="Paid">{{ __('Paid') }}</option>
+          <option value="Unpaid">{{ __('Unpaid') }}</option>
+      </select>
+    </div>
     <table id="datatable-debt" class="table table-hover is-stripedt">
       <thead>
           <tr>
@@ -108,32 +144,101 @@
 
 @section('page-script')
 <script src="{{asset('assets/js/pages-account-settings-account.js')}}"></script>
-
 <script>
-  new DataTable('#datatable-debt', {
-    initComplete: function () {
-        this.api()
-            .columns()
-            .every(function () {
-                let column = this;
-                let title = column.footer().textContent;
+$(document).ready(function() {
+    new DataTable('#datatable-debt', {
+      initComplete: function () {
+          let api = this.api();
 
-                // Create input element
-                let input = document.createElement('input');
-                input.placeholder = title;
-                column.footer().replaceChildren(input);
+          // Add Status Filter Dropdown
+          $('#statusFilter').on('change', function () {
+              let language = "{{ app()->getLocale() }}";
+              let filterValue = $(this).val();
+              console.log(language);
+              console.log(filterValue);
+              let column = api.column(5);
+              if (language === 'ar') {
+                switch (filterValue){
+                  case 'Paid':
+                    column.search('تم دفع', true, false).draw();
+                    break;
+                  case 'Unpaid':
+                    column.search('لم يدفع', true, false).draw();
+                    break;
+                  default:
+                    column.search('', true, false).draw();
+                }
+              } else {
+                if (filterValue) {
+                    api.column(5).search('^' + filterValue + '$', true, false).draw();
+                } else {
+                    api.column(5).search('').draw();
+                }
+              }
+          });
 
-                // Event listener for user input
-                input.addEventListener('keyup', () => {
-                    if (column.search() !== this.value) {
-                        column.search(input.value).draw();
-                    }
-                });
-            });
-    }
-  });
+          // Initialize text input search on each column footer
+          api.columns().every(function () {
+              let column = this;
+              let title = column.footer() ? column.footer().textContent : '';
 
+              // Create input element if title is present
+              if (title) {
+                  let input = document.createElement('input');
+                  input.placeholder = title;
+                  column.footer().replaceChildren(input);
+
+                  // Event listener for input
+                  input.addEventListener('keyup', function () {
+                      if (column.search() !== this.value) {
+                          column.search(this.value).draw();
+                      }
+                  });
+              }
+          });
+      }
+    });
+});
 </script>
+<script>
+  $(document).ready(function() {
+      $('#datatable-debt').DataTable(); // Initialize the DataTable
+
+      // Apply custom styles with JavaScript
+      $('.dataTables_filter input').css({
+          'border': '1px solid #ccc',
+          'border-radius': '4px',
+          'padding': '6px',
+          'width': '200px'
+      });
+
+      $('.dataTables_length select').css({
+          'border': '1px solid #ccc',
+          'border-radius': '4px',
+          'padding': '6px',
+          'width': 'auto'
+      });
+
+      // Optional: Add hover and focus effects for the search input
+      $('.dataTables_filter input').hover(
+          function() { $(this).css('border-color', '#007bff'); },
+          function() { $(this).css('border-color', '#ccc'); }
+      ).focus(function() {
+          $(this).css({
+              'border-color': '#0056b3',
+              'box-shadow': '0 0 5px rgba(0, 123, 255, 0.5)'
+          });
+      }).blur(function() {
+          $(this).css({
+              'border-color': '#ccc',
+              'box-shadow': 'none'
+          });
+      });
+  });
+</script>
+
+
+
 {{-- ! js for model created (create.blade.php) in order to add inputs --}}
 <script>
   $(document).ready(function() {
@@ -157,7 +262,7 @@
                   <label for="amount_due" class="form-label">{{ __('Amount Due') }}</label>
                   <div class="input-group input-group-merge">
                       <span class="input-group-text">{{ __('DZ') }}</span>
-                      <input type="text" class="form-control" name="amount_due[]" placeholder="100" aria-label="Amount (to the nearest DZ)" required>
+                      <input type="number" class="form-control" name="amount_due[]" placeholder="100" min="0" aria-label="Amount (to the nearest DZ)" required>
                       <span class="input-group-text">.00</span>
                   </div>
               </div>
@@ -203,7 +308,10 @@
                       <div>
                           <input type="hidden"  name="subcategory_ids[]" value="${response.data[0].id}" >
                           <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                          <input type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
+                          <div class="input-group input-group-merge">
+                            <input  type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
+                            <span class="input-group-text">${response.data[0].name}</span>
+                          </div>
                       </div>
                   `;
                   $(this).closest('.product-row-create').find('.inpute-create').append(InputCreate);
@@ -231,6 +339,30 @@
         var name = $(this).val();
         $(this).closest('.product-row-create').find('.subcategory_id').val(id);
 
+      });
+
+      $('#fullname-search').on('keyup', function()
+      {
+          var query = $(this).val();
+          $.ajax({
+              url:'{{ route('debt.search') }}',
+              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+              method: 'POST',
+              data: {query: query},
+              success: function(data){
+                  if (data.status) {
+                      array = data.query;
+                      let suggestions = data.query;
+                      let dataList = $('#listFullName');
+                      dataList.empty(); // Clear previous options
+                      suggestions.forEach((item) => {
+                          let option = $('<option>').val(item.name);
+                          dataList.append(option);
+                      });
+
+                  }
+              }
+          })
       });
 
 

@@ -28,6 +28,6 @@ class DebtProduct extends Model
 
     public function getSubcategory()
     {
-      return $this->belongsTo(Subcategory::class);
+      return $this->belongsTo(Subcategory::class,'subcategory_id');
     }
 }

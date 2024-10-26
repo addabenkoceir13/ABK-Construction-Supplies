@@ -67,7 +67,7 @@ class EloquentCategory implements CategoryRepository
         $query = Category::query();
 
         $result = $query->orderBy('id', 'desc')
-            ->paginate($perPage);
+            ->get();
 
         if ($search) {
             $result->appends(['search' => $search]);

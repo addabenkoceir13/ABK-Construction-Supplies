@@ -132,5 +132,19 @@
   "Debt paid" : "الدين مدفوع",
   "Debts Supplier" : "توصيل الديون",
   "Supplier":"سائق توصيل",
-  "Choose a Supplier":"اختر سائق توصيل "
+  "Choose a Supplier":"اختر سائق توصيل ",
+  "All":"كل",
+  "Filter by Status":"تصفية حسب الحالة",
+  "Delivery driver":"سائق التوصيل",
+  "Add delivery driver":"إضافة سائق التوصيل",
+  "Modify delivery driver":"تعديل سائق التوصيل",
+  "Delete delivery driver":"حذف سائق التوصيل",
+  "Delivery driver added successfully":"تمت إضافة سائق التوصيل بنجاح",
+  "Delivery driver update successfully":"تم تحديث سائق التوصيل بنجاح",
+  "Do you really want to delete this Delivery driver?":"هل تريد حقًا حذف سائق التوصيل هذا؟",
+  "Delivery driver deleted successfully":"تم حذف سائق التوصيل بنجاح",
+  "":"",
+  "":"",
+  "":"",
+  "":""
 }

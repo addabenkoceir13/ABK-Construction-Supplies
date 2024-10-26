@@ -14,7 +14,7 @@ class EloquentSupplier implements SupplierRepository
      */
     public function all()
     {
-        return Supplier::all();
+        return Supplier::where('id' , '!=',1)->orderBy('id', 'desc')->get();
     }
 
     public function SelectSupplier()
@@ -75,7 +75,7 @@ class EloquentSupplier implements SupplierRepository
     {
         $query = Supplier::query();
 
-        $result = $query->orderBy('id', 'desc')
+        $result = $query->where('id' , '!=',1)->orderBy('id', 'desc')
             ->paginate($perPage);
 
         if ($search) {

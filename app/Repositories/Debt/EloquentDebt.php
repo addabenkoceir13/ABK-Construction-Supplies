@@ -19,7 +19,7 @@ class EloquentDebt implements DebtRepository
 
     public function getSupplier()
     {
-        return Debt::where('supplier_id', '!=', '1')->orderBy('id', 'DESC')->get();
+        return Debt::where('supplier_id', '!=', '1')->orderBy('id', 'DESC')->orderBy('status', 'ASC')->get();
     }
     /**
      * {@inheritdoc}
@@ -71,8 +71,8 @@ class EloquentDebt implements DebtRepository
     {
         $query = Debt::query();
 
-        $result = $query->orderBy('id', 'desc')
-            ->paginate($perPage);
+        $result = $query->where('supplier_id', '=', '1')->orderBy('id', 'desc')->orderBy('status', 'desc')
+            ->get();
 
         if ($search) {
             $result->appends(['search' => $search]);

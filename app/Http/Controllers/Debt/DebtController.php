@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Debt;
 
 use App\Http\Controllers\Controller;
+use App\Models\Debt;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Debt\DebtRepository;
 use App\Repositories\DebtProduct\DebtProductRepository;
@@ -213,7 +214,7 @@ class DebtController extends Controller
                 $amount          = $amounts[$index];
                 $dateDebt        = $dateDebts[$index];
                 $idOld           = $Ids[$index];
-            
+
                 $total += $amount;
 
                 $dataDebtProduct = [
@@ -369,7 +370,7 @@ class DebtController extends Controller
           //   'date_end_debt'     => now()->format('Y-m-d'),
           // ]);
           // $this->debt->update($id, $dataDebt);
-        
+
 
         toastr()->success(__('Debt paid successfully'));
         DB::commit();
@@ -383,5 +384,18 @@ class DebtController extends Controller
       // $debts = $this->debt->paginate(10);
 
       // return view('content.debt.pay', compact('debts'));
+    }
+
+    public function searchName(Request $request)
+    {
+      $search = $request->input('query');
+
+      // $query = Debt::query()->where('fullname', 'LIKE', "%{$search}%");
+      $query = Debt::where('fullname', 'LIKE', "%{$search}%")->limit(10)->get(['fullname', 'phone']);
+
+      return response()->json([
+        'status' => true,
+        'query' => $query,
+      ]);
     }
 }

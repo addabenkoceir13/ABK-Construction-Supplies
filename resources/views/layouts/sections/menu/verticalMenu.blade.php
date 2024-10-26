@@ -39,6 +39,13 @@
         </a>
       </li>
 
+      <li class="menu-item {{ request()->routeIs('supplier.index') ? 'active' : '' }}">
+        <a href="{{ route('supplier.index') }}" class="menu-link">
+            <i class='menu-icon bx bxs-truck'></i>
+            <div>{{ __('Delivery driver') }}</div>
+        </a>
+      </li>
+
       <li class="menu-item {{ request()->routeIs('debt.*') ? 'active' : '' }} ">
         <a href="{{ route('debt.index') }}" class="menu-link">
             <i class='menu-icon bx bx-credit-card-front'></i>

@@ -4,6 +4,7 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Debt\DebtController;
 use App\Http\Controllers\Category\SubcategoryController;
 use App\Http\Controllers\Debt\DebtWithSupplierController;
+use App\Http\Controllers\Supplier\SupplierController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -43,10 +44,18 @@ Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboa
 Route::group(['middleware' => ['auth']], function () {
 
   Route::resource('building-materals', CategoryController::class);
+
   Route::resource('debt', DebtController::class);
-  Route::resource('debt-supplier', DebtWithSupplierController::class);
   Route::patch('debt/pays/{debt}', [DebtController::class, 'payDebt'])->name('debt.pay');
+
+  Route::resource('debt-supplier', DebtWithSupplierController::class);
+  Route::patch('debt-supplier/pays/{debt}', [DebtWithSupplierController::class, 'payDebt'])->name('debt-supplier.pay');
+
+  Route::post('debt/search', [DebtController::class, 'searchName'])->name('debt.search');
+
   Route::resource('subcategory', SubcategoryController::class);
+
+  Route::resource('supplier', SupplierController::class);
 
 });
 

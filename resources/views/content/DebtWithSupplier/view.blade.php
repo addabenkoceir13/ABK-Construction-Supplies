@@ -104,7 +104,7 @@
             <div class="col-md-3 mb-3">
               <h5>
                 <small class="text-light fw-semibold"><i class='bx bxs-checkbox mx-1'></i>{{ __('Quantity') }} : </small>
-                <span>{{  $item->quantity }}</span>
+                <span>{{  $item->quantity }} {{ $item->getSubcategory->display_name  }}</span>
               </h5>
             </div>
             <div class="col-md-3 mb-3">

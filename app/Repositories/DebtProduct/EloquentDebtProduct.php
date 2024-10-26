@@ -64,7 +64,7 @@ class EloquentDebtProduct implements DebtProductRepository
         $query = DebtProduct::query();
 
         $result = $query->orderBy('id', 'desc')
-            ->paginate($perPage);
+            ->get();
 
         if ($search) {
             $result->appends(['search' => $search]);

@@ -3,6 +3,22 @@
 @section('title', __('Debts'))
 
 @section('content')
+<style>
+  .dataTables_filter input {
+    padding: 8px;
+    border: 2px solid #007bff; /* Change border color */
+    border-radius: 5px;
+    width: 200px; /* Customize width */
+    outline: none;
+}
+.dataTables_length select {
+    padding: 6px;
+    border: 2px solid #28a745; /* Change border color */
+    border-radius: 5px;
+    background-color: #f8f9fa; /* Background color */
+    color: #495057; /* Text color */
+}
+</style>
 <h4 class="fw-bold py-3 mb-4">
   <span class="text-muted fw-light">{{ __('Debts') }} /</span> {{ __('Debts') }}
 </h4>
@@ -15,6 +31,14 @@
   </h5>
   @include('content.DebtWithSupplier.create')
   <div class="table-responsive text-nowrap">
+    <div class="mb-3 col-md-4">
+      <label for="statusFilter" class="form-label">{{ __('Filter by Status') }}</label>
+      <select id="statusFilter" class="form-select">
+          <option value="">{{ __('All') }}</option>
+          <option value="Paid">{{ __('Paid') }}</option>
+          <option value="Unpaid">{{ __('Unpaid') }}</option>
+      </select>
+    </div>
     <table id="datatable-debt" class="table table-hover is-stripedt">
       <thead>
           <tr>
@@ -112,29 +136,61 @@
 <script src="{{asset('assets/js/pages-account-settings-account.js')}}"></script>
 
 <script>
-  new DataTable('#datatable-debt', {
-    initComplete: function () {
-        this.api()
-            .columns()
-            .every(function () {
-                let column = this;
-                let title = column.footer().textContent;
+  $(document).ready(function() {
 
-                // Create input element
-                let input = document.createElement('input');
-                input.placeholder = title;
-                column.footer().replaceChildren(input);
+      new DataTable('#datatable-debt', {
+        initComplete: function () {
+            let api = this.api();
 
-                // Event listener for user input
-                input.addEventListener('keyup', () => {
-                    if (column.search() !== this.value) {
-                        column.search(input.value).draw();
-                    }
-                });
+            // Add Status Filter Dropdown
+            $('#statusFilter').on('change', function () {
+                let language = "{{ app()->getLocale() }}";
+                let filterValue = $(this).val();
+                console.log(language);
+                console.log(filterValue);
+                let column = api.column(5);
+                if (language === 'ar') {
+                  switch (filterValue){
+                    case 'Paid':
+                      column.search('تم دفع', true, false).draw();
+                      break;
+                    case 'Unpaid':
+                      column.search('لم يدفع', true, false).draw();
+                      break;
+                    default:
+                      column.search('', true, false).draw();
+                  }
+                } else {
+                  if (filterValue) {
+                      api.column(5).search('^' + filterValue + '$', true, false).draw();
+                  } else {
+                      api.column(5).search('').draw();
+                  }
+                }
             });
-    }
-  });
 
+            // Initialize text input search on each column footer
+            api.columns().every(function () {
+                let column = this;
+                let title = column.footer() ? column.footer().textContent : '';
+
+                // Create input element if title is present
+                if (title) {
+                    let input = document.createElement('input');
+                    input.placeholder = title;
+                    column.footer().replaceChildren(input);
+
+                    // Event listener for input
+                    input.addEventListener('keyup', function () {
+                        if (column.search() !== this.value) {
+                            column.search(this.value).draw();
+                        }
+                    });
+                }
+            });
+        }
+      });
+  });
 </script>
 {{-- ! js for model created (create.blade.php) in order to add inputs --}}
 <script>
@@ -205,7 +261,10 @@
                       <div>
                           <input type="hidden"  name="subcategory_ids[]" value="${response.data[0].id}" >
                           <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                          <input type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
+                          <div class="input-group input-group-merge">
+                            <input  type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
+                            <span class="input-group-text">${response.data[0].name}</span>
+                          </div>
                       </div>
                   `;
                   $(this).closest('.product-row-create').find('.inpute-create').append(InputCreate);

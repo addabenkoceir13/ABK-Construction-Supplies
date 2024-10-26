@@ -17,7 +17,9 @@
                 <label for="fullname" class="form-label">{{ __('Customer Name') }}</label>
                 <div class="input-group input-group-merge">
                   <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
-                  <input type="text" id="fullname" name="fullname" class="form-control @error('fullname') is-invalid @enderror" placeholder="{{ __('Enter Name') }}" />
+                  <input type="text" id="fullname-search" name="fullname" class="form-control @error('fullname') is-invalid @enderror" placeholder="{{ __('Enter Name') }}"
+                  autocomplete="on" list="listFullName" />
+                  <datalist id="listFullName"></datalist>
                 </div>
                 @error('fullname')
                   <span class="alert alert-danger " role="alert">
@@ -83,7 +85,7 @@
                   <label for="amount_due" class="form-label">{{ __('Amount Due') }}</label>
                   <div class="input-group input-group-merge">
                     <span class="input-group-text">{{ __('DZ') }}</span>
-                    <input type="number" class="form-control" name="amount_due[]" placeholder="1000"  required>
+                    <input type="number" class="form-control" name="amount_due[]" min="0" placeholder="1000"  required>
                     <span class="input-group-text">.00</span>
                   </div>
                 </div>
