@@ -148,6 +148,17 @@
   "Total debts":"المجموع الكلي للدين",
   "Total outstanding not debts":"إجمالي الديون غير مدفوع",
   "Total debt paid":"إجمالي الدين المدفوع",
+  "Welcome":"مرحبا بك",
+  "Email":"بريد إلكتروني",
+  "Enter your email":"أدخل بريدك الإلكتروني",
+  "Password":"كلمة المرور",
+  "Remember Me":"تذكرنى",
+  "Sign in":"تسجيل الدخول",
+  "Forgot Password?":"هل نسيت كلمة السر؟",
+  "Login Basic":"تسجيل الدخول الأساسي",
+  "Signed in":"تم تسجيل الدخول",
+  "Login details are not valid":"بيانات تسجيل الدخول غير صالحة",
+  "":"",
   "":"",
   "":""
 }

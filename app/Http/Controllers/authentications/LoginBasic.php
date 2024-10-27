@@ -4,7 +4,7 @@ namespace App\Http\Controllers\authentications;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class LoginBasic extends Controller
 {
@@ -24,9 +24,9 @@ class LoginBasic extends Controller
 
     if (Auth::attempt($credentials)) {
         return redirect()->intended('/')
-                    ->withSuccess('Signed in');
+                    ->withSuccess(__('Signed in'));
     }
 
-    return redirect("/auth/login-basic")->withSuccess('Login details are not valid');
+    return redirect("/auth/login-basic")->withSuccess(__('Login details are not valid'));
   }
 }

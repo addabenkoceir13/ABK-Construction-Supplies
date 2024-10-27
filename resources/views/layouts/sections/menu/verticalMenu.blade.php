@@ -2,13 +2,13 @@
 
   <!-- ! Hide app brand if navbar-full -->
   <div class="app-brand demo">
-      <a href="#" class="app-brand-link">
+      <a href="{{ route('dashboard-analytics') }}" class="app-brand-link">
           <span class="app-brand-logo demo">
               <img width="25" src="{{ asset('assets/img/favicon/favicon.ico') }}" alt="brand-logo" srcset="">
               {{-- @include('_partials.macros',["width"=>25,"withbg"=>'#696cff']) --}}
           </span>
-          <span class="app-brand-text demo menu-text fw-bold text-capitalize ms-2">
-              {{ config('app.locale') == 'en' ? config('variables.NameSiteFr') : config('variables.NameSiteAr')  }}
+          <span class="demo menu-text fw-bold  text-capitalize ms-2">
+              {{ config('app.locale') == 'en' ?  config('variables.templateName') :  config('variables.templateNameAr')  }}
           </span>
       </a>
 

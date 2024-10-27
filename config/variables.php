@@ -2,10 +2,11 @@
   // Variables
   return [
     "NameSiteFr" => "Sofiane",
-    "NameSiteAr" => "سفيان",
+    "NameSiteAr" => "عدة بن قصير سفيان",
     "creatorName" => "Mohamed Adda Benkosseir",
     "creatorUrl" => "https://github.com/addabenkoceir13",
-    "templateName" => "Sneat",
+    "templateName" => "ABK Construction Supplies",
+    "templateNameAr" => "ع.ب.ق لمستلزمات البناء",
     "templateDescription" => "Most Powerful & Comprehensive Bootstrap 5 HTML Admin Dashboard Template built for developers!",
     "templateKeyword" => "dashboard, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5, bootstrap 5 free, free admin template",
     "licenseUrl" => "https://themeselection.com/license/",
