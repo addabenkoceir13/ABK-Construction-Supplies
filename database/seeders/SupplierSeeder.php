@@ -22,7 +22,7 @@ class SupplierSeeder extends Seeder
         ]);
 
         Supplier::create([
-          'fullname' => 'Ben ladel',
+          'fullname' => 'بن لادن',
           'phone'    => '0544332211',
           'status'   => 'active',
         ]);

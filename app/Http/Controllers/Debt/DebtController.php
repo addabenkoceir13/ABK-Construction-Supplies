@@ -29,21 +29,29 @@ class DebtController extends Controller
         $this->category = $category;
         $this->supplier = $supplier;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $date = now();
         $dateToday = $date->format('Y-m-d');
 
-        $debts = $this->debt->paginate(10);
+        $debts = $this->debt->debtUnPaid();
         $categories = $this->category->all();
         $supplier = $this->supplier->SelectSupplier();
 
         return view('content.debt.index', compact('debts', 'categories' , 'supplier', 'dateToday'));
+    }
+
+    public function indexPaid()
+    {
+      $date = now();
+      $dateToday = $date->format('Y-m-d');
+
+      $debts = $this->debt->debtPaid();
+      $categories = $this->category->all();
+      $supplier = $this->supplier->SelectSupplier();
+
+      return view('content.debt.indexPaid', compact('debts', 'categories', 'supplier', 'dateToday'));
     }
 
     /**
@@ -137,16 +145,10 @@ class DebtController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         $debt = $this->debt->find($id);
-
         return view('content.Debt.view', compact('debt'));
     }
 

@@ -47,9 +47,11 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::resource('debt', DebtController::class);
   Route::patch('debt/pays/{debt}', [DebtController::class, 'payDebt'])->name('debt.pay');
+  Route::get('debt/status/paid', [DebtController::class, 'indexPaid'])->name('debt.index-paid');
 
   Route::resource('debt-supplier', DebtWithSupplierController::class);
   Route::patch('debt-supplier/pays/{debt}', [DebtWithSupplierController::class, 'payDebt'])->name('debt-supplier.pay');
+  Route::get('debt-supplier/status/paid', [DebtWithSupplierController::class, 'indexPaid'])->name('debt-supplier.index-paid');
 
   Route::post('debt/search', [DebtController::class, 'searchName'])->name('debt.search');
 

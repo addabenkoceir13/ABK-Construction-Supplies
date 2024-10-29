@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Category;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Category\CategoryRepository;
+use App\Repositories\SubCategories\SubCategoryRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,16 +12,19 @@ use Illuminate\Support\Facades\Validator;
 class CategoryController extends Controller
 {
     private $category;
+    private $subcategory;
 
-    public function __construct(CategoryRepository $category)
+    public function __construct(CategoryRepository $category, SubCategoryRepository $subcategory)
     {
         $this->category = $category;
+        $this->subcategory = $subcategory;
     }
 
     public function index()
     {
         $categories = $this->category->paginate(10);
-        return view('content.category.index', compact('categories'));
+        $subcategories = $this->subcategory->paginate(10);
+        return view('content.category.index', compact('categories', 'subcategories'));
     }
 
     /**

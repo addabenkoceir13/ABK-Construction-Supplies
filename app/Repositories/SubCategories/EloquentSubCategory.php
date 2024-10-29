@@ -70,7 +70,7 @@ class EloquentSubCategory implements SubCategoryRepository
         $query = SubCategory::query();
 
         $result = $query->orderBy('id', 'desc')
-            ->paginate($perPage);
+            ->get();
 
         if ($search) {
             $result->appends(['search' => $search]);

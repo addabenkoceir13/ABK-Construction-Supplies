@@ -88,5 +88,9 @@ class CategorySeeder extends Seeder
           //  !! 15
           'name' => 'رملة ريموك'
         ]);
+        Category::create([
+          //  !! 16
+          'name' => 'الماء'
+        ]);
     }
 }

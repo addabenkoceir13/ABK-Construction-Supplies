@@ -3,32 +3,6 @@
 @section('title', __('Debts'))
 
 @section('content')
-<style>
-  /* Style for the search input box */
-  .dataTables_filter input {
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 6px;
-      width: 200px;
-      outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s;
-  }
-
-  /* Focus effect for search input */
-  .dataTables_filter input:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
-
-  /* Style for the pagination select dropdown */
-  .dataTables_length select {
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 6px;
-      width: auto;
-      outline: none;
-  }
-</style>
 
 <h4 class="fw-bold py-3 mb-4">
   <span class="text-muted fw-light">{{ __('Debts') }} /</span> {{ __('Debts') }}
@@ -43,14 +17,14 @@
   @include('content.Debt.create')
 
   <div class="table-responsive text-nowrap">
-    <div class="mb-3 col-md-4">
+    {{-- <div class="mb-3 col-md-4">
       <label for="statusFilter" class="form-label">{{ __('Filter by Status') }}</label>
       <select id="statusFilter" class="form-select">
           <option value="">{{ __('All') }}</option>
           <option value="Paid">{{ __('Paid') }}</option>
           <option value="Unpaid">{{ __('Unpaid') }}</option>
       </select>
-    </div>
+    </div> --}}
     <table id="datatable-debt" class="table table-hover is-stripedt">
       <thead>
           <tr>

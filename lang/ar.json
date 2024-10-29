@@ -159,6 +159,11 @@
   "Signed in":"تم تسجيل الدخول",
   "Login details are not valid":"بيانات تسجيل الدخول غير صالحة",
   "Dashboard - Analytics":"لوحة التحكم - التحليلات",
+  "Debts Paid":"الديون المدفوعة",
+  "Debts Unpaid":"الديون غير المدفوع",
+  "Debts Supplier Unpaid":"توصيل الديون غير المدفوع",
+  "Debts Supplier Paid":"توصيل الديون المدفوع",
+  "":"",
   "":"",
   "":""
 }

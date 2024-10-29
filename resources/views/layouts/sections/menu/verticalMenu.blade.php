@@ -46,19 +46,52 @@
         </a>
       </li>
 
-      <li class="menu-item {{ request()->routeIs('debt.*') ? 'active' : '' }} ">
-        <a href="{{ route('debt.index') }}" class="menu-link">
-            <i class='menu-icon bx bx-credit-card-front'></i>
-            <div>{{ __('Debts') }}</div>
-        </a>
+      <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">{{ __('Debts') }}</span>
       </li>
 
-      <li class="menu-item {{ request()->routeIs('debt-supplier.*') ? 'active' : '' }} ">
-        <a href="{{ route('debt-supplier.index') }}" class="menu-link">
-            <i class='menu-icon bx bx-credit-card-front'></i>
+      <li class="menu-item {{ request()->routeIs('debt.*') ? 'active open' : '' }}">
+        <a class="menu-link menu-toggle" >
+            <i class="menu-icon bx bx-credit-card-front"></i>
+            <div>{{ __('Debts') }}</div>
+        </a>
+        <ul class="menu-sub">
+          <li class="menu-item {{ request()->routeIs('debt.index') ? 'active' : '' }} ">
+            <a href="{{ route('debt.index') }}" class="menu-link {{ request()->routeIs('debt.index') ? 'text-warning' : '' }} ">
+                <div>{{ __('Debts Unpaid') }}</div>
+            </a>
+          </li>
+
+          <li class="menu-item {{ request()->routeIs('debt.index-paid') ? 'active' : '' }} ">
+            <a href="{{ route('debt.index-paid') }}" class="menu-link {{ request()->routeIs('debt.index-paid') ? 'text-success' : '' }} ">
+                <div>{{ __('Debts Paid') }}</div>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="menu-item {{ request()->routeIs('debt-supplier.*') ? 'active open' : '' }}">
+        <a class="menu-link menu-toggle" >
+            <i class="menu-icon bx bx-credit-card-front"></i>
             <div>{{ __('Debts Supplier') }}</div>
         </a>
+        <ul class="menu-sub">
+          <li class="menu-item {{ request()->routeIs('debt-supplier.index') ? 'active' : '' }} ">
+            <a href="{{ route('debt-supplier.index') }}" class="menu-link {{ request()->routeIs('debt-supplier.index') ? 'text-warning' : '' }} ">
+                <div>{{ __('Debts Supplier Unpaid') }}</div>
+            </a>
+          </li>
+
+          <li class="menu-item {{ request()->routeIs('debt-supplier.index-paid') ? 'active' : '' }} ">
+            <a href="{{ route('debt-supplier.index-paid') }}" class="menu-link {{ request()->routeIs('debt-supplier.index-paid') ? 'text-success' : '' }} ">
+                <div>{{ __('Debts Supplier Paid') }}</div>
+            </a>
+          </li>
+
+        </ul>
       </li>
+
 </aside>
 
 

@@ -12,6 +12,14 @@ interface DebtRepository
 
     public function getSupplier();
 
+    public function debtPaid();
+
+    public function debtUnPaid();
+
+    public function driverDebtPaid();
+
+    public function driverDebtUnPaid();
+
     /**
      * {@inheritdoc}
      */

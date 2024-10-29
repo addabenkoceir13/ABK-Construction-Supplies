@@ -5,16 +5,11 @@
 @section('content')
 
 <h4 class="fw-bold py-3 mb-4">
-  <span class="text-muted fw-light">{{ __('Debts') }} /</span> {{ __('Debts Supplier Unpaid') }}
+  <span class="text-muted fw-light">{{ __('Debts') }} /</span> {{ __('Debts Supplier Paid') }}
 </h4>
 <!-- Basic Bootstrap Table -->
 <div class="card p-2">
-  <h5 class="card-header">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddDebt">
-      {{ __('Add Debt') }}
-    </button>
-  </h5>
-  @include('content.DebtWithSupplier.create')
+
   <div class="table-responsive text-nowrap">
     {{-- <div class="mb-3 col-md-4">
       <label for="statusFilter" class="form-label">{{ __('Filter by Status') }}</label>

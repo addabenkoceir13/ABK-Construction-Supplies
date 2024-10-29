@@ -21,6 +21,23 @@ class EloquentDebt implements DebtRepository
     {
         return Debt::where('supplier_id', '!=', '1')->orderBy('id', 'DESC')->orderBy('status', 'ASC')->get();
     }
+
+    public function driverDebtPaid()
+    {
+        return Debt::whereStatus('paid')->where('supplier_id','!=','1')->get();
+    }
+    public function driverDebtUnPaid()
+    {
+        return Debt::whereStatus('unpaid')->where('supplier_id','!=',1)->get();
+    }
+    public function debtPaid()
+    {
+        return Debt::whereStatus('paid')->whereSupplierId(1)->get();
+    }
+    public function debtUnPaid()
+    {
+        return Debt::whereStatus('unpaid')->whereSupplierId(1)->get();
+    }
     /**
      * {@inheritdoc}
      */

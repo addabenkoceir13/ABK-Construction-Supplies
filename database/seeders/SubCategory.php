@@ -179,5 +179,10 @@ class SubCategory extends Seeder
           'name' => '4/4 = 1',
           'input_type' => 'select',
         ]);
+        ModelsSubCategory::create([
+          'category_id' => 16,
+          'name' => 'سنتيرنة',
+          'input_type' => 'number',
+        ]);
     }
 }

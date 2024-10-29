@@ -35,12 +35,25 @@ class DebtWithSupplierController extends Controller
       $date = now();
       $dateToday = $date->format('Y-m-d');
 
-      $debts = $this->debt->getSupplier();
+      $debts = $this->debt->driverDebtUnPaid();
       // dd($debts);
       $categories = $this->category->all();
       $suppliers = $this->supplier->SupplierActive();
 
       return view('content.DebtWithSupplier.index', compact('debts', 'categories' , 'suppliers', 'dateToday'));
+  }
+
+  public function indexPaid()
+  {
+      $date = now();
+      $dateToday = $date->format('Y-m-d');
+
+      $debts = $this->debt->driverDebtPaid();
+      // dd($debts);
+      $categories = $this->category->all();
+      $suppliers = $this->supplier->SupplierActive();
+
+      return view('content.DebtWithSupplier.indexPaid', compact('debts', 'categories' , 'suppliers', 'dateToday'));
   }
 
   /**
