@@ -97,6 +97,9 @@
                 <span class="badge bg-label-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Pay a debt') }}</span>">
                 <i class='bx bx-money'></i></span>
               </a>
+              <a href="{{ route('debt.printer-facteur-client',['debt' => $debt->id, 'fullname' => str_replace('%20', '-', urlencode($debt->fullname))]) }}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-show me-1'></i> <span>{{ __('Print Invoice') }}</span>">
+                <span class="badge bg-label-dribbble"><i class='bx bx-printer me-1'></i></span>
+              </a>
             </td>
           </tr>
           @include('content.DebtWithSupplier.delete')

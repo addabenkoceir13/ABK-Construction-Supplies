@@ -35,7 +35,7 @@
   </h4>
 
   <div class="card">
-    <page size="A4" id="content-to-print">
+    <page size="A4" id="content-to-print" style="background: white;">
       <div class="py-4">
         <div class="px-14 py-6">
           <table class="w-full border-collapse border-spacing-0">
