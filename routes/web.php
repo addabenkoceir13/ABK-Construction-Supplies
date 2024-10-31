@@ -4,6 +4,7 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Debt\DebtController;
 use App\Http\Controllers\Category\SubcategoryController;
 use App\Http\Controllers\Debt\DebtWithSupplierController;
+use App\Http\Controllers\Print\PrinterController;
 use App\Http\Controllers\Supplier\SupplierController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,8 @@ Route::group(['middleware' => ['auth']], function () {
   Route::resource('subcategory', SubcategoryController::class);
 
   Route::resource('supplier', SupplierController::class);
+
+  Route::get('print/printer-facteur/{debt}/{fullname}', [PrinterController::class, 'factuerClient'])->name('debt.printer-facteur-client');
 
 });
 
