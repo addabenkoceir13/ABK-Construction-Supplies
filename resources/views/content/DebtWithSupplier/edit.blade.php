@@ -84,7 +84,7 @@
                       <div class="col-md-12" id="empty-quantity-{{ $item->id }}">
                         <input type="hidden"  name="subcategory_ids[]" value="{{ $item->subcategory_id  }}" >
                         <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                        <input type="text" id="quantity" step="0.01" name="quantity[]" class="form-control disabled" min="0" value="{{ $item->quantity }}" >
+                        <input type="text" id="quantity" step="0.01" name="quantity[]" class="form-control" style="pointer-events: none;" min="0" value="{{ $item->quantity }}" >
                       </div>
                       <div id="inpute-edit-{{ $item->id }}" class="inpute-edit col-md-12">
                       </div>
