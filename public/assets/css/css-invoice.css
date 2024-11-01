@@ -575,6 +575,9 @@ video {
 .border-b-2{
   border-bottom-width: 2px;
 }
+.border-radius-50{
+  border-radius: 50%;
+}
 
 .border-r{
   border-right-width: 1px;
