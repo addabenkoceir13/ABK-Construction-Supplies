@@ -62,6 +62,7 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::get('print/printer-facteur/{debt}/{fullname}', [PrinterController::class, 'factuerClient'])->name('debt.printer-facteur-client');
 
+  
 });
 
 // authentication
