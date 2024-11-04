@@ -7,18 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Supplier extends Model
+class TractorDriver extends Model
 {
     use HasFactory, SoftDeletes, SoftCascadeTrait;
 
     protected $fillable = [
       'fullname',
       'phone',
+      'type',
       'status',
-  ];
+    ];
 
-  public function debts()
-  {
+
+    public function debts()
+    {
       return $this->hasMany(Debt::class);
-  }
+    }
 }

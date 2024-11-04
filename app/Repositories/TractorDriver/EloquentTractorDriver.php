@@ -1,36 +1,37 @@
 <?php
 
-namespace App\Repositories\Supplier;
+namespace App\Repositories\TractorDriver;
 
 use App\Models\Supplier;
+use App\Models\TractorDriver;
 use App\Repositories\Supplier\SupplierRepository;
 
 
 
-class EloquentSupplier implements SupplierRepository
+class EloquentTractorDriver implements TractorDriverRepository
 {
     /**
      * {@inheritdoc}
      */
     public function all()
     {
-        return Supplier::where('id' , '!=',1)->orderBy('id', 'desc')->get();
+        return TractorDriver::all();
     }
 
-    public function SelectSupplier()
+    public function TractorDriverNormal()
     {
-        return Supplier::whereId(1)->first();
+        return TractorDriver::whereType('normal')->first();
     }
-    public function SupplierActive()
+    public function TractorDriverDeliveryActive()
     {
-        return Supplier::whereStatus('active')->get();
+        return TractorDriver::whereStatus('active')->whereType('delivery')->get();
     }
     /**
      * {@inheritdoc}
      */
     public function find($id)
     {
-        return Supplier::find($id);
+        return TractorDriver::find($id);
     }
 
     /**
@@ -39,9 +40,9 @@ class EloquentSupplier implements SupplierRepository
      */
     public function create(array $data)
     {
-        $Supplier = Supplier::create($data);
+        $TractorDriver = TractorDriver::create($data);
 
-        return $Supplier;
+        return $TractorDriver;
     }
 
     /**
@@ -49,11 +50,11 @@ class EloquentSupplier implements SupplierRepository
      */
     public function update($id, array $data)
     {
-        $Supplier = $this->find($id);
+        $TractorDriver = $this->find($id);
 
-        $Supplier->update($data);
+        $TractorDriver->update($data);
 
-        return $Supplier;
+        return $TractorDriver;
     }
 
     /**
@@ -61,9 +62,9 @@ class EloquentSupplier implements SupplierRepository
      */
     public function delete($id)
     {
-        $Supplier = $this->find($id);
+        $TractorDriver = $this->find($id);
 
-        return $Supplier->delete();
+        return $TractorDriver->delete();
     }
 
     /**
@@ -73,10 +74,10 @@ class EloquentSupplier implements SupplierRepository
      */
     public function paginate($perPage, $search = null)
     {
-        $query = Supplier::query();
+        $query = TractorDriver::query();
 
-        $result = $query->where('id' , '!=',1)->orderBy('id', 'desc')
-            ->paginate($perPage);
+        $result = $query->orderBy('id', 'desc')
+            ->get();
 
         if ($search) {
             $result->appends(['search' => $search]);

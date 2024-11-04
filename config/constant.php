@@ -1,14 +1,19 @@
 <?php
 return [
-  
-  'DEBTS_STATUS' => [
+
+    'DEBTS_STATUS' => [
         'PAID'   => 'paid',
         'UNPAID' => 'unpaid',
     ],
 
-  'SUPPLIERS_STATUS' => [
+    'TRACTORDRIVER_STATUS' => [
         'ACTIVE'    => 'active',
         'INACTIVE'  => 'inactive',
         'BLOCKED'   => 'blocked',
+    ],
+
+    'TRACTORDRIVER_TYPE' => [
+        'DRIVERY'    => 'drivery',
+        'NORMAL'     => 'normal',
     ],
 ];

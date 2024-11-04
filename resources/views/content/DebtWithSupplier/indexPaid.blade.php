@@ -231,7 +231,7 @@
         $(this).closest('.product-row-create').find('.inpute-create').empty();
 
         $.ajax({
-          url: '{{ route('subcategory.show', '01') }}',
+          url: '{{ route('services.subcategory.show', '01') }}',
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },

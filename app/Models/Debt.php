@@ -37,6 +37,11 @@ class Debt extends Model
       return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
+    public function tractorDriver()
+    {
+        return $this->belongsTo(TractorDriver::class, 'tractor_driver_id');
+    }
+
     public static  function getTotalDebt()
     {
         return static::sum('total_debt_amount');

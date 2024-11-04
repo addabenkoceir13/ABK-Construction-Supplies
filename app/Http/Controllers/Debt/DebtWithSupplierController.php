@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Debt\DebtRepository;
 use App\Repositories\DebtProduct\DebtProductRepository;
-use App\Repositories\Supplier\SupplierRepository;
+use App\Repositories\TractorDriver\TractorDriverRepository;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,14 +20,14 @@ class DebtWithSupplierController extends Controller
   private $debt;
   private $debtProduct;
   private $category;
-  private $supplier;
+  private $tractorDriver;
 
-  public function __construct(DebtRepository $debt, DebtProductRepository $debtProduct, CategoryRepository $category, SupplierRepository $supplier)
+  public function __construct(DebtRepository $debt, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver)
   {
       $this->debt = $debt;
       $this->debtProduct = $debtProduct;
       $this->category = $category;
-      $this->supplier = $supplier;
+      $this->tractorDriver = $tractorDriver;
   }
 
   public function index()
@@ -38,7 +38,7 @@ class DebtWithSupplierController extends Controller
       $debts = $this->debt->driverDebtUnPaid();
       // dd($debts);
       $categories = $this->category->all();
-      $suppliers = $this->supplier->SupplierActive();
+      $suppliers = $this->tractorDriver->TractorDriverDeliveryActive();
 
       return view('content.DebtWithSupplier.index', compact('debts', 'categories' , 'suppliers', 'dateToday'));
   }
@@ -51,8 +51,8 @@ class DebtWithSupplierController extends Controller
       $debts = $this->debt->driverDebtPaid();
       // dd($debts);
       $categories = $this->category->all();
-      $suppliers = $this->supplier->SupplierActive();
-
+      $suppliers = $this->tractorDriver->TractorDriverDeliveryActive();
+      
       return view('content.DebtWithSupplier.indexPaid', compact('debts', 'categories' , 'suppliers', 'dateToday'));
   }
 

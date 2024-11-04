@@ -3,18 +3,22 @@
 namespace App\Http\Controllers\Vehicle;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Vehicle\VehicleRepository;
 use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    protected $vehicle;
+
+    public function __construct(VehicleRepository $vehicle)
+    {
+        $this->vehicle = $vehicle;
+    }
     public function index()
     {
-        //
+        $vehicles = $this->vehicle->paginate(10);
+
+        return view('content.Vehicle.index', compact('vehicles'));
     }
 
     /**

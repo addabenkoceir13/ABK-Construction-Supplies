@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('suppliers', function (Blueprint $table) {
+        Schema::create('tractor_drivers', function (Blueprint $table) {
             $table->id();
             $table->string('fullname');
             $table->string('phone');
+            $table->enum('type', ['delivery', 'normal'])->default('delivery');
             $table->enum('status', ['active', 'inactive', 'blocked'])->default('active');
             $table->timestamps();
             $table->softDeletes();
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('suppliers');
+        Schema::dropIfExists('tractor_drivers');
     }
 };

@@ -32,19 +32,36 @@
           </a>
       </li>
 
-      <li class="menu-item {{ request()->routeIs('building-materals.index') ? 'active' : '' }}">
-        <a href="{{ route('building-materals.index') }}" class="menu-link">
-            <i class='menu-icon bx bx-cube-alt'></i>
-            <div>{{ __('Building Materials') }}</div>
-        </a>
+      <li class="menu-header small text-uppercase">
+          <span class="menu-header-text">{{ __('Services for drivers, cars, and construction') }}</span>
       </li>
 
-      <li class="menu-item {{ request()->routeIs('supplier.index') ? 'active' : '' }}">
-        <a href="{{ route('supplier.index') }}" class="menu-link">
-            <i class='menu-icon bx bxs-truck'></i>
-            <div>{{ __('Delivery driver') }}</div>
+      <li class="menu-item {{ request()->routeIs('services.*') ? 'active open' : '' }}">
+        <a class="menu-link menu-toggle" >
+            <i class='menu-icon bx bx-cog'></i>
+            <div>{{ __('Services') }}</div>
         </a>
+        <ul class="menu-sub">
+          <li class="menu-item {{ request()->routeIs('services.building-materials.index') ? 'active' : '' }}">
+            <a href="{{ route('services.building-materials.index') }}" class="menu-link">
+                <div>{{ __('Building Materials') }}</div>
+            </a>
+          </li>
+
+          <li class="menu-item {{ request()->routeIs('services.tractor-driver.index') ? 'active' : '' }}">
+            <a href="{{ route('services.tractor-driver.index') }}" class="menu-link">
+                <div>{{ __('Tractor driver') }}</div>
+            </a>
+          </li>
+
+
+
+        </ul>
       </li>
+
+
+
+
 
       <li class="menu-header small text-uppercase">
         <span class="menu-header-text">{{ __('Debts') }}</span>

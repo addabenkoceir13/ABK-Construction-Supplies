@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\Supplier;
+namespace App\Repositories\TractorDriver;
 
-interface SupplierRepository
+interface TractorDriverRepository
 {
     /**
      * Get all available Coupon.
@@ -10,9 +10,9 @@ interface SupplierRepository
      */
     public function all();
 
-    public function SelectSupplier();
-    
-    public function SupplierActive();
+    public function TractorDriverNormal();
+
+    public function TractorDriverDeliveryActive();
     /**
      * {@inheritdoc}
      */

@@ -1,19 +1,19 @@
 
 <!-- Modal -->
-<div class="modal fade" id="modalAddsupplier" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalAddTractorDriver" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalCenterTitle">{{ __('Add delivery driver') }}</h5>
+          <h5 class="modal-title" id="modalCenterTitle">{{ __('Add tractor driver') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="{{ route('supplier.store') }}" method="POST">
+        <form action="{{ route('services.tractor-driver.store') }}" method="POST">
           @csrf
           <div class="modal-body">
             <div class="row">
               <div class="row g-2">
                 <div class="col-md-6 mb-3">
-                  <label for="fullname" class="form-label">{{ __('Customer Name') }}</label>
+                  <label for="fullname" class="form-label">{{ __('Name driver') }}</label>
                   <div class="input-group input-group-merge">
                     <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
                     <input type="text" id="fullname-search" name="fullname" class="form-control @error('fullname') is-invalid @enderror" placeholder="{{ __('Enter Name') }}"

@@ -6,6 +6,8 @@ use App\Http\Controllers\Category\SubcategoryController;
 use App\Http\Controllers\Debt\DebtWithSupplierController;
 use App\Http\Controllers\Print\PrinterController;
 use App\Http\Controllers\Supplier\SupplierController;
+use App\Http\Controllers\TractorDriver\TractorDriverController;
+use App\Http\Controllers\Vehicle\VehicleController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -43,8 +45,13 @@ Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboa
 
 // layout
 Route::group(['middleware' => ['auth']], function () {
+  // ** start route services
+  Route::resource('services/building-materals', CategoryController::class)->names('services.building-materials');
+  Route::resource('services/subcategory', SubcategoryController::class)->names('services.subcategory');
+  Route::resource('services/tractor-driver', TractorDriverController::class)->names('services.tractor-driver');
+  Route::resource('services/vehicle', VehicleController::class)->names('services.vehicle');
+  // ** end of services
 
-  Route::resource('building-materals', CategoryController::class);
 
   Route::resource('debt', DebtController::class);
   Route::patch('debt/pays/{debt}', [DebtController::class, 'payDebt'])->name('debt.pay');
@@ -56,13 +63,11 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::post('debt/search', [DebtController::class, 'searchName'])->name('debt.search');
 
-  Route::resource('subcategory', SubcategoryController::class);
 
-  Route::resource('supplier', SupplierController::class);
 
   Route::get('print/printer-facteur/{debt}/{fullname}', [PrinterController::class, 'factuerClient'])->name('debt.printer-facteur-client');
 
-  
+
 });
 
 // authentication
