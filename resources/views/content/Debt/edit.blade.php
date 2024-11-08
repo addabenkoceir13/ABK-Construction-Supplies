@@ -184,7 +184,7 @@
           $(this).closest('.product-row-edit').find('#inpute-edit-'+ debtId).empty();
 
           $.ajax({
-            url: '{{ route('subcategory.show', '01') }}',
+            url: '{{ route('services.subcategory.show', '01') }}',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -242,7 +242,7 @@
         $(this).closest('.product-row-new-edit').find('.inpute-new-edit').empty();
 
         $.ajax({
-          url: '{{ route('subcategory.show', '01') }}',
+          url: '{{ route('services.subcategory.show', '01') }}',
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },
