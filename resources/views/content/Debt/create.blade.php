@@ -11,7 +11,7 @@
         @csrf
         <div class="modal-body">
           <div class="row">
-            <input type="hidden" name="supplier_id" value="{{ $supplier->id }}">
+            <input type="text" name="tractor_driver_id" value="{{ $supplier->id }}">
             <div class="row g-2">
               <div class="col-md-6 mb-3">
                 <label for="fullname" class="form-label">{{ __('Customer Name') }}</label>

@@ -5,7 +5,7 @@
 @section('content')
 
 <h4 class="fw-bold py-3 mb-4">
-  <span class="text-muted fw-light">{{ __('Debts') }} /</span> {{ __('Debts Supplier Unpaid') }}
+  <span class="text-muted fw-light">{{ __('Debts') }} /</span> {{ __('Unpaid Tractor Driver Delivery Debts') }}
 </h4>
 <!-- Basic Bootstrap Table -->
 <div class="card p-2">
@@ -28,7 +28,7 @@
       <thead>
           <tr>
               <th >#</th>
-              <th >{{ __('Supplier') }}</th>
+              <th >{{ __('Tractor driver') }}</th>
               <th >{{ __('Name') }}</th>
               <th >{{ __('Phone') }}</th>
               <th >{{ __('Debts') }}</th>
@@ -42,7 +42,7 @@
         @foreach ($debts as $debt)
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $debt->getSupplier->fullname }}</td>
+            <td>{{ $debt->tractorDriver->fullname }}</td>
             <td>{{ $debt->fullname }}</td>
             <td>{{ $debt->phone }}</td>
             <td>

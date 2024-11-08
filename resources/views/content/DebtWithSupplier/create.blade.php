@@ -14,8 +14,8 @@
 
             <div class="row g-2">
               <div class="col-md-6 mb-3">
-                <label for="name-product" class="form-label">{{ __('Supplier') }}</label>
-                  <select class="form-select" name="supplier_id" required>
+                <label for="name-product" class="form-label">{{ __('Tractor driver') }}</label>
+                  <select class="form-select" name="tractor_driver_id" required>
                     <option value="">{{ __('Choose a Supplier') }}</option>
                     @foreach ($suppliers as $supplier)
                       <option value="{{ $supplier->id }}" >{{ $supplier->fullname }}</option>

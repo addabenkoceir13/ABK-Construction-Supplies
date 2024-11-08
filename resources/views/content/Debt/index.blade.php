@@ -177,43 +177,6 @@ $(document).ready(function() {
     });
 });
 </script>
-<script>
-  $(document).ready(function() {
-      $('#datatable-debt').DataTable(); // Initialize the DataTable
-
-      // Apply custom styles with JavaScript
-      $('.dataTables_filter input').css({
-          'border': '1px solid #ccc',
-          'border-radius': '4px',
-          'padding': '6px',
-          'width': '200px'
-      });
-
-      $('.dataTables_length select').css({
-          'border': '1px solid #ccc',
-          'border-radius': '4px',
-          'padding': '6px',
-          'width': 'auto'
-      });
-
-      // Optional: Add hover and focus effects for the search input
-      $('.dataTables_filter input').hover(
-          function() { $(this).css('border-color', '#007bff'); },
-          function() { $(this).css('border-color', '#ccc'); }
-      ).focus(function() {
-          $(this).css({
-              'border-color': '#0056b3',
-              'box-shadow': '0 0 5px rgba(0, 123, 255, 0.5)'
-          });
-      }).blur(function() {
-          $(this).css({
-              'border-color': '#ccc',
-              'box-shadow': 'none'
-          });
-      });
-  });
-</script>
-
 
 
 {{-- ! js for model created (create.blade.php) in order to add inputs --}}

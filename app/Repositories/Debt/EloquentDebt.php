@@ -19,24 +19,24 @@ class EloquentDebt implements DebtRepository
 
     public function getSupplier()
     {
-        return Debt::where('supplier_id', '!=', '1')->orderBy('id', 'DESC')->orderBy('status', 'ASC')->get();
+        return Debt::where('tractor_driver_id', '!=', '1')->orderBy('id', 'DESC')->orderBy('status', 'ASC')->get();
     }
 
     public function driverDebtPaid()
     {
-        return Debt::whereStatus('paid')->where('supplier_id','!=','1')->get();
+        return Debt::whereStatus('paid')->where('tractor_driver_id','!=','1')->orderBy('id', 'desc')->get();
     }
     public function driverDebtUnPaid()
     {
-        return Debt::whereStatus('unpaid')->where('supplier_id','!=',1)->get();
+        return Debt::whereStatus('unpaid')->where('tractor_driver_id','!=',1)->orderBy('id', 'desc')->get();
     }
     public function debtPaid()
     {
-        return Debt::whereStatus('paid')->whereSupplierId(1)->get();
+        return Debt::whereStatus('paid')->whereTractorDriverId(1)->orderBy('id', 'desc')->get();
     }
     public function debtUnPaid()
     {
-        return Debt::whereStatus('unpaid')->whereSupplierId(1)->get();
+        return Debt::whereStatus('unpaid')->whereTractorDriverId(1)->orderBy('id', 'desc')->get();
     }
     /**
      * {@inheritdoc}
@@ -88,7 +88,7 @@ class EloquentDebt implements DebtRepository
     {
         $query = Debt::query();
 
-        $result = $query->where('supplier_id', '=', '1')->orderBy('id', 'desc')->orderBy('status', 'desc')
+        $result = $query->where('tractor_driver_id', '=', '1')->orderBy('id', 'desc')->orderBy('status', 'desc')
             ->get();
 
         if ($search) {

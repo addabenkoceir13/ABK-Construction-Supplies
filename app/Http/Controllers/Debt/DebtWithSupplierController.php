@@ -52,7 +52,7 @@ class DebtWithSupplierController extends Controller
       // dd($debts);
       $categories = $this->category->all();
       $suppliers = $this->tractorDriver->TractorDriverDeliveryActive();
-      
+
       return view('content.DebtWithSupplier.indexPaid', compact('debts', 'categories' , 'suppliers', 'dateToday'));
   }
 
@@ -98,7 +98,7 @@ class DebtWithSupplierController extends Controller
 
           $dataDebt = array_replace( [
               'user_id'       => Auth::user()->id,
-              'supplier_id'   => $request->supplier_id,
+              'tractor_driver_id'   => $request->tractor_driver_id,
               'fullname'      => $request->fullname,
               'phone'         => $request->phone,
               'date_debut_debt' => $request->input('date_debut_debt'),

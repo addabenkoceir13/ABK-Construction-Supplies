@@ -95,7 +95,7 @@ class DebtController extends Controller
 
             $dataDebt = array_replace( [
                 'user_id'       => Auth::user()->id,
-                'supplier_id'   => $request->supplier_id,
+                'tractor_driver_id'   => $request->tractor_driver_id,
                 'fullname'      => $request->fullname,
                 'phone'         => $request->phone,
                 'date_debut_debt' => $request->input('date_debut_debt'),
@@ -328,10 +328,14 @@ class DebtController extends Controller
         $DebtPaid = $request->debt_paid;
         $idsDebtProsucts = $request->id_debt_product;
 
-        foreach ($idsDebtProsucts as $idDebtProduct) {
-          $data = array_replace(['status' => 1]);
-          $debtProduct = $this->debtProduct->update($idDebtProduct, $data);
+        if(!is_null($idsDebtProsucts))
+        {
+            foreach ($idsDebtProsucts as $idDebtProduct) {
+              $data = array_replace(['status' => 1]);
+              $debtProduct = $this->debtProduct->update($idDebtProduct, $data);
+            }
         }
+
 
         $restDebtAmount =  $debt->rest_debt_amount;
 

@@ -13,7 +13,7 @@ class Debt extends Model
 
     protected $fillable = [
         'user_id',
-        'supplier_id',
+        'tractor_driver_id',
         'fullname',
         'phone',
         'date_debut_debt',
@@ -30,11 +30,6 @@ class Debt extends Model
     public function getDebtProduct()
     {
         return $this->hasMany(DebtProduct::class);
-    }
-
-    public function getSupplier()
-    {
-      return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
     public function tractorDriver()
