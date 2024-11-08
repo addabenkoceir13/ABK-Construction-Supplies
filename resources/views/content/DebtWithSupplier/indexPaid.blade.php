@@ -37,7 +37,7 @@
         @foreach ($debts as $debt)
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $debt->getSupplier->fullname }}</td>
+            <td>{{ $debt->tractorDriver->fullname }}</td>
             <td>{{ $debt->fullname }}</td>
             <td>{{ $debt->phone }}</td>
             <td>
