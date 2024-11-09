@@ -21,39 +21,45 @@
           <tr>
               <th >#</th>
               <th >{{ __('Name') }}</th>
-              <th >{{ __('Phone') }}</th>
-              <th >{{ __('Create At') }}</th>
-              <th >{{ __('Status') }}</th>
+              <th >{{ __('Type vehicle') }}</th>
+              <th >{{ __('License plate') }}</th>
               <th >{{ __('Action') }}</th>
           </tr>
 
       </thead>
       <tbody>
-        @foreach ($suppliers as $supplier)
+        @foreach ($vehicles as $vehicle)
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $supplier->fullname }}</td>
-            <td>{{ $supplier->phone }}</td>
-            <td>{{ $supplier->created_at->format('Y-m-d') }}</td>
-            <td>
-              @if ($supplier->status == 'active')
-                <span class="badge bg-label-success me-1">{{ __('Active') }}</span>
-              @else
-                <span class="badge bg-label-warning me-1">{{ __('Inactive') }}</span>
-              @endif
+            <td>{{ $vehicle->name }}</td>
+            <td class="text-center">
+              @switch($vehicle->type)
+                @case('car')
+                  <span class="badge bg-label-danger"><i class='bx bx-car'></i></span>
+                  @break
+                @case('truck')
+                  <span class="badge bg-label-warning"><i class='bx bxs-truck' ></i></span>
+                  @break
+                @case('motorcycle')
+                  <span class="badge bg-label-facebook"><i class='bx bx-cycling'></i></span>
+                  @break
+
+              @endswitch
             </td>
+            <td>{{ $vehicle->license_plate }}</td>
             <td>
-              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalditVehicle{{ $supplier->id }}">
-                <span data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-edit bx-xs' ></i> <span>{{ __('Modify Vehicle') }}</span>" class="badge bg-label-success"><i class="bx bx-edit-alt me-1"></i></span>
+              <a href="javascript:void(0);" class="pay-btn" data-bs-toggle="modal" data-bs-target="#modalEditVehicle{{ $vehicle->id }}">
+                <span class="badge bg-label-success" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-edit bx-xs' ></i> <span>{{ __('Modify Vehicle') }}</span>">
+                <i class='bx bx-edit bx-xs'></i></span>
               </a>
-              @include('content.Vehicle.edit')
-              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalDeleteVehicle{{ $supplier->id }}">
-                <span class="badge bg-label-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Delete Vehicle') }}</span>">
+              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalDeleteVehicle{{ $vehicle->id }}">
+                <span class="badge bg-label-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Delete  Vehicle') }}</span>">
                 <i class="bx bx-trash me-1"></i></span>
               </a>
-              @include('content.Vehicle.deleted')
-            </td>
           </tr>
+          @include('content.Vehicle.edit')
+          @include('content.Vehicle.delete')
+          @include('content.Vehicle.added-date')
         @endforeach
       </tbody>
     </table>

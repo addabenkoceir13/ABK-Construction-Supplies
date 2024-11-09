@@ -17,13 +17,14 @@ class Vehicle extends Model
       'license_plate',
     ];
 
+    protected $softCascade = ['insuranceVehicle', 'fuelStations'];
 
     public function fuelStations()
     {
       return $this->hasMany(FuelStation::class);
     }
 
-    public function InsuranceVehicle()
+    public function insuranceVehicle()
     {
       return $this->hasMany(InsuranceVehicle::class);
     }

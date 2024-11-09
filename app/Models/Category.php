@@ -15,10 +15,11 @@ class Category extends Model
       'name',
     ];
 
+    protected $softCascade = ['getSubcategories'];
+
     public function getSubcategories()
     {
       return $this->hasMany(SubCategory::class);
     }
-    protected $softCascade = ['getSubcategories'];
 
 }

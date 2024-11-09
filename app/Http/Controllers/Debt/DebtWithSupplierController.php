@@ -76,7 +76,7 @@ class DebtWithSupplierController extends Controller
   {
     // dd($request->all());
       $validator = Validator::make($request->all(), [
-          'supplier_id'  => ['required','exists:suppliers,id'],
+          'tractor_driver_id'  => ['required'],
           'fullname'  => ['required','string','max:255'],
           'phone'     => ['required','numeric'],
           'date_debut_debt' => ['required','date'],

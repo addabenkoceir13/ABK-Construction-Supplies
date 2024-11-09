@@ -54,6 +54,13 @@
             </a>
           </li>
 
+          <li class="menu-item {{ request()->routeIs('services.vehicle.index') ? 'active' : '' }}">
+            <a href="{{ route('services.vehicle.index') }}" class="menu-link">
+                <div>{{ __('Vehicle') }}</div>
+            </a>
+          </li>
+
+
 
 
         </ul>
