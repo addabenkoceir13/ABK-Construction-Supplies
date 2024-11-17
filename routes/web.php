@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::resource('services/subcategory', SubcategoryController::class)->names('services.subcategory');
   Route::resource('services/tractor-driver', TractorDriverController::class)->names('services.tractor-driver');
   Route::resource('services/vehicle', VehicleController::class)->names('services.vehicle');
+  Route::post('services/vehicle/{vehicle}/added-date', [VehicleController::class, 'addDateIns'])->name('services.vehicle.added-date');
   // ** end of services
 
 

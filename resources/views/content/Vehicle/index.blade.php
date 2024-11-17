@@ -56,6 +56,12 @@
                 <span class="badge bg-label-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Delete  Vehicle') }}</span>">
                 <i class="bx bx-trash me-1"></i></span>
               </a>
+              @if ($vehicle->insuranceDateExpiredLast())
+                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalAddDateInsuranceVehicle-{{ $vehicle->id }}">
+                  <span class="badge bg-label-hover-linkedin" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="<i class='bx bx-bell bx-xs' ></i> <span>{{ __('Added date insurance vehicle') }}</span>">
+                  <i class='bx bx-calendar-plus me-1'></i>
+                </a>
+              @endif
           </tr>
           @include('content.Vehicle.edit')
           @include('content.Vehicle.delete')

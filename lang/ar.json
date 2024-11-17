@@ -208,8 +208,8 @@
   "Do you really want to delete this vehicle?":"هل تريد حقًا حذف هذه المركبة؟",
   "Vehicle deleted successfully":"تم حذف المركبة بنجاح",
   "Vehicle updated successfully":"تم تحديث السيارة بنجاح",
-  "":"",
-  "":"",
+  "Added date insurance vehicle":"تاريخ إضافة تأمين المركبة",
+  "Vehicle insurance date added successfully":"تم إضافة تاريخ تأمين المركبة بنجاح ",
   "":"",
   "":""
 }

@@ -81,26 +81,43 @@ class VehicleController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    public function edit(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'start_date'        => 'required|date',
+            'end_date'          => 'required|date',
+        ]);
+        if ($validator->fails()){
+            toastr()->error($validator->errors()->first());
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        try {
+          DB::beginTransaction();
+
+
+          $dataIns = array_replace([
+              'vehicle_id'     => $id,
+              'start_date'     => $request->start_date,
+              'end_date'       => $request->end_date,
+          ]);
+          $insuranceVehicle = $this->insuranceVehicle->create($dataIns);
+
+          DB::commit();
+          toastr()->success('Vehicle insurance date added successfully');
+          return redirect()->back();
+        }
+        catch (\Exception $e) {
+          DB::rollBack();
+          toastr()->error($e->getMessage());
+          return redirect()->back();
+      }
     }
 
     public function update(Request $request, $id)
@@ -154,15 +171,47 @@ class VehicleController extends Controller
      */
     public function destroy($id)
     {
-      try {
-        $this->vehicle->delete($id);
-        toastr()->success(__('Vehicle deleted successfully'));
-        return redirect()->back();
+        try {
+          $this->vehicle->delete($id);
+          toastr()->success(__('Vehicle deleted successfully'));
+          return redirect()->back();
+        }
+        catch (\Exception $e) {
+          DB::rollBack();
+          toastr()->error($e->getMessage());
+          return redirect()->back();
       }
-      catch (\Exception $e) {
-        DB::rollBack();
-        toastr()->error($e->getMessage());
-        return redirect()->back();
     }
+
+    public function addDateIns(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'start_date'        => 'required|date',
+            'end_date'          => 'required|date',
+        ]);
+        if ($validator->fails()){
+            toastr()->error($validator->errors()->first());
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        try {
+          DB::beginTransaction();
+
+
+          $dataIns = array_replace([
+              'vehicle_id'     => $id,
+              'start_date'     => $request->start_date,
+              'end_date'       => $request->end_date,
+          ]);
+          $insuranceVehicle = $this->insuranceVehicle->create($dataIns);
+
+          DB::commit();
+          toastr()->success('Vehicle insurance date added successfully');
+          return redirect()->back();
+        }
+        catch (\Exception $e) {
+          DB::rollBack();
+          toastr()->error($e->getMessage());
+          return redirect()->back();
+      }
     }
 }
