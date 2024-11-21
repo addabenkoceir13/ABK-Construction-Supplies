@@ -43,7 +43,6 @@
                 @case('motorcycle')
                   <span class="badge bg-label-facebook"><i class='bx bx-cycling'></i></span>
                   @break
-
               @endswitch
             </td>
             <td>{{ $vehicle->license_plate }}</td>

@@ -60,9 +60,6 @@
             </a>
           </li>
 
-
-
-
         </ul>
       </li>
 
@@ -110,6 +107,27 @@
           <li class="menu-item {{ request()->routeIs('debt-supplier.index-paid') ? 'active' : '' }} ">
             <a href="{{ route('debt-supplier.index-paid') }}" class="menu-link {{ request()->routeIs('debt-supplier.index-paid') ? 'text-success' : '' }} ">
                 <div>{{ __('Debts Supplier Paid') }}</div>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="menu-item {{ request()->routeIs('fuel-stations.*') ? 'active open' : '' }}">
+        <a class="menu-link menu-toggle" >
+            <i class="menu-icon bx bx-credit-card-front"></i>
+            <div>{{ __('Fuel Accounting') }}</div>
+        </a>
+        <ul class="menu-sub">
+          <li class="menu-item {{ request()->routeIs('debt-supplier.index') ? 'active' : '' }} ">
+            <a href="{{ route('fuel-stations.index') }}" class="menu-link {{ request()->routeIs('debt-supplier.index') ? 'text-warning' : '' }} ">
+                <div>{{ __('Fuel Accounting Unpaid') }}</div>
+            </a>
+          </li>
+
+          <li class="menu-item {{ request()->routeIs('debt-supplier.index-paid') ? 'active' : '' }} ">
+            <a href="{{ route('debt-supplier.index-paid') }}" class="menu-link {{ request()->routeIs('debt-supplier.index-paid') ? 'text-success' : '' }} ">
+                <div>{{ __('Fuel Accounting Paid') }}</div>
             </a>
           </li>
 

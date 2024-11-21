@@ -4,6 +4,7 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Debt\DebtController;
 use App\Http\Controllers\Category\SubcategoryController;
 use App\Http\Controllers\Debt\DebtWithSupplierController;
+use App\Http\Controllers\FuelStation\FulstationController;
 use App\Http\Controllers\Print\PrinterController;
 use App\Http\Controllers\Supplier\SupplierController;
 use App\Http\Controllers\TractorDriver\TractorDriverController;
@@ -63,6 +64,8 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('debt-supplier/status/paid', [DebtWithSupplierController::class, 'indexPaid'])->name('debt-supplier.index-paid');
 
   Route::post('debt/search', [DebtController::class, 'searchName'])->name('debt.search');
+
+  Route::resource('fuel-stations', FulstationController::class);
 
 
 

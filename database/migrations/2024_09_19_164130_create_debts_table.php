@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('debts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('tractor_driver_id')->constrained('tractor_drivers')->cascadeOnDelete();
             $table->string('fullname');
             $table->string('phone');
             $table->date('date_debut_debt');
