@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('fuel_stations', function (Blueprint $table) {
             $table->enum('status', ['unpaid', 'paid'])->default('unpaid')->after('amount');
+            $table->enum('type_fuel', ['diesel', 'gasoline','gas'])->default('diesel')->after(' amount');
         });
     }
 
@@ -26,7 +27,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('fuel_stations', function (Blueprint $table) {
-          $table->dropColumn(['status']);
+          $table->dropColumn(['status','type_fuel']);
         });
     }
 };

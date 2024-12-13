@@ -66,6 +66,8 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('debt/search', [DebtController::class, 'searchName'])->name('debt.search');
 
   Route::resource('fuel-stations', FulstationController::class);
+  Route::patch('fuel-stations/status/{id}', [FulstationController::class, 'status'])->name('fuel-stations.status');
+  Route::get('fuel-stations/status/paid', [FulstationController::class, 'indexPaid'])->name('fuel-stations.index-paid');
 
 
 

@@ -63,16 +63,40 @@ class EloquentFuelStation implements FuelStationRepository
      * @param $search
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|mixed
      */
-    public function paginate($perPage, $search = null)
+    public function paginate($perPage, $search = null, $start_date = null, $end_date = null)
     {
-        $query = FuelStation::query();
+      $query = FuelStation::query();
 
-        $result = $query->orderBy('id', 'desc')
-            ->get();
+      if ($start_date && $end_date) {
+          $query->whereBetween('filing_datetime', [$start_date, $end_date]);
+      }
 
-        if ($search) {
-            $result->appends(['search' => $search]);
-        }
-        return $result;
+      // Use paginate() instead of get()
+      $result = $query->orderBy('id', 'desc')->whereStatus('unpaid')
+                      ->paginate($perPage)
+                      ->appends([
+                          'start_date' => $start_date,
+                          'end_date' => $end_date,
+                      ]);
+
+      return $result;
+    }
+    public function paginatePaid($perPage, $search = null, $start_date = null, $end_date = null)
+    {
+      $query = FuelStation::query();
+
+      if ($start_date && $end_date) {
+          $query->whereBetween('filing_datetime', [$start_date, $end_date]);
+      }
+
+      // Use paginate() instead of get()
+      $result = $query->orderBy('id', 'desc')->whereStatus('paid')
+                      ->paginate($perPage)
+                      ->appends([
+                          'start_date' => $start_date,
+                          'end_date' => $end_date,
+                      ]);
+
+      return $result;
     }
 }

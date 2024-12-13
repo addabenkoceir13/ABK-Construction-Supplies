@@ -19,6 +19,8 @@ class FuelStation extends Model
     'filing_datetime',
     'liter',
     'amount',
+    'status',
+    'type_fuel',
   ];
 
 
