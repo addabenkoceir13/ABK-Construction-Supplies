@@ -1,204 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zxx">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="{{ asset('assets/css/css-invoice.css') }}">
-  <title>{{ __('Debts') }}</title>
-  <style>
-    /* Styles for Print */
-    @media print {
-      .no-print {
-        display: none;
-      }
-      .print-area {
-        font-family: Arial, sans-serif;
-        color: #333;
-      }
-      .print-area h4, .print-area h5 {
-        color: #000;
-      }
-      .table thead th {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-      }
-      .table tbody td {
-        border: 1px solid #dee2e6;
-      }
-    }
-  </style>
-</head>
+    <title>{{ __('Print Invoice') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+
+    <!-- External CSS libraries -->
+    <link rel="stylesheet" href="{{ asset('print/assets/bootstrap.min.css') }}">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ asset('print/assets/style.css') }}">
+
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon">
+
+
 <body dir="rtl">
+    <!-- Invoice 3 start -->
+    <div class="invoice-3 invoice-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="invoice-inner">
+                        <div class="invoice-info" id="invoice_wrapper">
+                            <div class="invoice-headar">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="invoice-name">
+                                            <!-- logo started -->
+                                            <div class="logo">
+                                                <img src="{{ asset('assets/img/logos/logo-v2.jpg') }}" style="">
+                                            </div>
+                                            <!-- logo ended -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="invoice">
+                                            <h1 class="text-end inv-header-1 mb-0">{{ __('Invoice No:') }}
+                                                {{ str_pad($debt->id, 4, '0', STR_PAD_LEFT) . '/' . $debt->created_at->format('Y') }}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="invoice-top">
+                                <div class="row">
+                                    <div class="col-sm-6 mb-30">
+                                        <div class="invoice-number">
+                                            <h4 class="inv-title-1">{{ __('Invoice To') }}</h4>
+                                            <p class="invo-addr-1 mb-0">
+                                                {{ $debt->fullname }}
+                                            </p>
+                                            <p class="invo-addr-1 mb-0">{{ $debt->phone }}</p>
 
-  <page size="A4" id="content-to-print" style="background: white;">
-    <div class="py-4">
-      <div class="px-14 py-6">
-        <table class="w-full border-collapse border-spacing-0">
-          <tbody>
-            <tr>
-              <td class="w-full align-top">
-                <div>
-                  <img src="{{ asset('assets/img/logos/logo-v2.jpg') }}" style="border-radius: 50%;" width="8%"  />
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-30">
+                                        <div class="invoice-number text-end">
+                                            <h4 class="inv-title-1">{{ __('Bill To') }}</h4>
+                                            <p class="invo-addr-1 mb-0">
+                                                مؤسسة عدة بن قصير لمستلزمات البناء
+                                            </p>
+                                            <p class="invo-addr-1 mb-0">06 61785937</p>
+                                            <p class="invo-addr-1 mb-0">07 70932767</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-30">
+                                        <h4 class="inv-title-1">{{ __('Date') }}</h4>
+                                        <p class="invo-addr-1 mb-0">{{ __('Due Date:') }} {{ $debt->date_debut_debt }}
+                                        </p>
+                                    </div>
+                                    {{-- <div class="col-sm-6 text-end mb-30">
+                                        <h4 class="inv-title-1">Payment Method</h4>
+                                        <p class="inv-from-1 mb-0">Credit Card</p>
+                                    </div> --}}
+                                </div>
+                            </div>
+                            <div class="invoice-center">
+                                <div class="order-summary">
+                                    <h4>{{ __('Order summary') }}</h4>
+                                    <div class="table-outer">
+                                        <table class="default-table invoice-table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>{{ __('Product details') }}</th>
+                                                    <th>{{ __('Qty') }}</th>
+                                                    <th>{{ __('Price') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($debt->getDebtProduct as $item)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $item->name_category }} </td>
+                                                        <td>{{ $item->quantity }}
+                                                            {{ $item->getSubcategory->display_name }}</td>
+                                                        <td>{{ number_format($item->amount, 2) }} {{ __('DZ') }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                                <tr>
+                                                    <td colspan="3"><strong>{{ __('Net total:') }}</strong></td>
+                                                    <td><strong>{{ number_format($debt->total_debt_amount, 2) }}
+                                                            {{ __('DZ') }}</strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="invoice-btn-section clearfix d-print-none">
+                            <a href="javascript:window.print()" class="btn btn-lg btn-print">
+                                <i class="fa fa-print"></i> {{ __('Print Invoice') }}
+                            </a>
+                            {{-- <a id="invoice_download_btn" class="btn btn-lg btn-download btn-theme">
+                                <i class="fa fa-download"></i> {{ __('Download Invoice') }}
+                            </a> --}}
+                        </div>
+                    </div>
                 </div>
-              </td>
-
-              <td class="align-top">
-                <div class="text-sm">
-                  <table class="border-collapse border-spacing-0">
-                    <tbody>
-                      <tr>
-                        <td class="border-r pr-4">
-                          <div>
-                            <p class="whitespace-nowrap text-slate-400 text-right">{{ __('Date') }}</p>
-                            <p class="whitespace-nowrap font-bold text-main text-right">{{ now()->format('Y-m-d') }}</p>
-                          </div>
-                        </td>
-                        <td class="pl-4">
-                          <div>
-                            <p class="whitespace-nowrap text-slate-400 text-right">{{ __('Invoice') }} #</p>
-                            <p class="whitespace-nowrap font-bold text-main text-right"><p> {{ str_pad($debt->id, 4, '0', STR_PAD_LEFT) .'/'. $debt->created_at->format('Y') }}</p></p>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="bg-slate-100 px-14 py-6 text-sm">
-        <table class="w-full border-collapse border-spacing-0">
-          <tbody>
-            <tr>
-              <td class="w-1/2 align-top">
-                <div class="text-sm text-neutral-600">
-                  <h3 class="whitespace-nowrap font-bold">{{ __('Client Information') }}</h3>
-                  <p><strong>{{ __('Client name') }}:</strong> {{ $debt->fullname }}</p>
-                  <p><strong>{{ __('Client phone') }}:</strong> {{ $debt->phone }}</p>
-                </div>
-              </td>
-              <td class="w-1/2 align-top text-right">
-                <div class="text-sm text-neutral-600">
-                  <h3 class="whitespace-nowrap font-bold">{{ __('Company Information') }}:</h3>
-                  <p><strong>{{ __('Company Name') }}:</strong> {{ config('app.locale') == 'en' ?  config('variables.templateName') :  config('variables.templateNameAr') }}</p>
-                  <p><strong>{{ __('Company phone') }}:</strong> <span>0661785937</span></p>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="px-14 py-10 text-sm text-neutral-700">
-        <table class="w-full border-collapse border-spacing-0">
-          <thead>
-            <tr>
-              <td class="border-b-2 border-main pb-3 pl-3 font-bold text-main">#</td>
-              <td class="border-b-2 border-main pb-3 pl-2 font-bold text-main">{{ __('Product details') }}</td>
-              <td class="border-b-2 border-main pb-3 pl-2 text-main font-bold text-main">{{ __('Qty') }}</td>
-              <td class="border-b-2 border-main pb-3 pl-2 text-main font-bold text-main">{{ __('Price') }}</td>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach ($debt->getDebtProduct as $item )
-              <tr>
-                <td class="border-b py-3 pl-3">{{  $loop->iteration }}</td>
-                <td class="border-b py-3 pl-2">{{ $item->name_category }}</td>
-                <td class="border-b py-3 pl-2 text-right">{{ $item->quantity }} {{ $item->getSubcategory->display_name }}</td>
-                <td class="border-b py-3 pl-2 text-right">{{ $item->amount }} {{ __('DZ') }}</td>
-              </tr>
-            @endforeach
-
-            <tr>
-              <td colspan="4">
-                <table class="w-full border-collapse border-spacing-0">
-                  <tbody>
-                    <tr>
-                      <td class="w-full"></td>
-                      <td>
-                        <table class="w-full border-collapse border-spacing-0">
-                          <tbody>
-                            <tr>
-                              <td class="border-b p-3">
-                                <div class="whitespace-nowrap text-slate-400">{{ __('Net total:') }}</div>
-                              </td>
-                              <td class="border-b p-3 text-right">
-                                <div class="whitespace-nowrap font-bold text-main">{{ number_format($debt->total_debt_amount, 2) }} {{ __('DZ') }}</div>
-                              </td>
-                            </tr>
-                            {{-- <tr>
-                              <td class="p-3">
-                                <div class="whitespace-nowrap text-slate-400">VAT total:</div>
-                              </td>
-                              <td class="p-3 text-right">
-                                <div class="whitespace-nowrap font-bold text-main">$64.00</div>
-                              </td>
-                            </tr> --}}
-                            <tr>
-                              <td class="bg-main p-3">
-                                <div class="whitespace-nowrap font-bold text-white">{{ __('Total:') }}</div>
-                              </td>
-                              <td class="bg-main p-3 text-right">
-                                <div class="whitespace-nowrap font-bold text-white">{{ number_format($debt->total_debt_amount, 2) }} {{ __('DZ') }}</div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            </div>
+        </div>
     </div>
+    <!-- Invoice 3 end -->
 
-  </page>
+    {{-- <script src="{{ asset('print/assets/js/app.js') }}"></script> --}}
+    <script src="{{ asset('print/assets/js/html2canvas.js') }}"></script>
+    <script src="{{ asset('print/assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('print/assets/js/jspdf.min.js') }}"></script>
 
-    <!-- Print Button -->
-    <div class="no-print text-center mt-4">
-      <button id="print-button" class="btn btn-primary">{{ __('Print Invoice') }}</button>
-    </div>
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '#invoice_download_btn', function () {
+            console.log('====================================');
+            console.log('download');
+            console.log('====================================');
+                var contentWidth = $("#invoice_wrapper").width();
+                var contentHeight = $("#invoice_wrapper").height();
+                var topLeftMargin = 20;
+                var pdfWidth = contentWidth + (topLeftMargin * 2);
+                var pdfHeight = (pdfWidth * 1.5) + (topLeftMargin * 2);
+                var canvasImageWidth = contentWidth;
+                var canvasImageHeight = contentHeight;
+                var totalPDFPages = Math.ceil(contentHeight / pdfHeight) - 1;
 
+                html2canvas($("#invoice_wrapper")[0], {allowTaint: true}).then(function (canvas) {
+                    canvas.getContext('2d');
+                    var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                    var pdf = new jsPDF('p', 'pt', [pdfWidth, pdfHeight]);
+                    pdf.addImage(imgData, 'JPG', topLeftMargin, topLeftMargin, canvasImageWidth, canvasImageHeight);
+                    for (var i = 1; i <= totalPDFPages; i++) {
+                        pdf.addPage(pdfWidth, pdfHeight);
+                        pdf.addImage(imgData, 'JPG', topLeftMargin, -(pdfHeight * i) + (topLeftMargin * 4), canvasImageWidth, canvasImageHeight);
+                    }
+                    pdf.save("sample-invoice.pdf");
+                });
+            });
+        });
+    </script>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-      $(document).ready(function() {
-    $('#print-button').on('click', function() {
-        // Select the content you want to print
-        var printContents = document.getElementById("content-to-print").innerHTML;
-
-        // Open a new window and write the content into it
-        var printWindow = window.open("", "_blank", "width=800,height=600");
-        printWindow.document.open();
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Invoice</title>
-                    <style>
-                        /* Add your print-specific CSS here */
-                        body { font-family: Arial, sans-serif; direction: rtl; }
-                        /* Additional styling for print version */
-                    </style>
-                    <link rel="stylesheet" href="{{ asset('assets/css/css-invoice.css') }}">
-                </head>
-                <body onload="window.print(); window.close();">
-                    ${printContents}
-                </body>
-            </html>
-        `);
-        printWindow.document.close();
-    });
-});
-
-  </script>
 </body>
+
 </html>
-
-

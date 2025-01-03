@@ -45,8 +45,8 @@ class VehicleController extends Controller
             'wilaya_license'    => 'required|numeric',
             'year_license'      => 'required|numeric',
             'license'           => 'required|numeric',
-            'start_date'        => 'required|date',
-            'end_date'          => 'required|date',
+            'start_date'        => 'sometimes|date',
+            'end_date'          => 'sometimes|date',
         ]);
         if ($validator->fails()){
             toastr()->error($validator->errors()->first());
@@ -128,8 +128,8 @@ class VehicleController extends Controller
           'wilaya_license'    => 'required|numeric',
           'year_license'      => 'required|numeric',
           'license'           => 'required|numeric',
-          'start_date'        => 'required|date',
-          'end_date'          => 'required|date',
+          'start_date'        => 'sometimes|date',
+          'end_date'          => 'sometimes|date',
         ]);
         if ($validator->fails()){
             toastr()->error($validator->errors()->first());

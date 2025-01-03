@@ -9,6 +9,7 @@ use App\Http\Controllers\Print\PrinterController;
 use App\Http\Controllers\Supplier\SupplierController;
 use App\Http\Controllers\TractorDriver\TractorDriverController;
 use App\Http\Controllers\Vehicle\VehicleController;
+use App\Models\Debt;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -84,6 +85,13 @@ Route::post('/auth/login-action', 'App\Http\Controllers\authentications\LoginBas
 Route::get('/auth/forgot-password-basic', 'App\Http\Controllers\authentications\ForgotPasswordBasic@index')->name('auth-reset-password-basic');
 Route::get('/auth/logout', 'App\Http\Controllers\authentications\LogoutBasic@logout')->name('auth-logout');
 
+Route::get('list/debt/supplier/', function() {
+  $date = now();
+      $dateToday = $date->format('Y-m-d');
 
+      $debts = Debt::whereStatus('unpaid')->where('tractor_driver_id','!=',1)->orderBy('id', 'desc')->get();;
+
+      return view('content.Liste.index', compact('debts', ));
+});
 
 

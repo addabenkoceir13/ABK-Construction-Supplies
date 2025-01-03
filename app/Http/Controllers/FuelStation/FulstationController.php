@@ -32,7 +32,7 @@ class FulstationController extends Controller
         $vehicles = $this->vehicle->paginate(10);
         return view('content.Fuelstation.index', compact('fuelStations', 'vehicles'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -53,7 +53,7 @@ class FulstationController extends Controller
             'name_driver'       => 'required|string|max:255',
             'name_distributor'  => 'required|string|max:255',
             'filing_datetime'   => 'required|date',
-            'liter'             => 'required|numeric',
+            'liter'             => 'sometimes|numeric',
             'amount'            => 'required|numeric',
             'type_fuel'         => 'required',
         ]);
@@ -110,7 +110,7 @@ class FulstationController extends Controller
           'name_driver'       => 'required|string|max:255',
           'name_distributor'  => 'required|string|max:255',
           'filing_datetime'   => 'required|date',
-          'liter'             => 'required|numeric',
+          'liter'             => 'sometimes|numeric',
           'amount'            => 'required|numeric',
           'type_fuel'         => 'required',
         ]);
@@ -166,7 +166,7 @@ class FulstationController extends Controller
         DB::commit();
         toastr()->success(__('Status updated successfully'));
         return redirect()->back();
-      } 
+      }
       catch (\Exception $e) {
         DB::rollBack();
         toastr()->error($e->getMessage());

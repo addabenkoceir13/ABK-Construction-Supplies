@@ -17,7 +17,7 @@ class PrinterController extends Controller
     public function factuerClient($id,$fullname)
     {
         $debt = $this->debt->find($id);
-
+        
         return view('content.Printer.facteur-client', compact('debt'));
     }
 }
