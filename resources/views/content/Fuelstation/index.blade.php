@@ -21,7 +21,7 @@
             </button>
             <div class="d-flex">
                 <p class="mx-2">{{ __('Total Amount: ') }}</p>
-                <p>{{ number_format($total, 2) }} {{ __('DZ') }}</p>
+                <p class="total-amount">{{ number_format($total, 2) }} {{ __('DZ') }}</p>
             </div>
         </h5>
         @include('content.Fuelstation.add')
@@ -138,6 +138,7 @@
                             $(this).html(response.content).fadeIn(200);
                         });
                         $('#pagination').html(response.pagination);
+                        $('.total-amount').html(response.total);
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);

@@ -32,10 +32,12 @@ class FulstationController extends Controller
         $vehicles = $this->vehicle->all();
 
         if ($request->ajax()) {
-        // dd($search);
+          $total = $fuelStations->sum('amount');
+
           return response()->json([
             'content' => view('content.Fuelstation.pagination-data', compact('fuelStations', 'vehicles'))->render(),
             'pagination' => $fuelStations->links('vendor.pagination.custom')->render(),
+            'total' => number_format($total, 2, ',', ''), // Format the total
           ]);
           // return view('content.fuelstation.pagination-data', compact('fuelStations', 'vehicles'))->render();
         }
