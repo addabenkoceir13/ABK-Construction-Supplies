@@ -36,7 +36,7 @@ interface FuelStationRepository
      * @param $search
      * @return mixed
      */
-    public function paginate($perPage, $search = null, $start_date = null, $end_date = null);
+    public function paginate($perPage,  $search = null, $start_date = null, $end_date = null);
 
     /**
      * Paginate Coupons.

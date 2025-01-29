@@ -64,7 +64,10 @@
                     </div>
                     <div class="col-md-1">
                         <select class="form-select mb-3" id="entries">
-                            <option value="10" selected>10</option>
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
                             <option value="75">75</option>
@@ -89,13 +92,26 @@
 @section('page-script')
     <script>
         $(document).ready(function() {
-            $(document).on('click', '.pagination a', function(e) {
-                e.preventDefault();
-                const url = new URL($(this).attr('href'));  // Proper URL parsing
-                const page = url.searchParams.get("page");  // Get page parameter value
-                fetchContent(page);
-            });
+            // var currentPage = new URLSearchParams(window.location.search).get('page') || 1;
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                let page = $(this).attr('href').split('page=')[1]; // Get page number from the URL
+                let search = $('#search').val(); // Get the search value
+                let start_date = $('#start_date').val(); // Optional: Add start_date if needed
+                let end_date = $('#end_date').val(); // Optional: Add end_date if needed
 
+                let params = {
+                    page: page,
+                };
+
+                let queryString = $.param(params);
+
+                console.log('====================================');
+                console.log(queryString);
+                console.log('====================================');
+
+                fetchContent(page, search, start_date, end_date);
+            });
             // Event listener for search input
             $('#search').on('keyup', function() {
                 fetchContent(); // Fetch results on search
@@ -106,6 +122,13 @@
                 fetchContent(); // Fetch results on entries change
             });
 
+            // Pagination click event
+            $(document).on('click', '.page-link', function(e) {
+                e.preventDefault();
+                const page = $(this).attr('href').split('page=')[1];
+                fetchContent(page); // Fetch results for the selected page
+            });
+
             // Clear filters
             $('#clear').on('click', function() {
                 $('#start_date').val('');
@@ -114,12 +137,16 @@
             });
 
             // Dynamic fetching function
-            function fetchContent(page = 1) {
-                const search = $('#search').val();
+            function fetchContent(page = 1, search = '', startDate = '', endDate = '') {
+                // const search = $('#search').val();
                 const entries = $('#entries').val();
-                const startDate = $('#start_date').val();
-                const endDate = $('#end_date').val();
-              console.log(page, entries, search);
+                // const startDate = $('#start_date').val();
+                // const endDate = $('#end_date').val();
+
+                console.log('====================================');
+                console.log('page:', page);
+                console.log('entries:', entries);
+                console.log('====================================');
 
                 // $('#content').html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
 
@@ -152,3 +179,108 @@
         });
     </script>
 @endsection
+
+
+
+{{-- <script>
+  $(document).ready(function() {
+     // Initialize variables
+      let searchQuery = '';
+      let perPage = 10;
+
+      // $(document).on('click', '.pagination a', function (event) {
+      //     event.preventDefault();
+      //     let page = $(this).attr('href').split('page=')[1];
+      //     fetchFuelStations(page);
+      // });
+
+      function fetchFuelStations(page) {
+          $.ajax({
+              url: "?page=" + page,
+              beforeSend: function () {
+              $('#fuel-stations-container').fadeOut(); // Fade out the old content
+            },
+            success: function (data) {
+                $('#fuel-stations-container').html(data).fadeIn(); // Fade in the new content
+            }
+          });
+      }
+
+      // Fetch content dynamically
+      function fetchContent(page = 1) {
+          $('#content').html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+          var searchQuery = $('#search').val();  // Get the search query
+          var perPage = $('#entries-per-page').val();  // Get the selected entries per page
+          $.ajax({
+              url: "{{ route('fuel-stations.index') }}", // Adjust the route as needed
+              type: "GET",
+              data: {
+                  page: page,
+                  search: searchQuery,
+                  per_page: perPage,
+              },
+              success: function (response) {
+                  // Update content and pagination dynamically
+                  $('#content').fadeOut(200, function () {
+                      $(this).html(response.content).fadeIn(200);
+                  });
+
+                  $('#pagination').html(response.pagination);
+              },
+              error: function (xhr, status, error) {
+                  console.error('Error:', error);
+              }
+          });
+      }
+
+     // Event listener for search input
+    $('#search').on('keyup', function () {
+        fetchPage();  // Fetch the first page with the updated search query
+    });
+
+    // Event listener for entries per page dropdown
+    $('#entries-per-page').on('change', function () {
+        fetchPage();  // Fetch the first page with the updated entries per page
+    });
+
+      // Pagination Click Event
+      $(document).on('click', '.page-link[data-page]', function (e) {
+          e.preventDefault();
+          const page = $(this).data('page');
+          fetchContent(page); // Fetch results for the selected page
+      });
+
+      $(document).on('click', '#clear', function () {
+        $('#start_date').val('');
+        $('#end_date').val('');
+
+        // Update the URL to remove date parameters
+        const url = new URL(window.location.href);
+        url.searchParams.delete('start_date');
+        url.searchParams.delete('end_date');
+
+        // Push the updated URL to the browser history
+        history.pushState(null, '', url);
+
+        // Optionally submit the form if required to refresh results
+        $('#filter-form').submit();
+      })
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const filterForm = document.getElementById('filter-form');
+      const startDate = document.getElementById('start_date');
+      const endDate = document.getElementById('end_date');
+
+      startDate.addEventListener('change', function () {
+          filterForm.submit();
+      });
+
+      endDate.addEventListener('change', function () {
+          filterForm.submit();
+      });
+  });
+
+</script> --}}

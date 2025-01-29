@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::resource('fuel-stations', FulstationController::class);
   Route::patch('fuel-stations/status/{id}', [FulstationController::class, 'status'])->name('fuel-stations.status');
   Route::get('fuel-stations/status/paid', [FulstationController::class, 'indexPaid'])->name('fuel-stations.index-paid');
+  Route::get('fuel-stations/search', [FulstationController::class, 'indexA'])->name('fuel-stations.index-search');
 
 
 

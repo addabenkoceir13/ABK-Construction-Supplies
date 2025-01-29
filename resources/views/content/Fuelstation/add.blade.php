@@ -15,7 +15,10 @@
                   <select id="vehicle_id" class="form-select" name="vehicle_id" >
                     <option value="">{{ __('Choose a type vehicle') }}</option>
                     @foreach ($vehicles as $vehicle)
-                      <option value="{{ $vehicle->id }}">{{ $vehicle->name }}</option>
+                      <option value="{{ $vehicle->id }}">
+                        {{ $vehicle->name }} |
+                        {{ $vehicle->license_plate }}
+                      </option>
                     @endforeach
                   </select>
                   @error('vehicle_id')
