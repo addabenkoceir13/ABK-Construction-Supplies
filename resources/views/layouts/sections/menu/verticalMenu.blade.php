@@ -31,6 +31,13 @@
               <div>{{ __('Dashboard') }}</div>
           </a>
       </li>
+      <li class="menu-item {{ request()->routeIs('dashboard-analytics-template') ? 'active' : '' }}">
+          <a href="{{ route('dashboard-analytics-template') }}" class="menu-link">
+              {{-- <i class="menu-icon tf-icons bx bx-collection"></i> --}}
+              <i class='menu-icon bx bxs-dashboard'></i>
+              <div>{{ __('Dashboard') }}</div>
+          </a>
+      </li>
 
       <li class="menu-header small text-uppercase">
           <span class="menu-header-text">{{ __('Services for drivers, cars, and construction') }}</span>

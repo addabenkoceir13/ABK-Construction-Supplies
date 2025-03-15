@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 // Main Page Route
 Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('auth');
+Route::get('/template', 'App\Http\Controllers\dashboard\Analytics@index2')->name('dashboard-analytics-template')->middleware('auth');
 
 // layout
 Route::group(['middleware' => ['auth']], function () {
