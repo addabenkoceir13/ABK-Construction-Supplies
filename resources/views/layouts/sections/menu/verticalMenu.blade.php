@@ -128,13 +128,13 @@
         <ul class="menu-sub">
           <li class="menu-item {{ request()->routeIs('fuel-stations.index') ? 'active' : '' }} ">
             <a href="{{ route('fuel-stations.index') }}" class="menu-link {{ request()->routeIs('fuel-stations.index') ? 'text-warning' : '' }} ">
-                <div>{{ __('Paid fuel receipts') }}</div>
+                <div>{{ __('Unpaid fuel receipts') }}</div>
             </a>
           </li>
 
           <li class="menu-item {{ request()->routeIs('fuel-stations.index-paid') ? 'active' : '' }} ">
             <a href="{{ route('fuel-stations.index-paid') }}" class="menu-link {{ request()->routeIs('fuel-stations.index-paid') ? 'text-success' : '' }} ">
-                <div>{{ __('Unpaid fuel receipts') }}</div>
+                <div>{{ __('Paid fuel receipts') }}</div>
             </a>
           </li>
 

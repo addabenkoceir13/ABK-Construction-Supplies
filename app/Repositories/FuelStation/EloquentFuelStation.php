@@ -25,6 +25,11 @@ class EloquentFuelStation implements FuelStationRepository
     return FuelStation::find($id);
   }
 
+  public function updateStatus($ids, $status)
+  {
+    return FuelStation::whereIn('id', $ids)->update(['status' => $status]);
+  }
+
   /**
    * @param array $data
    * @return mixed

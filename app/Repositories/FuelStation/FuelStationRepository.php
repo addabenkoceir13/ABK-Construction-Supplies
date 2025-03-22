@@ -15,6 +15,8 @@ interface FuelStationRepository
      */
     public function find($id);
 
+    public function updateStatus($ids, $status);
+
     /**
      * {@inheritdoc}
      */

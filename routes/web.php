@@ -11,6 +11,7 @@ use App\Http\Controllers\TractorDriver\TractorDriverController;
 use App\Http\Controllers\Vehicle\VehicleController;
 use App\Models\Debt;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -43,8 +44,8 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 // Main Page Route
-Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('auth');
-Route::get('/template', 'App\Http\Controllers\dashboard\Analytics@index2')->name('dashboard-analytics-template')->middleware('auth');
+Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index2')->name('dashboard-analytics')->middleware('auth');
+Route::get('/template', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboard-analytics-template')->middleware('auth');
 
 // layout
 Route::group(['middleware' => ['auth']], function () {
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::patch('fuel-stations/status/{id}', [FulstationController::class, 'status'])->name('fuel-stations.status');
   Route::get('fuel-stations/status/paid', [FulstationController::class, 'indexPaid'])->name('fuel-stations.index-paid');
   Route::get('fuel-stations/search', [FulstationController::class, 'indexA'])->name('fuel-stations.index-search');
+  Route::post('fuel-stations/change-status', [FulstationController::class, 'updateStatus'])->name('fuel-stations.update.status');
 
 
 
@@ -94,6 +96,12 @@ Route::get('list/debt/supplier/', function() {
       $debts = Debt::whereStatus('unpaid')->where('tractor_driver_id','!=',1)->orderBy('id', 'desc')->get();;
 
       return view('content.Liste.index', compact('debts', ));
+});
+
+Route::get('password/hash', function() {
+  $password = '123456789';
+  $hashedPassword = Hash::make($password);
+  return $hashedPassword;
 });
 
 

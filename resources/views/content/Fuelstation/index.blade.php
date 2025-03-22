@@ -75,15 +75,23 @@
             </form>
         </div>
         <div class="table-responsive text-nowrap">
+            <div class="mt-3">
+                <button id="submit-selected" class="btn btn-primary m-2" disabled>{{ __('To be sure') }}</button>
+            </div>
+
             <div id="content">
                 @include('content.Fuelstation.pagination-data', ['fuelStations' => $fuelStations])
             </div>
             <div id="pagination" class="mt-3 pagination-wrapper">
-              {{ $fuelStations->links('vendor.pagination.custom') }}
+                {{ $fuelStations->links('vendor.pagination.custom') }}
             </div>
         </div>
     </div>
     <!--/ Basic Bootstrap Table -->
+@endsection
+
+@section('page-style')
+
 @endsection
 
 @section('page-script')
@@ -91,8 +99,8 @@
         $(document).ready(function() {
             $(document).on('click', '.pagination a', function(e) {
                 e.preventDefault();
-                const url = new URL($(this).attr('href'));  // Proper URL parsing
-                const page = url.searchParams.get("page");  // Get page parameter value
+                const url = new URL($(this).attr('href')); // Proper URL parsing
+                const page = url.searchParams.get("page"); // Get page parameter value
                 fetchContent(page);
             });
 
@@ -119,7 +127,7 @@
                 const entries = $('#entries').val();
                 const startDate = $('#start_date').val();
                 const endDate = $('#end_date').val();
-              console.log(page, entries, search);
+                console.log(page, entries, search);
 
                 // $('#content').html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
 
@@ -149,6 +157,72 @@
             // Auto-submit filters for date changes
             $('#start_date, #end_date').on('change', function() {
                 fetchContent(); // Fetch results on date change
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Handle "Select All" checkbox
+            $(document).on('change', '#select-all-page', function() {
+                var isChecked = $(this).prop('checked');
+                $('.row-checkbox').prop('checked', isChecked);
+                document.getElementById('submit-selected').disabled = !isChecked;
+            });
+
+            // Update "Select All" when individual checkboxes change
+            $(document).on('change', '.row-checkbox', function() {
+                var allChecked = $('.row-checkbox').length === $('.row-checkbox:checked').length;
+                var anyChecked = $('.row-checkbox:checked').length > 0 ? true : false;
+                console.log(anyChecked);
+
+                document.getElementById('submit-selected').disabled = !anyChecked;
+            });
+
+            // Submit selected IDs via AJAX
+            $('#submit-selected').on('click', function(e) {
+                e.preventDefault();
+
+                var selectedIds = $('.row-checkbox:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                if (selectedIds.length === 0) {
+                    alert('Please select at least one entry.');
+                    return;
+                }
+                Swal.fire({
+                    title: "{{ __('Have the documents been paid?') }}",
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: "{{ __('Yes') }}",
+                    denyButtonText: "{{ __('No') }}",
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ route('fuel-stations.update.status') }}',
+                            method: 'POST',
+                            data: {
+                                ids: selectedIds,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                Swal.fire("Saved!", "", "success");
+                                window.location.reload();
+                            },
+                            error: function(xhr) {
+                                // Handle error
+                                alert('An error occurred. Please try again.');
+                            }
+                        });
+
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+
+
             });
         });
     </script>

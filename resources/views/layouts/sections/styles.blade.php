@@ -38,6 +38,8 @@
 <link rel="stylesheet" href="{{ asset('assets/DataTables/dataTables.dataTables.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/DataTables/jquery.dataTables.min.css') }}">
 
+<link rel="stylesheet" href="{{ asset('assets/sweetalert2/min.css') }}">
+
 <!-- Vendor Styles -->
 @yield('vendor-style')
 
