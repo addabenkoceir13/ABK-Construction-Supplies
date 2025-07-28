@@ -210,6 +210,10 @@ class DebtController extends Controller
 
             $debt = $this->debt->update($id, $dataDebt);
 
+            $TotalDebtAmount = $debt->total_debt_amount;
+            $restDebtAmount  = $debt->rest_debt_amount;
+            $debtPaid        = $debt->debt_paid;
+
             for ($index=0; $index < count($products); $index++) {
                 $subcategory_id  = $subcategoryIds[$index];
                 $quantity        = $quantities[$index];
@@ -244,44 +248,11 @@ class DebtController extends Controller
 
             }
 
-            // foreach ($products as $index => $product) {
-            //     // Process each product, quantity, and amount
-            //     $subcategory_id  = $subcategoryIds[$index];
-            //     $quantity  = $quantities[$index];
-            //     $amount    = $amounts[$index];
-            //     $dateDebt  = $dateDebts[$index];
-            //     $idOld     = $Ids[$index];
-
-            //     $total    += $amount;
-
-            //     if ($idOld == 0) {
-            //         $dataDebtProduct = array_replace( [
-            //             'debt_id'   => $id,
-            //             'subcategory_id'   => $subcategory_id,
-            //             'name_category' => $products[$index],
-            //             'quantity'  => $quantities[$index],
-            //             'amount'    => $amounts[$index],
-            //             'date_debt' => $dateDebts[$index],
-            //         ]);
-
-            //         $this->debtProduct->create(data: $dataDebtProduct);
-            //     }
-            //     else {
-            //         $dataDebtProduct = array_replace( [
-            //           'subcategory_id'   => $subcategory_id,
-            //           'name_category'    => $products[$index],
-            //           'quantity'  => $quantities[$index],
-            //           'amount'    => $amounts[$index],
-            //           'date_debt' => $dateDebts[$index],
-            //         ]);
-            //         $this->debtProduct->update($id,$dataDebtProduct);
-            //     }
-
-            // }
-
+            $restDebtAmountNew = $total - $debtPaid;
+            
             $dataDebtTotal = array_replace( [
                 'total_debt_amount' => $total,
-                'rest_debt_amount' => $total,
+                'rest_debt_amount' => $restDebtAmountNew,
             ]);
 
             $this->debt->update($id, $dataDebtTotal);
