@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Debt;
 use App\Http\Controllers\Controller;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Debt\DebtRepository;
+use App\Repositories\DebtHistory\DebtHistoryRepository;
 use App\Repositories\DebtProduct\DebtProductRepository;
 use App\Repositories\TractorDriver\TractorDriverRepository;
 use Carbon\Carbon;
@@ -18,13 +19,15 @@ class DebtWithSupplierController extends Controller
 {
 
   private $debt;
+  private $debtHistory;
   private $debtProduct;
   private $category;
   private $tractorDriver;
 
-  public function __construct(DebtRepository $debt, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver)
+  public function __construct(DebtRepository $debt, DebtHistoryRepository $debtHistory, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver)
   {
     $this->debt = $debt;
+    $this->debtHistory = $debtHistory;
     $this->debtProduct = $debtProduct;
     $this->category = $category;
     $this->tractorDriver = $tractorDriver;
@@ -301,6 +304,7 @@ class DebtWithSupplierController extends Controller
       $debt = $this->debt->find($id);
 
       $DebtPaid = $request->debt_paid;
+      $DatePaid = $request->date_payment;
       $idsDebtProsucts = $request->id_debt_product;
       if (!is_null($idsDebtProsucts)) {
         foreach ($idsDebtProsucts as $idDebtProduct) {
@@ -338,6 +342,14 @@ class DebtWithSupplierController extends Controller
         toastr()->error(__('The amount paid exceeds the amount owed.'));
         return redirect()->route('debt.index');
       }
+
+      $debtHistoryData = array_replace([
+        'debt_id' => $id,
+        'amount'  => $DebtPaid,
+        'date'    => $DatePaid,
+      ]);
+
+      $this->debtHistory->create($debtHistoryData);
 
 
       toastr()->success(__('Debt paid successfully'));

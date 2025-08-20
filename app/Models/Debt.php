@@ -66,5 +66,10 @@ class Debt extends Model
       ->get();
   }
 
-  
+  public function debtHistories()
+  {
+    return $this->hasMany(DebtHistory::class);
+  }
+
+
 }

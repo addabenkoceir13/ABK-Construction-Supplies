@@ -28,7 +28,7 @@
       const debtProgress = new ApexCharts(document.querySelector("#debt-progress"), {
           series: [{{ $TotalPaidDebt }}, {{ $TotalRestDebt }}],
           chart: { type: 'donut', height: 350 },
-          labels: ['Paid Debt', 'Outstanding Debt'],
+          labels: ['{{ __("Paid Debt") }}', '{{ __("Outstanding Debt") }}'],
           colors: ['#00E396', '#FF4560'],
           legend: { position: 'bottom' },
           responsive: [{
@@ -41,7 +41,7 @@
       const fuelChart = new ApexCharts(document.querySelector("#fuel-chart"), {
           series: [{{ $TotalLiterGasoline }}, {{ $getTotalLiterTypeDiesl }}, {{ $TotalLiterGas }}],
           chart: { type: 'pie', height: 350 },
-          labels: ['Gasoline', 'Diesel', 'Gas'],
+          labels: ['{{ __("Diesel") }}', '{{ __("Gasoline") }}', '{{ __("Gas") }}'],
           colors: ['#FFB64D', '#546E7A', '#E91E63'],
           legend: { position: 'bottom' },
           responsive: [{
@@ -54,13 +54,13 @@
       const timelineData = @json($debtTimeline);
       const debtTimeline = new ApexCharts(document.querySelector("#debt-timeline"), {
           series: [{
-              name: 'Total Debt',
+              name: '{{ __("Total Debt") }}',
               data: timelineData.map(item => item.total)
           }, {
-              name: 'Paid',
+              name: '{{ __("Paid") }}',
               data: timelineData.map(item => item.paid)
           }, {
-              name: 'Remaining',
+              name: '{{ __("Remaining") }}',
               data: timelineData.map(item => item.remaining)
           }],
           chart: { type: 'area', height: 350 },
@@ -116,7 +116,7 @@
         const fuelChart = new ApexCharts(document.querySelector("#fuel-chart"), {
             series: [{{ $getTotalLiterTypeDiesl }}, {{ $TotalLiterGasoline }}, {{ $TotalLiterGas }}],
             chart: { type: 'donut', height: 300 },
-            labels: ['Diesel', 'Gasoline', 'Gas'],
+            labels: ['{{ __("Diesel") }}', '{{ __("Gasoline") }}', '{{ __("Gas") }}'],
             colors: ['#00CFE8', '#FF9F43', '#EA5455'],
             legend: { position: 'bottom' }
         }).render();
@@ -422,7 +422,7 @@
   <div class="col-12 col-lg-6 mb-4">
       <div class="card">
           <div class="card-header">
-              <h5 class="card-title mb-0">Debt Progress</h5>
+              <h5 class="card-title mb-0">{{ __('Debt Progress') }}</h5>
           </div>
           <div class="card-body">
               <div id="debt-progress"></div>
@@ -433,7 +433,7 @@
   <div class="col-12 col-lg-6 mb-4">
       <div class="card">
           <div class="card-header">
-              <h5 class="card-title mb-0">Fuel Type Distribution</h5>
+              <h5 class="card-title mb-0">{{ __('Fuel Type Distribution') }}</h5>
           </div>
           <div class="card-body">
               <div id="fuel-chart"></div>
@@ -444,7 +444,7 @@
   <div class="col-12 mb-4">
       <div class="card">
           <div class="card-header">
-              <h5 class="card-title mb-0">Debt Timeline</h5>
+              <h5 class="card-title mb-0">{{ __('Debt Timeline') }}</h5>
           </div>
           <div class="card-body">
               <div id="debt-timeline"></div>
@@ -455,7 +455,7 @@
   <div class="col-12 mb-4">
       <div class="card">
           <div class="card-header">
-              <h5 class="card-title mb-0">Monthly Fuel Consumption</h5>
+              <h5 class="card-title mb-0">{{ __('Monthly Fuel Consumption') }}</h5>
           </div>
           <div class="card-body">
               <div id="fuel-timeline"></div>

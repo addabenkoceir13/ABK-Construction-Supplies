@@ -6,6 +6,8 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\EloquentCategory;
 use App\Repositories\Debt\DebtRepository;
 use App\Repositories\Debt\EloquentDebt;
+use App\Repositories\DebtHistory\DebtHistoryRepository;
+use App\Repositories\DebtHistory\EloquentDebtHistory;
 use App\Repositories\DebtProduct\DebtProductRepository;
 use App\Repositories\DebtProduct\EloquentDebtProduct;
 use App\Repositories\FuelStation\EloquentFuelStation;
@@ -32,6 +34,7 @@ class EloquentRepositoryProvider extends ServiceProvider
       $this->app->bind(CategoryRepository::class, EloquentCategory::class);
       $this->app->bind(SubCategoryRepository::class, EloquentSubCategory::class);
       $this->app->bind(DebtRepository::class, EloquentDebt::class);
+      $this->app->bind(DebtHistoryRepository::class, EloquentDebtHistory::class);
       $this->app->bind(DebtProductRepository::class, EloquentDebtProduct::class);
       $this->app->bind(TractorDriverRepository::class, EloquentTractorDriver::class);
       $this->app->bind(VehicleRepository::class, EloquentVehicle::class);

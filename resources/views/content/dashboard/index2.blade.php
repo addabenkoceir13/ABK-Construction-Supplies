@@ -37,7 +37,7 @@
                             },
                             total: {
                                 show: true,
-                                label: 'Paid',
+                                label: '{{ __("Paid") }}',
                                 formatter: function(w) {
                                     return '{{ number_format(($TotalPaidDebt / $TotalDebt) * 100, 1) }}%'
                                 }
@@ -46,7 +46,7 @@
                     }
                 },
                 colors: ['#7367F0'],
-                labels: ['Paid Debt']
+                labels: ['{{ __("Paid Debt") }}']
             }).render();
 
             // Fuel Type Distribution
@@ -93,7 +93,7 @@
             // Debt Timeline Chart
             const debtTimeline = new ApexCharts(document.querySelector("#debt-timeline"), {
                 series: [{
-                    name: 'Total Debt',
+                    name: '{{ __("Total Debt") }}',
                     data: @json($debtTimeline->map(fn($item) => $item->total))
                 }],
                 chart: {
@@ -115,10 +115,10 @@
             // Fuel Consumption Timeline
             const fuelTimeline = new ApexCharts(document.querySelector("#fuel-timeline"), {
                 series: [{
-                    name: 'Liters',
+                    name: '{{ __("Liters") }}',
                     data: @json($fuelTimeline->map(fn($item) => $item->liters))
                 }, {
-                    name: 'Amount',
+                    name: '{{ __("Amount") }}',
                     data: @json($fuelTimeline->map(fn($item) => $item->amount))
                 }],
                 chart: {
@@ -317,7 +317,7 @@
         <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Debt Progress</h5>
+                    <h5 class="card-title mb-0">{{ __('Debt Progress') }}</h5>
                 </div>
                 <div class="card-body">
                     <div id="debt-progress"></div>
@@ -328,7 +328,7 @@
         <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Debt Timeline</h5>
+                    <h5 class="card-title mb-0">{{ __('Debt Timeline') }}</h5>
                 </div>
                 <div class="card-body">
                     <div id="debt-timeline"></div>
@@ -340,7 +340,7 @@
         <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Fuel Type Distribution</h5>
+                    <h5 class="card-title mb-0">{{ __('Fuel Type Distribution') }}</h5>
                 </div>
                 <div class="card-body">
                     <div id="fuel-type-chart"></div>
@@ -351,7 +351,7 @@
         <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Payment Status</h5>
+                    <h5 class="card-title mb-0">{{ __('Payment Status') }}</h5>
                 </div>
                 <div class="card-body">
                     <div id="payment-status-chart"></div>
@@ -362,7 +362,7 @@
         <div class="col-12 col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Fuel Consumption Timeline</h5>
+                    <h5 class="card-title mb-0">{{ __('Fuel Consumption Timeline') }}</h5>
                 </div>
                 <div class="card-body">
                     <div id="fuel-timeline"></div>
