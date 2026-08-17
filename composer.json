@@ -61,7 +61,15 @@
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "audit": {
+      "ignore": {
+        "PKSA-m5cs-t1y6-qpcs": "temp: L9 EOL, resolved at L13 — remove after upgrade",
+        "PKSA-3r5d-mb8f-1qw9": "temp: L9 EOL, resolved at L13 — remove after upgrade",
+        "PKSA-mdq4-51ck-6kdq": "temp: L9 EOL, resolved at L13 — remove after upgrade",
+        "PKSA-8qx3-n5y5-vvnd": "temp: L9 EOL, resolved at L13 — remove after upgrade"
+      }
+    }
   },
   "minimum-stability": "dev",
   "prefer-stable": true

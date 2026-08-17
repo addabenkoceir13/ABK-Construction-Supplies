@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c3d0e6758c62130f9802b5404524da67",
+    "content-hash": "81dcb944b868f9c28fad3fd188a07501",
     "packages": [
         {
             "name": "askedio/laravel-soft-cascade",
@@ -1248,16 +1248,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "9.x-dev",
+            "version": "v9.52.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "feb47bae900315eb9b030de98626b384cbbb86ac"
+                "reference": "e1cef1030fc31c5cdbcf9e61869dc28a56a19493"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/feb47bae900315eb9b030de98626b384cbbb86ac",
-                "reference": "feb47bae900315eb9b030de98626b384cbbb86ac",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/e1cef1030fc31c5cdbcf9e61869dc28a56a19493",
+                "reference": "e1cef1030fc31c5cdbcf9e61869dc28a56a19493",
                 "shasum": ""
             },
             "require": {
@@ -1442,7 +1442,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-08-07T13:41:38+00:00"
+            "time": "2026-08-12T03:46:05+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -2304,16 +2304,16 @@
         },
         {
             "name": "nette/schema",
-            "version": "v1.3.5",
+            "version": "v1.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "f0ab1a3cda782dbc5da270d28545236aa80c4002"
+                "reference": "c54350438cd6914616f790a49cb424605f421562"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/f0ab1a3cda782dbc5da270d28545236aa80c4002",
-                "reference": "f0ab1a3cda782dbc5da270d28545236aa80c4002",
+                "url": "https://api.github.com/repos/nette/schema/zipball/c54350438cd6914616f790a49cb424605f421562",
+                "reference": "c54350438cd6914616f790a49cb424605f421562",
                 "shasum": ""
             },
             "require": {
@@ -2365,9 +2365,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/schema/issues",
-                "source": "https://github.com/nette/schema/tree/v1.3.5"
+                "source": "https://github.com/nette/schema/tree/v1.3.6"
             },
-            "time": "2026-02-23T03:47:12+00:00"
+            "time": "2026-08-16T21:58:41+00:00"
         },
         {
             "name": "nette/utils",
