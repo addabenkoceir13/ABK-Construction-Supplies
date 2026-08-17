@@ -2,108 +2,44 @@
 
 namespace Tests\Feature\Read;
 
-use App\Models\Debt;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Concerns\SeedsDomainFixtures;
 use Tests\TestCase;
 
 /**
- * Target #20: routes that are reachable WITHOUT authentication.
+ * Target #20: routes that were reachable WITHOUT authentication.
  *
- * Both routes below are declared in routes/web.php outside the
- * Route::group(['middleware' => ['auth']]) block. These tests deliberately
- * characterize the current, insecure behaviour so the upgrade cannot change it
- * by accident. They are NOT an endorsement of it - see docs/upgrade/01-SAFETY-NET.md.
+ * FIXED (pre-hop-1 security PR): /list/debt/supplier/ and /password/hash
+ * were unauthenticated closure routes in routes/web.php - the former leaked
+ * debtor PII (full name, phone, balances) to any anonymous visitor, the
+ * latter was a public bcrypt oracle. Neither had any internal caller
+ * anywhere in the codebase (routes, views, JS), so both were deleted
+ * outright rather than gated behind auth - confirmed with the user first.
+ * This is the one case where a characterization test is deliberately
+ * updated rather than left pinned: the insecure behaviour it protected
+ * no longer exists, so pinning "still 200 and leaks PII" would be pinning
+ * a bug that was just fixed. See docs/upgrade/01-SAFETY-NET.md.
  */
 class PublicExposureTest extends TestCase
 {
     use RefreshDatabase;
     use SeedsDomainFixtures;
 
-    /**
-     * Target #20: /list/debt/supplier/ leaks unpaid supplier debts to anyone.
-     *
-     * SMELL: this closure route has no 'auth' middleware. It renders every
-     * unpaid debt for tractor_driver_id != 1, exposing debtor full names,
-     * phone numbers and outstanding balances to unauthenticated visitors.
-     */
-    public function test_supplier_debt_list_is_publicly_readable_and_leaks_debtor_pii(): void
-    {
-        $user = $this->appUser();
-        $this->normalDriver();               // occupies id 1
-        $supplierDriver = $this->deliveryDriver();
-
-        Debt::factory()->create([
-            'user_id' => $user->id,
-            'tractor_driver_id' => $supplierDriver->id,
-            'fullname' => 'Leaked Debtor Name',
-            'phone' => '0555999888',
-            'status' => 'unpaid',
-        ]);
-
-        // no actingAs(): this is an anonymous visitor
-        $this->assertGuest();
-        $response = $this->get('/list/debt/supplier/');
-
-        $response->assertStatus(200);
-
-        // PII is rendered to an unauthenticated visitor
-        $response->assertSee('Leaked Debtor Name', false);
-        $response->assertSee('0555999888', false);
-    }
-
-    /** Target #20b: paid supplier debts are excluded from the public list. */
-    public function test_public_supplier_list_excludes_paid_debts(): void
-    {
-        $user = $this->appUser();
-        $this->normalDriver();
-        $supplierDriver = $this->deliveryDriver();
-
-        Debt::factory()->paid()->create([
-            'user_id' => $user->id,
-            'tractor_driver_id' => $supplierDriver->id,
-            'fullname' => 'Already Settled Person',
-        ]);
-
-        $response = $this->get('/list/debt/supplier/');
-
-        $response->assertStatus(200);
-        $response->assertDontSee('Already Settled Person', false);
-    }
-
-    /** Target #20c: debts belonging to driver id 1 are excluded from the public list. */
-    public function test_public_supplier_list_excludes_the_normal_driver(): void
-    {
-        $user = $this->appUser();
-        $normal = $this->normalDriver();
-
-        Debt::factory()->create([
-            'user_id' => $user->id,
-            'tractor_driver_id' => $normal->id,
-            'fullname' => 'Walk In Customer',
-            'status' => 'unpaid',
-        ]);
-
-        $response = $this->get('/list/debt/supplier/');
-
-        $response->assertStatus(200);
-        $response->assertDontSee('Walk In Customer', false);
-    }
-
-    /**
-     * Target #20d: /password/hash is a public bcrypt oracle.
-     *
-     * SMELL: this debug route is unauthenticated and returns a bcrypt hash of
-     * the hardcoded password '123456789' as the raw response body. It is dead
-     * developer scaffolding that shipped to the app's route table.
-     */
-    public function test_password_hash_debug_route_is_public(): void
+    /** Target #20: /list/debt/supplier/ no longer exists - route removed entirely. */
+    public function test_supplier_debt_list_route_no_longer_exists(): void
     {
         $this->assertGuest();
+        $response = $this->get('/list/debt/supplier/');
 
+        $response->assertStatus(404);
+    }
+
+    /** Target #20d: /password/hash no longer exists - route removed entirely. */
+    public function test_password_hash_debug_route_no_longer_exists(): void
+    {
+        $this->assertGuest();
         $response = $this->get('/password/hash');
 
-        $response->assertStatus(200);
-        $this->assertMatchesRegularExpression('/^\$2y\$/', trim($response->getContent()));
+        $response->assertStatus(404);
     }
 }
