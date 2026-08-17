@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('fuel_stations', function (Blueprint $table) {
-            $table->enum('status', ['unpaid', 'paid'])->default('unpaid')->after('amount');
-            $table->enum('type_fuel', ['diesel', 'gasoline','gas'])->default('diesel')->after(' amount');
+            $table->enum('status', ['unpaid', 'paid'])->default('unpaid');
+            $table->enum('type_fuel', ['diesel', 'gasoline','gas'])->default('diesel');
         });
     }
 

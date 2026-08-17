@@ -21,9 +21,13 @@
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
-        <!-- <env name="DB_CONNECTION" value="sqlite"/> -->
-        <!-- <env name="DB_DATABASE" value=":memory:"/> -->
+        <!-- Dedicated test schema. See config/database.php -> connections.mysql_testing.
+             DB_TEST_DATABASE must never point at the development schema;
+             Tests\TestCase enforces this at runtime as well. -->
+        <env name="DB_CONNECTION" value="mysql_testing"/>
+        <env name="DB_TEST_DATABASE" value="dettessofiane_test"/>
         <env name="MAIL_MAILER" value="array"/>
+        <env name="SCOUT_DRIVER" value="collection"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>

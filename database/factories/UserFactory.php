@@ -12,6 +12,14 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
+     * The shared password used by every factory-built user.
+     *
+     * Tests that exercise the login form need to know the plaintext,
+     * so it lives here rather than being randomised per-user.
+     */
+    public const PASSWORD = 'password123';
+
+    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -19,10 +27,12 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => 'System Admin',
-            'email' => 'addasofiane@gmail.com',
+            'name' => $this->faker->name(),
+            // Previously hardcoded to a single real address, which made it
+            // impossible to build more than one user (unique index on email).
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => Hash::make('addasofiane2024'), // password
+            'password' => Hash::make(self::PASSWORD),
             'remember_token' => Str::random(30),
         ];
     }
