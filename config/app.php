@@ -195,7 +195,7 @@ return [
     */
 
   'aliases' => Facade::defaultAliases()->merge([
-    // ...
+    'PDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class,
   ])->toArray(),
 
 ];

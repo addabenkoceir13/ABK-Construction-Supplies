@@ -77,7 +77,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 
   Route::get('print/printer-facteur/{debt}/{fullname}', [PrinterController::class, 'factuerClient'])->name('debt.printer-facteur-client');
-
+  Route::get('print/download-facteur/{debt}/{fullname}', [PrinterController::class, 'downloadPdf'])->name('debt.download-facteur-client');
+  Route::get('print/pdf-facteur/{debt}/{fullname}', [PrinterController::class, 'streamPdf'])->name('debt.stream-facteur-client');
+  Route::post('print/send-email/{debt}', [PrinterController::class, 'sendEmail'])->name('debt.send-email');
 
 });
 
