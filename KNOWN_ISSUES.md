@@ -1,10 +1,11 @@
 # Known Issues
 
 Discovered while building the characterization/benchmark safety net for
-`App\Http\Controllers\Debt\DebtController` (see `/perf-audit`, `/perf-plan`,
-`/perf-safety-net`). None of these are fixed here — the safety net locks in
-current behavior, bugs included, so the performance refactor waves can be
-verified as behavior-preserving.
+`App\Http\Controllers\Debt\DebtController` and
+`App\Http\Controllers\Debt\DebtWithSupplierController` (see `/perf-audit`,
+`/perf-plan`, `/perf-safety-net`). None of these are fixed here — the safety
+net locks in current behavior, bugs included, so the performance refactor
+waves can be verified as behavior-preserving.
 
 ## 1. `tractor_driver_id = 1` is a hardcoded magic number for "walk-in customer"
 
@@ -70,7 +71,49 @@ dumps a var-dump page to the user instead of the intended graceful toastr
 error + redirect. Preserved byte-for-byte during the Wave C refactor (see
 `/perf-wave-c`); trivial one-line fix (delete the `dd()` call) once wanted.
 
-## 7. Pre-existing failing test: `tests/Feature/ExampleTest.php`
+## 7. `DebtWithSupplierController::show()` 500s on every view — nonexistent relation
+
+`resources/views/content/DebtWithSupplier/view.blade.php:20` reads
+`$debt->getSupplier->fullname`, but `Debt` has no `getSupplier()` relation
+(only `tractorDriver()`). Initial investigation via `php artisan tinker`
+suggested this only produced a silent PHP warning (blank field, page still
+200s) — but that was **wrong**: confirmed via
+`tests/Feature/Debt/DebtWithSupplierControllerTest.php::test_show_currently_errors_because_getSupplier_relation_does_not_exist`,
+a real HTTP request goes through Laravel's `HandleExceptions` bootstrap,
+which converts the "Attempt to read property on null" warning into an
+`ErrorException` — so `debt-supplier.show` currently returns a **500 on every
+single view**. This is Critical, not a minor display bug. You approved
+fixing this (`$debt->getSupplier` → `$debt->tractorDriver`, with
+`tractorDriver` eager-loaded) as part of `/perf-plan`'s Wave A — not yet
+implemented as of this safety-net commit.
+
+## 8. `DebtWithSupplierController::driverDebtPaid()`/`driverDebtUnPaid()` are unbounded
+
+Same pattern as issue #2 above (`EloquentDebt.php:25-31`, `->get()` with no
+`limit`/`paginate`) — currently 1188 rows load and render in one response on
+`/debt-supplier/status/paid`. Subject of the approved Wave A fix for this
+controller; characterized in
+`test_index_paid_renders_every_matching_paid_supplier_debt_with_no_pagination_today`.
+
+## 9. `DebtWithSupplierController::destroy()` redirects to the wrong index
+
+`app/Http/Controllers/Debt/DebtWithSupplierController.php:292` does
+`return redirect()->route('debt.index');` on success — that's
+`DebtController`'s index route, not this controller's own
+`debt-supplier.index`. Almost certainly a copy-paste leftover from
+`DebtController::destroy()`. You approved fixing this as part of
+`/perf-plan`'s Wave A.
+
+## 10. `DebtWithSupplierController::update()` has the same unreachable `dd()` as issue #6
+
+`app/Http/Controllers/Debt/DebtWithSupplierController.php:275` — identical
+bug to issue #6 (`dd($e->getMessage())` before the `toastr()`/redirect in the
+catch block, making those lines unreachable). Not part of the two items you
+approved fixing (#7/blank-field-turned-500 and the wrong redirect target);
+documented-only, consistent with how issue #6 was handled for the sibling
+controller.
+
+## 11. Pre-existing failing test: `tests/Feature/ExampleTest.php`
 
 `test_the_application_returns_a_successful_response` asserts `GET /` returns
 `200`, but `routes/web.php:47` has since added `->middleware('auth')` to that
