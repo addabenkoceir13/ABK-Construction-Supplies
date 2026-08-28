@@ -60,7 +60,17 @@ autoload. Not touched here since it currently passes in this environment and
 is outside the scope of the Debt performance work — worth a dedicated fix
 separately.
 
-## 6. Pre-existing failing test: `tests/Feature/ExampleTest.php`
+## 6. `update()`'s catch block calls `dd()` before its `toastr()`/redirect
+
+`DebtController::update()`'s `catch (\Exception $e)` block calls
+`dd($e->getMessage())` immediately before `toastr()->error($e->getMessage());
+return redirect()->back();`. Since `dd()` dumps and terminates the request,
+those two lines are unreachable — any exception during an update currently
+dumps a var-dump page to the user instead of the intended graceful toastr
+error + redirect. Preserved byte-for-byte during the Wave C refactor (see
+`/perf-wave-c`); trivial one-line fix (delete the `dd()` call) once wanted.
+
+## 7. Pre-existing failing test: `tests/Feature/ExampleTest.php`
 
 `test_the_application_returns_a_successful_response` asserts `GET /` returns
 `200`, but `routes/web.php:47` has since added `->middleware('auth')` to that
