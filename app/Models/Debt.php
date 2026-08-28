@@ -86,4 +86,9 @@ class Debt extends Model
     return $query->whereTractorDriverId($tractorDriverId);
   }
 
+  public function scopeExcludingTractorDriver($query, $tractorDriverId)
+  {
+    return $query->where('tractor_driver_id', '!=', $tractorDriverId);
+  }
+
 }
