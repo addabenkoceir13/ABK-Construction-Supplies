@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Debt;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Debt\StoreDebtSupplierRequest;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Debt\DebtRepository;
 use App\Repositories\DebtHistory\DebtHistoryRepository;
@@ -75,20 +76,8 @@ class DebtWithSupplierController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store(Request $request): RedirectResponse
+  public function store(StoreDebtSupplierRequest $request): RedirectResponse
   {
-    // dd($request->all());
-    $validator = Validator::make($request->all(), [
-      'tractor_driver_id'  => ['required'],
-      'fullname'  => ['required', 'string', 'max:255'],
-      'phone'     => ['required', 'numeric'],
-      'date_debut_debt' => ['required', 'date'],
-    ]);
-    if ($validator->fails()) {
-      toastr()->error($validator->errors()->first());
-      return redirect()->back()->withErrors($validator)->withInput();
-    }
-
     try {
       DB::beginTransaction();
 
