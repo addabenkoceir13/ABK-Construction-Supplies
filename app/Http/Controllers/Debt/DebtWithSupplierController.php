@@ -157,14 +157,6 @@ class DebtWithSupplierController extends Controller
     try {
       DB::beginTransaction();
 
-      $products   = $request->input('name_product');
-      $quantities = $request->input('quantity');
-      $amounts    = $request->input('amount_due');
-      $dateDebts  = $request->input('date_debt');
-      $subcategoryIds  = $request->input('subcategory_ids');
-      $Ids        = $request->input('id');
-      $total      = 0;
-
       $dataDebt = array_replace([
         'fullname'      => $request->fullname,
         'phone'         => $request->phone,
@@ -173,52 +165,16 @@ class DebtWithSupplierController extends Controller
         'status'    => config('constant.DEBTS_STATUS.UNPAID'),
       ]);
 
-      $debt = $this->debt->update($id, $dataDebt);
-
-      $TotalDebtAmount = $debt->total_debt_amount;
-      $restDebtAmount  = $debt->rest_debt_amount;
-      $debtPaid        = $debt->debt_paid;
-
-      for ($index = 0; $index < count($products); $index++) {
-        $subcategory_id  = $subcategoryIds[$index];
-        $quantity        = $quantities[$index];
-        $amount          = $amounts[$index];
-        $dateDebt        = $dateDebts[$index];
-        $idOld           = $Ids[$index];
-
-        $total += $amount;
-
-        $dataDebtProduct = [
-          'subcategory_id' => $subcategory_id,
-          'name_category'  => $products[$index],
-          'quantity'       => $quantities[$index],
-          'amount'         => $amounts[$index],
-          'date_debt'      => $dateDebts[$index],
-        ];
-
-        if ($idOld == 0) {
-          $dataDebtProduct['debt_id'] = $id;
-          $this->debtProduct->create($dataDebtProduct);
-        } else {
-          $dataDebtProduct = array_replace([
-            'subcategory_id'   => $subcategory_id,
-            'name_category'    => $products[$index],
-            'quantity'  => $quantities[$index],
-            'amount'    => $amounts[$index],
-            'date_debt' => $dateDebts[$index],
-          ]);
-          $this->debtProduct->update($idOld, $dataDebtProduct);
-        }
-      }
-
-      $restDebtAmountNew = $total - $debtPaid;
-
-      $dataDebtTotal = array_replace([
-        'total_debt_amount' => $total,
-        'rest_debt_amount' => $restDebtAmountNew,
-      ]);
-
-      $this->debt->update($id, $dataDebtTotal);
+      $this->debtService->updateWithProducts(
+        $id,
+        $dataDebt,
+        $request->input('name_product'),
+        $request->input('quantity'),
+        $request->input('amount_due'),
+        $request->input('date_debt'),
+        $request->input('subcategory_ids'),
+        $request->input('id')
+      );
 
       toastr()->success(__('Debt updated successfully'));
 
