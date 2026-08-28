@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Debt;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Debt\StoreDebtSupplierRequest;
+use App\Http\Requests\Debt\UpdateDebtSupplierRequest;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Debt\DebtRepository;
 use App\Repositories\DebtHistory\DebtHistoryRepository;
@@ -14,7 +15,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class DebtWithSupplierController extends Controller
 {
@@ -177,20 +177,8 @@ class DebtWithSupplierController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, $id)
+  public function update(UpdateDebtSupplierRequest $request, $id)
   {
-    // dd($request->all());
-    // dd($request->all());
-    $validator = Validator::make($request->all(), [
-      'fullname'  => ['required', 'string', 'max:255'],
-      'phone'     => ['required', 'numeric'],
-      'date_debut_debt' => ['required', 'date'],
-    ]);
-    if ($validator->fails()) {
-      toastr()->error($validator->errors()->first());
-      return redirect()->back()->withErrors($validator)->withInput();
-    }
-
     try {
       DB::beginTransaction();
 
