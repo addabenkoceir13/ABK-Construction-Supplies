@@ -7,6 +7,14 @@
 <h4 class="fw-bold py-3 mb-4">
   <span class="text-muted fw-light">{{ __('Debts') }} /</span> {{ __('Unpaid Tractor Driver Delivery Debts') }}
 </h4>
+
+<x-debt-search-card
+  :action="route('debt-supplier.index')"
+  :name="request('name')"
+  :phone="request('phone')"
+  :result-count="$debts->total()"
+/>
+
 <!-- Basic Bootstrap Table -->
 <div class="card p-2">
   <h5 class="card-header">
