@@ -21,14 +21,11 @@ show zero rows or the wrong driver's debts.
 
 ## 2. `index()` / `indexPaid()` have no pagination, filtering, or sorting
 
-Confirmed by `/perf-audit`: `debtPaid()`/`debtUnPaid()` call `->get()` with no
-`limit`/`paginate`. Every matching row is loaded and rendered in a single
-response — currently 1701 rows on `/debt/status/paid` in production. This is
-the subject of the approved Wave A fix; recorded here too since the
-characterization tests in `tests/Feature/Debt/DebtControllerTest.php`
-explicitly lock in the *current* no-pagination behavior (e.g.
-`test_index_ignores_the_page_query_param_because_pagination_does_not_exist_yet`)
-and will need updating once Wave A adds real pagination.
+**RESOLVED in `/perf-wave-b`** (`debtPaid()`/`debtUnPaid()` now `paginate(25)`).
+Originally: `->get()` with no `limit`/`paginate`, every matching row loaded
+and rendered in a single response — 1701 rows on `/debt/status/paid` in
+production. Left here for the audit trail; characterization tests were
+updated alongside the fix (see the Wave B commit).
 
 ## 3. `show()` / `edit()` return a 500, not a 404, for a nonexistent debt
 
@@ -73,36 +70,27 @@ error + redirect. Preserved byte-for-byte during the Wave C refactor (see
 
 ## 7. `DebtWithSupplierController::show()` 500s on every view — nonexistent relation
 
-`resources/views/content/DebtWithSupplier/view.blade.php:20` reads
-`$debt->getSupplier->fullname`, but `Debt` has no `getSupplier()` relation
-(only `tractorDriver()`). Initial investigation via `php artisan tinker`
-suggested this only produced a silent PHP warning (blank field, page still
-200s) — but that was **wrong**: confirmed via
-`tests/Feature/Debt/DebtWithSupplierControllerTest.php::test_show_currently_errors_because_getSupplier_relation_does_not_exist`,
-a real HTTP request goes through Laravel's `HandleExceptions` bootstrap,
-which converts the "Attempt to read property on null" warning into an
-`ErrorException` — so `debt-supplier.show` currently returns a **500 on every
-single view**. This is Critical, not a minor display bug. You approved
-fixing this (`$debt->getSupplier` → `$debt->tractorDriver`, with
-`tractorDriver` eager-loaded) as part of `/perf-plan`'s Wave A — not yet
-implemented as of this safety-net commit.
+**RESOLVED in `/perf-wave-a`** (`view.blade.php:20` now reads
+`$debt->tractorDriver->fullname`, eager-loaded via `loadMissing()` in the
+controller). Originally: read `$debt->getSupplier->fullname`, a relation
+that doesn't exist on `Debt` (only `tractorDriver()`). Initial investigation
+via `php artisan tinker` suggested this only produced a silent PHP warning
+(blank field, page still 200s) — that was **wrong**: a real HTTP request
+goes through Laravel's `HandleExceptions` bootstrap, which converts the
+warning into an `ErrorException`, so this 500'd on every single view before
+the fix (confirmed by the characterization test before it was updated).
 
 ## 8. `DebtWithSupplierController::driverDebtPaid()`/`driverDebtUnPaid()` are unbounded
 
-Same pattern as issue #2 above (`EloquentDebt.php:25-31`, `->get()` with no
-`limit`/`paginate`) — currently 1188 rows load and render in one response on
-`/debt-supplier/status/paid`. Subject of the approved Wave A fix for this
-controller; characterized in
-`test_index_paid_renders_every_matching_paid_supplier_debt_with_no_pagination_today`.
+**RESOLVED in `/perf-wave-b`** (`paginate(25)`, same as issue #2). Left here
+for the audit trail; originally `->get()` with no limit — 1188 rows on
+`/debt-supplier/status/paid` in production.
 
 ## 9. `DebtWithSupplierController::destroy()` redirects to the wrong index
 
-`app/Http/Controllers/Debt/DebtWithSupplierController.php:292` does
-`return redirect()->route('debt.index');` on success — that's
-`DebtController`'s index route, not this controller's own
-`debt-supplier.index`. Almost certainly a copy-paste leftover from
-`DebtController::destroy()`. You approved fixing this as part of
-`/perf-plan`'s Wave A.
+**RESOLVED in `/perf-wave-a`** (`route('debt-supplier.index')`). Originally
+`return redirect()->route('debt.index');` — `DebtController`'s index route,
+not this controller's own, almost certainly a copy-paste leftover.
 
 ## 10. `DebtWithSupplierController::update()` has the same unreachable `dd()` as issue #6
 
@@ -113,7 +101,20 @@ approved fixing (#7/blank-field-turned-500 and the wrong redirect target);
 documented-only, consistent with how issue #6 was handled for the sibling
 controller.
 
-## 11. Pre-existing failing test: `tests/Feature/ExampleTest.php`
+## 11. `DebtWithSupplierController::payDebt()` also redirects to the wrong index
+
+Discovered during `/perf-wave-c` while extracting the payment logic into the
+shared `DebtPaymentCalculator`. The "amount paid exceeds the amount owed"
+branch (`app/Http/Controllers/Debt/DebtWithSupplierController.php`, in
+`payDebt()`) does `return redirect()->route('debt.index');` — the same
+wrong-controller mistake as issue #9 had in `destroy()`, but this one
+wasn't caught by `/perf-audit` and wasn't part of the two fixes you
+approved (issue #7 and issue #9). Preserved byte-for-byte during the Wave C
+extraction (verified with a throwaway test asserting the exact wrong
+redirect target); trivial one-line fix (`route('debt.index')` →
+`route('debt-supplier.index')`) once wanted.
+
+## 12. Pre-existing failing test: `tests/Feature/ExampleTest.php`
 
 `test_the_application_returns_a_successful_response` asserts `GET /` returns
 `200`, but `routes/web.php:47` has since added `->middleware('auth')` to that
