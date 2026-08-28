@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasNormalizedSearch;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Debt extends Model
 {
-  use HasFactory, SoftDeletes, SoftCascadeTrait;
+  use HasFactory, SoftDeletes, SoftCascadeTrait, HasNormalizedSearch;
 
   protected $fillable = [
     'user_id',
