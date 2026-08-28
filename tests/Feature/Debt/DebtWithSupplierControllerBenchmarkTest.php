@@ -30,8 +30,9 @@ class DebtWithSupplierControllerBenchmarkTest extends TestCase
 
     private const SAMPLE_SIZE = 50;
 
-    // BASELINE (pre-Wave A) — see class docblock.
-    private const BASELINE_QUERY_COUNT = 153;
+    // BASELINE, updated as Wave A changes land — see class docblock.
+    // 153 (pre-Wave A) -> 6 after eager-loading tractorDriver/getDebtProduct/debtHistories.
+    private const BASELINE_QUERY_COUNT = 6;
 
     public function test_index_paid_query_count_matches_recorded_pre_refactor_baseline(): void
     {
