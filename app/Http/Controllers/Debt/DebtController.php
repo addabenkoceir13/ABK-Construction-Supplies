@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Debt;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Debt\SearchDebtRequest;
 use App\Http\Requests\Debt\StoreDebtRequest;
 use App\Http\Requests\Debt\UpdateDebtRequest;
 use App\Models\Debt;
+use App\Queries\DebtSearchQuery;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Debt\DebtRepository;
 use App\Repositories\DebtHistory\DebtHistoryRepository;
@@ -28,8 +30,9 @@ class DebtController extends Controller
     private $tractorDriver;
     private $debtService;
     private $paymentCalculator;
+    private $debtSearch;
 
-    public function __construct(DebtRepository $debt, DebtHistoryRepository $debtHistory, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver, DebtService $debtService, DebtPaymentCalculator $paymentCalculator)
+    public function __construct(DebtRepository $debt, DebtHistoryRepository $debtHistory, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver, DebtService $debtService, DebtPaymentCalculator $paymentCalculator, DebtSearchQuery $debtSearch)
     {
         $this->debt = $debt;
         $this->debtHistory = $debtHistory;
@@ -38,26 +41,27 @@ class DebtController extends Controller
         $this->tractorDriver = $tractorDriver;
         $this->debtService = $debtService;
         $this->paymentCalculator = $paymentCalculator;
+        $this->debtSearch = $debtSearch;
     }
 
-    public function index()
+    public function index(SearchDebtRequest $request)
     {
         $date = now();
         $dateToday = $date->format('Y-m-d');
 
-        $debts = $this->debt->debtUnPaid();
+        $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: true, forSupplier: false);
         $categories = $this->category->all();
         $supplier = $this->tractorDriver->TractorDriverNormal();
 
         return view('content.debt.index', compact('debts', 'categories' , 'supplier', 'dateToday'));
     }
 
-    public function indexPaid()
+    public function indexPaid(SearchDebtRequest $request)
     {
       $date = now();
       $dateToday = $date->format('Y-m-d');
 
-      $debts = $this->debt->debtPaid();
+      $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: false, forSupplier: false);
       $categories = $this->category->all();
       $supplier = $this->tractorDriver->TractorDriverNormal();
 
