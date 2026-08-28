@@ -10,6 +10,7 @@ use App\Repositories\Debt\DebtRepository;
 use App\Repositories\DebtHistory\DebtHistoryRepository;
 use App\Repositories\DebtProduct\DebtProductRepository;
 use App\Repositories\TractorDriver\TractorDriverRepository;
+use App\Services\Debt\DebtPaymentCalculator;
 use App\Services\Debt\DebtService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -26,8 +27,9 @@ class DebtWithSupplierController extends Controller
   private $category;
   private $tractorDriver;
   private $debtService;
+  private $paymentCalculator;
 
-  public function __construct(DebtRepository $debt, DebtHistoryRepository $debtHistory, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver, DebtService $debtService)
+  public function __construct(DebtRepository $debt, DebtHistoryRepository $debtHistory, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver, DebtService $debtService, DebtPaymentCalculator $paymentCalculator)
   {
     $this->debt = $debt;
     $this->debtHistory = $debtHistory;
@@ -35,6 +37,7 @@ class DebtWithSupplierController extends Controller
     $this->category = $category;
     $this->tractorDriver = $tractorDriver;
     $this->debtService = $debtService;
+    $this->paymentCalculator = $paymentCalculator;
   }
 
   public function index()
@@ -222,36 +225,20 @@ class DebtWithSupplierController extends Controller
           $debtProduct = $this->debtProduct->update($idDebtProduct, $data);
         }
       }
-      $restDebtAmount =  $debt->rest_debt_amount;
 
+      $dataDebt = $this->paymentCalculator->calculate(
+        $debt->total_debt_amount,
+        $debt->debt_paid,
+        $debt->rest_debt_amount,
+        $DebtPaid
+      );
 
-      if ($DebtPaid == $debt->total_debt_amount) {
-        $dataDebt = array_replace([
-          'status'            => config('constant.DEBTS_STATUS.PAID'),
-          'debt_paid'         => $DebtPaid,
-          'rest_debt_amount'  => $debt->total_debt_amount - $DebtPaid,
-          'date_end_debt'     => now()->format('Y-m-d'),
-        ]);
-        $this->debt->update($id, $dataDebt);
-      } elseif (($debt->debt_paid + $DebtPaid) == $debt->total_debt_amount) {
-        $dataDebt = array_replace([
-          'status'            => config('constant.DEBTS_STATUS.PAID'),
-          'debt_paid'         => $debt->debt_paid + $DebtPaid,
-          'rest_debt_amount'  => $debt->rest_debt_amount - $DebtPaid,
-          'date_end_debt'     => now()->format('Y-m-d'),
-        ]);
-        $this->debt->update($id, $dataDebt);
-      } elseif (($debt->debt_paid + $DebtPaid) < $debt->total_debt_amount) {
-        $dataDebt = array_replace([
-          'debt_paid'         => $debt->debt_paid + $DebtPaid,
-          'rest_debt_amount'  => $debt->rest_debt_amount - $DebtPaid,
-          'date_end_debt'     => now()->format('Y-m-d'),
-        ]);
-        $this->debt->update($id, $dataDebt);
-      } elseif (($debt->debt_paid + $DebtPaid) > $debt->total_debt_amount) {
+      if ($dataDebt === false) {
         toastr()->error(__('The amount paid exceeds the amount owed.'));
         return redirect()->route('debt.index');
       }
+
+      $this->debt->update($id, $dataDebt);
 
       $debtHistoryData = array_replace([
         'debt_id' => $id,
