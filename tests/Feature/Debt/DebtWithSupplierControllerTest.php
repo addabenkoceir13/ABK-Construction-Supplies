@@ -267,21 +267,35 @@ class DebtWithSupplierControllerTest extends TestCase
     // show() — single debt detail page
     // ------------------------------------------------------------------
 
-    public function test_show_currently_errors_because_getSupplier_relation_does_not_exist(): void
+    public function test_show_renders_a_debt_with_its_products_and_supplier_name(): void
     {
-        // KNOWN_ISSUES.md: view.blade.php reads $debt->getSupplier->fullname,
-        // but Debt has no getSupplier() relation (only tractorDriver()). In a
-        // real request (unlike a bare tinker eval), Laravel's HandleExceptions
-        // converts the resulting "Attempt to read property on null" warning
-        // into an ErrorException, so debt-supplier.show currently 500s on
-        // EVERY view — confirmed via this test, not assumed. Locks in the
-        // CURRENT broken behavior; the approved fix in /perf-plan will change
-        // this test's expectation once applied.
-        $debt = $this->unpaidSupplierDebt(['fullname' => 'Client Sees A 500']);
+        // Wave A (approved fix, KNOWN_ISSUES.md #7): view.blade.php used to
+        // read $debt->getSupplier->fullname, a nonexistent relation, which
+        // made debt-supplier.show 500 on every view. Now reads
+        // $debt->tractorDriver->fullname (eager-loaded in the controller
+        // alongside getDebtProduct.getSubcategory).
+        $debt = $this->unpaidSupplierDebt(['fullname' => 'Client Sees The Real Supplier']);
+
+        $category = Category::factory()->create(['name' => 'Sand']);
+        $subcategory = SubCategory::factory()->create([
+            'category_id' => $category->id,
+            'name' => 'Ton',
+        ]);
+
+        DebtProduct::factory()->create([
+            'debt_id' => $debt->id,
+            'subcategory_id' => $subcategory->id,
+            'name_category' => 'Sand',
+        ]);
 
         $response = $this->actingAs($this->user)->get(route('debt-supplier.show', $debt->id));
 
-        $response->assertStatus(500);
+        $response->assertOk();
+        $response->assertViewIs('content.DebtWithSupplier.view');
+        $response->assertViewHas('debt', fn ($v) => $v->is($debt));
+        $response->assertSeeText('Client Sees The Real Supplier');
+        $response->assertSeeText('Supplier Driver One');
+        $response->assertSeeText('Sand');
     }
 
     public function test_show_requires_authentication(): void

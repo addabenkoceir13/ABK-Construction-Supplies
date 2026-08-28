@@ -17,7 +17,7 @@
           <div class="col-md-12 mb-3">
             <h5>
               <small class="text-light fw-semibold"><i class="bx bx-user mx-1"></i>{{ __('Supplier') }} : </small>
-              <span class="me-2">{{ $debt->getSupplier->fullname }}</span>
+              <span class="me-2">{{ $debt->tractorDriver->fullname }}</span>
             </h5>
           </div>
           <div class="col-md-6 mb-3">

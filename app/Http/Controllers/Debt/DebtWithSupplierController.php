@@ -159,6 +159,7 @@ class DebtWithSupplierController extends Controller
   public function show($id)
   {
     $debt = $this->debt->find($id);
+    $debt->loadMissing(['getDebtProduct.getSubcategory', 'tractorDriver']);
 
     return view('content.DebtWithSupplier.view', compact('debt'));
   }
