@@ -40,11 +40,11 @@ class EloquentDebt implements DebtRepository
 
     public function debtPaid()
     {
-        return Debt::select(self::DEBT_LIST_COLUMNS)->with(['getDebtProduct', 'debtHistories'])->whereStatus('paid')->whereTractorDriverId(1)->orderBy('id', 'desc')->paginate(self::DEBT_LIST_PER_PAGE);
+        return Debt::select(self::DEBT_LIST_COLUMNS)->with(['getDebtProduct', 'debtHistories'])->paid()->forTractorDriver(1)->orderBy('id', 'desc')->paginate(self::DEBT_LIST_PER_PAGE);
     }
     public function debtUnPaid()
     {
-        return Debt::select(self::DEBT_LIST_COLUMNS)->with(['getDebtProduct', 'debtHistories'])->whereStatus('unpaid')->whereTractorDriverId(1)->orderBy('id', 'desc')->paginate(self::DEBT_LIST_PER_PAGE);
+        return Debt::select(self::DEBT_LIST_COLUMNS)->with(['getDebtProduct', 'debtHistories'])->unpaid()->forTractorDriver(1)->orderBy('id', 'desc')->paginate(self::DEBT_LIST_PER_PAGE);
     }
     /**
      * {@inheritdoc}

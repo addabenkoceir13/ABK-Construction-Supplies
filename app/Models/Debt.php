@@ -71,5 +71,19 @@ class Debt extends Model
     return $this->hasMany(DebtHistory::class);
   }
 
+  public function scopeUnpaid($query)
+  {
+    return $query->whereStatus('unpaid');
+  }
+
+  public function scopePaid($query)
+  {
+    return $query->whereStatus('paid');
+  }
+
+  public function scopeForTractorDriver($query, $tractorDriverId)
+  {
+    return $query->whereTractorDriverId($tractorDriverId);
+  }
 
 }
