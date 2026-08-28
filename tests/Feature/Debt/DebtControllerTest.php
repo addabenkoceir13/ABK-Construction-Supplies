@@ -108,12 +108,12 @@ class DebtControllerTest extends TestCase
         $response->assertSeeText('Cement');
     }
 
-    public function test_index_renders_every_matching_unpaid_debt_with_no_pagination_today(): void
+    public function test_index_paginates_unpaid_debts_at_25_per_page(): void
     {
-        // KNOWN_ISSUES.md: debtUnPaid() calls ->get() with no limit/paginate — all
-        // matching rows are loaded and rendered in a single response.
+        // Wave B: debtUnPaid() now paginates instead of loading every matching
+        // row (see KNOWN_ISSUES.md for the pre-Wave-B behavior this replaced).
         $this->unpaidDebt();
-        $debts = Debt::factory()->count(60)->create([
+        Debt::factory()->count(60)->create([
             'user_id' => $this->user->id,
             'tractor_driver_id' => $this->normalDriver->id,
             'status' => 'unpaid',
@@ -130,10 +130,14 @@ class DebtControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('debt.index'));
 
         $response->assertOk();
-        $response->assertViewHas('debts', fn ($v) => $v->count() === 61);
+        $response->assertViewHas('debts', function ($debts) {
+            return $debts->count() === 25
+                && $debts->total() === 61
+                && $debts->perPage() === 25;
+        });
     }
 
-    public function test_index_ignores_the_page_query_param_because_pagination_does_not_exist_yet(): void
+    public function test_index_page_query_param_selects_the_requested_page(): void
     {
         Debt::factory()->count(30)->create([
             'user_id' => $this->user->id,
@@ -145,9 +149,9 @@ class DebtControllerTest extends TestCase
         $page2 = $this->actingAs($this->user)->get(route('debt.index', ['page' => 2]));
         $pageOutOfRange = $this->actingAs($this->user)->get(route('debt.index', ['page' => 999]));
 
-        $page1->assertOk()->assertViewHas('debts', fn ($v) => $v->count() === 30);
-        $page2->assertOk()->assertViewHas('debts', fn ($v) => $v->count() === 30);
-        $pageOutOfRange->assertOk()->assertViewHas('debts', fn ($v) => $v->count() === 30);
+        $page1->assertOk()->assertViewHas('debts', fn ($v) => $v->count() === 25 && $v->currentPage() === 1);
+        $page2->assertOk()->assertViewHas('debts', fn ($v) => $v->count() === 5 && $v->currentPage() === 2);
+        $pageOutOfRange->assertOk()->assertViewHas('debts', fn ($v) => $v->count() === 0 && $v->currentPage() === 999);
     }
 
     public function test_index_orders_unpaid_debts_by_id_descending(): void
@@ -240,8 +244,9 @@ class DebtControllerTest extends TestCase
         $response->assertSeeText('Sand');
     }
 
-    public function test_index_paid_renders_every_matching_paid_debt_with_no_pagination_today(): void
+    public function test_index_paid_paginates_debts_at_25_per_page(): void
     {
+        // Wave B: debtPaid() now paginates instead of loading every matching row.
         Debt::factory()->count(75)->create([
             'user_id' => $this->user->id,
             'tractor_driver_id' => $this->normalDriver->id,
@@ -251,7 +256,11 @@ class DebtControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('debt.index-paid'));
 
         $response->assertOk();
-        $response->assertViewHas('debts', fn ($v) => $v->count() === 75);
+        $response->assertViewHas('debts', function ($debts) {
+            return $debts->count() === 25
+                && $debts->total() === 75
+                && $debts->perPage() === 25;
+        });
     }
 
     public function test_index_paid_orders_debts_by_id_descending(): void

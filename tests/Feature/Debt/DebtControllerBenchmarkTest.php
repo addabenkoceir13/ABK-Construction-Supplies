@@ -34,10 +34,13 @@ class DebtControllerBenchmarkTest extends TestCase
 
     private const SAMPLE_SIZE = 50;
 
-    // BASELINE, updated as Wave A changes land — see class docblock.
+    // BASELINE, updated as Wave A/B changes land — see class docblock.
     // 103 (pre-Wave A) -> 54 after eager-loading getDebtProduct
-    // -> 5 after also eager-loading debtHistories.
-    private const BASELINE_QUERY_COUNT = 5;
+    // -> 5 after also eager-loading debtHistories (end of Wave A)
+    // -> 6 after Wave B paginate(25) adds one COUNT(*) query.
+    // Note: from here on, this number no longer scales with SAMPLE_SIZE —
+    // that is the whole point of Wave B.
+    private const BASELINE_QUERY_COUNT = 6;
 
     public function test_index_paid_query_count_matches_recorded_pre_refactor_baseline(): void
     {
