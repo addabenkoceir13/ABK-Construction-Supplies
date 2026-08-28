@@ -291,7 +291,7 @@ class DebtWithSupplierController extends Controller
     try {
       $this->debt->delete($id);
       toastr()->success(__('Debt deleted successfully'));
-      return redirect()->route('debt.index');
+      return redirect()->route('debt-supplier.index');
     } catch (\Exception $e) {
       DB::rollBack();
       toastr()->error($e->getMessage());
