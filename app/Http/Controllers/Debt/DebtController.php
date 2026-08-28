@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Debt;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Debt\StoreDebtRequest;
 use App\Models\Debt;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Debt\DebtRepository;
@@ -73,19 +74,8 @@ class DebtController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreDebtRequest $request): RedirectResponse
     {
-      // dd($request->all());
-        $validator = Validator::make($request->all(), [
-            'fullname'  => ['required','string','max:255'],
-            'phone'     => ['required','numeric'],
-            'date_debut_debt' => ['required','date'],
-        ]);
-        if ($validator->fails()){
-            toastr()->error($validator->errors()->first());
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         try {
             DB::beginTransaction();
 
