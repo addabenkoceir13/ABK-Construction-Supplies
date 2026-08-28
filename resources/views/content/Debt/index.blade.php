@@ -136,6 +136,7 @@
 $(document).ready(function() {
     new DataTable('#datatable-debt', {
       paging: false, // server-side pagination now bounds the rows in the DOM; see the links() control below the table
+      searching: false, // client-side search replaced by the search card above the table
       initComplete: function () {
           let api = this.api();
 
