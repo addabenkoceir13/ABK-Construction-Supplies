@@ -46,10 +46,14 @@ class DebtWithSupplierController extends Controller
 
   public function index(SearchDebtRequest $request)
   {
+    $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: true, forSupplier: true);
+
+    if ($request->ajax()) {
+        return view('content.DebtWithSupplier._debtsTable', ['debts' => $debts, 'tractorDriverLabel' => __('Tractor driver')]);
+    }
+
     $date = now();
     $dateToday = $date->format('Y-m-d');
-
-    $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: true, forSupplier: true);
     $categories = $this->category->all();
     $suppliers = $this->tractorDriver->TractorDriverDeliveryActive();
 
@@ -58,10 +62,14 @@ class DebtWithSupplierController extends Controller
 
   public function indexPaid(SearchDebtRequest $request)
   {
+    $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: false, forSupplier: true);
+
+    if ($request->ajax()) {
+        return view('content.DebtWithSupplier._debtsTable', ['debts' => $debts, 'tractorDriverLabel' => __('Supplier')]);
+    }
+
     $date = now();
     $dateToday = $date->format('Y-m-d');
-
-    $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: false, forSupplier: true);
     $categories = $this->category->all();
     $suppliers = $this->tractorDriver->TractorDriverDeliveryActive();
 

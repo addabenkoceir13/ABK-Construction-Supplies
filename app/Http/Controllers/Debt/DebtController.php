@@ -46,10 +46,14 @@ class DebtController extends Controller
 
     public function index(SearchDebtRequest $request)
     {
+        $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: true, forSupplier: false);
+
+        if ($request->ajax()) {
+            return view('content.Debt._debtsTable', compact('debts'));
+        }
+
         $date = now();
         $dateToday = $date->format('Y-m-d');
-
-        $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: true, forSupplier: false);
         $categories = $this->category->all();
         $supplier = $this->tractorDriver->TractorDriverNormal();
 
@@ -58,10 +62,14 @@ class DebtController extends Controller
 
     public function indexPaid(SearchDebtRequest $request)
     {
+      $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: false, forSupplier: false);
+
+      if ($request->ajax()) {
+          return view('content.Debt._debtsTable', compact('debts'));
+      }
+
       $date = now();
       $dateToday = $date->format('Y-m-d');
-
-      $debts = $this->debtSearch->paginate($request->validated('name'), $request->validated('phone'), unpaid: false, forSupplier: false);
       $categories = $this->category->all();
       $supplier = $this->tractorDriver->TractorDriverNormal();
 
