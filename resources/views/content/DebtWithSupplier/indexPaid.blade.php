@@ -110,6 +110,9 @@
           </tr> --}}
       </tfoot>
     </table>
+    <div class="d-flex justify-content-center mt-3">
+      {{ $debts->withQueryString()->links() }}
+    </div>
   </div>
 </div>
 <!--/ Basic Bootstrap Table -->
@@ -122,6 +125,7 @@
   $(document).ready(function() {
 
       new DataTable('#datatable-debt', {
+        paging: false, // server-side pagination now bounds the rows in the DOM; see the links() control below the table
         initComplete: function () {
             let api = this.api();
 

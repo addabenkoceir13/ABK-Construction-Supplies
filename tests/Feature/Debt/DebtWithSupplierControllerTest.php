@@ -110,9 +110,10 @@ class DebtWithSupplierControllerTest extends TestCase
         $response->assertSeeText('Brick');
     }
 
-    public function test_index_renders_every_matching_unpaid_supplier_debt_with_no_pagination_today(): void
+    public function test_index_paginates_unpaid_supplier_debts_at_25_per_page(): void
     {
-        // KNOWN_ISSUES.md: driverDebtUnPaid() calls ->get() with no limit/paginate.
+        // Wave B: driverDebtUnPaid() now paginates instead of loading every
+        // matching row (see KNOWN_ISSUES.md for the pre-Wave-B behavior).
         Debt::factory()->count(40)->create([
             'user_id' => $this->user->id,
             'tractor_driver_id' => $this->supplierDriver->id,
@@ -130,7 +131,11 @@ class DebtWithSupplierControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('debt-supplier.index'));
 
         $response->assertOk();
-        $response->assertViewHas('debts', fn ($v) => $v->count() === 40);
+        $response->assertViewHas('debts', function ($debts) {
+            return $debts->count() === 25
+                && $debts->total() === 40
+                && $debts->perPage() === 25;
+        });
     }
 
     public function test_index_orders_unpaid_supplier_debts_by_id_descending(): void
@@ -230,8 +235,10 @@ class DebtWithSupplierControllerTest extends TestCase
         $response->assertSeeText('Gravel');
     }
 
-    public function test_index_paid_renders_every_matching_paid_supplier_debt_with_no_pagination_today(): void
+    public function test_index_paid_paginates_supplier_debts_at_25_per_page(): void
     {
+        // Wave B: driverDebtPaid() now paginates instead of loading every
+        // matching row.
         Debt::factory()->count(55)->create([
             'user_id' => $this->user->id,
             'tractor_driver_id' => $this->supplierDriver->id,
@@ -241,7 +248,11 @@ class DebtWithSupplierControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('debt-supplier.index-paid'));
 
         $response->assertOk();
-        $response->assertViewHas('debts', fn ($v) => $v->count() === 55);
+        $response->assertViewHas('debts', function ($debts) {
+            return $debts->count() === 25
+                && $debts->total() === 55
+                && $debts->perPage() === 25;
+        });
     }
 
     public function test_index_paid_orders_debts_by_id_descending(): void
