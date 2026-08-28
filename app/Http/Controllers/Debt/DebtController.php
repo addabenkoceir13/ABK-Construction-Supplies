@@ -11,6 +11,7 @@ use App\Repositories\Debt\DebtRepository;
 use App\Repositories\DebtHistory\DebtHistoryRepository;
 use App\Repositories\DebtProduct\DebtProductRepository;
 use App\Repositories\TractorDriver\TractorDriverRepository;
+use App\Services\Debt\DebtService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,14 +25,16 @@ class DebtController extends Controller
     private $debtProduct;
     private $category;
     private $tractorDriver;
+    private $debtService;
 
-    public function __construct(DebtRepository $debt, DebtHistoryRepository $debtHistory, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver)
+    public function __construct(DebtRepository $debt, DebtHistoryRepository $debtHistory, DebtProductRepository $debtProduct, CategoryRepository $category, TractorDriverRepository $tractorDriver, DebtService $debtService)
     {
         $this->debt = $debt;
         $this->debtHistory = $debtHistory;
         $this->debtProduct = $debtProduct;
         $this->category = $category;
         $this->tractorDriver = $tractorDriver;
+        $this->debtService = $debtService;
     }
 
     public function index()
@@ -79,13 +82,6 @@ class DebtController extends Controller
         try {
             DB::beginTransaction();
 
-            $products   = $request->input('name_product');
-            $quantities = $request->input('quantity');
-            $amounts    = $request->input('amount_due');
-            $dateDebts  = $request->input('date_debt');
-            $subcategoryIds  = $request->input('subcategory_ids');
-            $total      = 0;
-
             $dataDebt = array_replace( [
                 'user_id'       => Auth::user()->id,
                 'tractor_driver_id'   => $request->tractor_driver_id,
@@ -96,35 +92,14 @@ class DebtController extends Controller
                 'status'    => config('constant.DEBTS_STATUS.UNPAID'),
             ]);
 
-
-            $debt = $this->debt->create($dataDebt);
-
-            foreach ($products as $index => $product) {
-              // Process each product, quantity, and amount
-                $subcategory_id  = $subcategoryIds[$index];
-                $quantity  = $quantities[$index];
-                $amount    = $amounts[$index];
-                $dateDebt  = $dateDebts[$index];
-                $total    += $amount;
-
-                $dataDebtProduct = array_replace( [
-                    'debt_id'   => $debt->id,
-                    'subcategory_id'   => $subcategory_id,
-                    'name_category'      => $products[$index],
-                    'quantity'  => $quantity,
-                    'amount'    => $amount,
-                    'date_debt' => $dateDebt,
-                ]);
-
-                $this->debtProduct->create($dataDebtProduct);
-            }
-
-            $dataDebtTotal = array_replace( [
-                'total_debt_amount' => $total,
-                'rest_debt_amount' => $total,
-            ]);
-
-            $this->debt->update($debt->id, $dataDebtTotal);
+            $this->debtService->createWithProducts(
+                $dataDebt,
+                $request->input('name_product'),
+                $request->input('quantity'),
+                $request->input('amount_due'),
+                $request->input('date_debt'),
+                $request->input('subcategory_ids')
+            );
 
             toastr()->success(__('Debt added successfully'));
 
