@@ -152,6 +152,7 @@ class DebtController extends Controller
     public function show($id)
     {
         $debt = $this->debt->find($id);
+        $debt->loadMissing('getDebtProduct.getSubcategory');
         return view('content.Debt.view', compact('debt'));
     }
 
