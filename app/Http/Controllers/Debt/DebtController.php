@@ -167,6 +167,7 @@ class DebtController extends Controller
         $date = now();
         $dateToday = $date->format('Y-m-d');
         $debt = $this->debt->find($id);
+        $debt->loadMissing('getDebtProduct');
         $categories = $this->category->all();
 
         return view('content.Debt.edit', compact('debt', 'categories', 'dateToday'));
