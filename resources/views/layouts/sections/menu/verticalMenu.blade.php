@@ -24,18 +24,10 @@
           <span class="menu-header-text">{{ __('Dashboard') }}</span>
       </li>
 
-      <li class="menu-item {{ request()->routeIs('dashboard-analytics') ? 'active' : '' }}">
-          <a href="{{ route('dashboard-analytics') }}" class="menu-link">
-              {{-- <i class="menu-icon tf-icons bx bx-collection"></i> --}}
-              <i class='menu-icon bx bxs-dashboard'></i>
-              <div>{{ __('Dashboard') }}</div>
-          </a>
-      </li>
-      <li class="menu-item {{ request()->routeIs('dashboard-analytics-template') ? 'active' : '' }}">
-          <a href="{{ route('dashboard-analytics-template') }}" class="menu-link">
-              {{-- <i class="menu-icon tf-icons bx bx-collection"></i> --}}
-              <i class='menu-icon bx bxs-dashboard'></i>
-              <div>{{ __('Dashboard') }}</div>
+      <li class="menu-item {{ (request()->routeIs('dashboard-analytics') || request()->routeIs('analytics') || request()->routeIs('dashboard-analytics-template')) ? 'active' : '' }}">
+          <a href="{{ route('analytics') }}" class="menu-link">
+              <i class='menu-icon bx bx-pie-chart-alt-2'></i>
+              <div>{{ __('Analytics Dashboard') }}</div>
           </a>
       </li>
 

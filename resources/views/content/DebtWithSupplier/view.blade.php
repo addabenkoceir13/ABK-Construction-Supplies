@@ -27,10 +27,14 @@
       <i class="bx bx-edit-alt"></i>
       <span>{{ __('Edit Debt') }}</span>
     </a>
-    <button type="button" onclick="window.print()" class="btn btn-primary d-flex align-items-center gap-1 shadow-sm">
+    <a href="{{ route('debt.printer-facteur-client', ['debt' => $debt->id, 'fullname' => str_replace('%20', '-', urlencode($debt->fullname))]) }}" target="_blank" class="btn btn-primary d-flex align-items-center gap-1 shadow-sm">
       <i class="bx bx-printer"></i>
-      <span>{{ __('Print Statement') }}</span>
-    </button>
+      <span>{{ __('Print Invoice') }}</span>
+    </a>
+    <a href="{{ route('debt.download-facteur-client', ['debt' => $debt->id, 'fullname' => str_replace('%20', '-', urlencode($debt->fullname))]) }}" class="btn btn-outline-danger d-flex align-items-center gap-1 shadow-sm" title="{{ __('Download PDF Invoice') }}">
+      <i class="bx bxs-file-pdf"></i>
+      <span>{{ __('Download PDF') }}</span>
+    </a>
   </div>
 </div>
 
