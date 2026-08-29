@@ -1,19 +1,36 @@
+<!-- Modal Delete Fuel Receipt -->
 <div class="modal fade" id="modalDeleteFuelStation-{{ $fuelStation->id }}" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel1">{{ __('Delete Fuel Receipt') }} | {{ $fuelStation->vehicle->name }}</h5>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-transparent border-bottom pb-3">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar avatar-xs bg-label-danger rounded p-1 d-flex align-items-center justify-content-center">
+            <i class="bx bx-trash fs-6"></i>
+          </div>
+          <h5 class="modal-title mb-0 fw-semibold">{{ __('Delete Fuel Receipt') }}</h5>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ route('fuel-stations.destroy',  $fuelStation->id) }}" method="POST">
+      <form action="{{ route('fuel-stations.destroy', $fuelStation->id) }}" method="POST">
         @csrf
         @method('DELETE')
-        <div class="modal-body">
-          {{ __('Do you really want to delete this fuel receipt?') }} {{ $fuelStation->vehicle->name }}
+        <div class="modal-body py-4">
+          <div class="d-flex align-items-start gap-3">
+            <div class="avatar bg-label-danger rounded p-2 flex-shrink-0">
+              <i class="bx bx-error-alt fs-4"></i>
+            </div>
+            <div>
+              <h6 class="mb-1">{{ __('Do you really want to delete this fuel receipt?') }}</h6>
+              <p class="text-muted small mb-0">{{ __('Vehicle:') }} <strong class="text-danger">{{ $fuelStation->vehicle->name ?? '' }}</strong> | {{ __('Amount:') }} <strong>{{ number_format($fuelStation->amount, 2) }} DZ</strong>. {{ __('This action cannot be undone.') }}</p>
+            </div>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
-          <button type="submit" class="btn btn-outline-danger">{{ __('Delete') }}</button>
+        <div class="modal-footer bg-transparent border-top pt-3">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+          <button type="submit" class="btn btn-danger d-flex align-items-center gap-1 shadow-sm">
+            <i class="bx bx-trash"></i>
+            <span>{{ __('Delete Receipt') }}</span>
+          </button>
         </div>
       </form>
     </div>

@@ -57,7 +57,7 @@ class DebtController extends Controller
         $categories = $this->category->all();
         $supplier = $this->tractorDriver->TractorDriverNormal();
 
-        return view('content.debt.index', compact('debts', 'categories' , 'supplier', 'dateToday'));
+        return view('content.Debt.index', compact('debts', 'categories' , 'supplier', 'dateToday'));
     }
 
     public function indexPaid(SearchDebtRequest $request)
@@ -73,7 +73,7 @@ class DebtController extends Controller
       $categories = $this->category->all();
       $supplier = $this->tractorDriver->TractorDriverNormal();
 
-      return view('content.debt.indexPaid', compact('debts', 'categories', 'supplier', 'dateToday'));
+      return view('content.Debt.indexPaid', compact('debts', 'categories', 'supplier', 'dateToday'));
     }
 
     /**

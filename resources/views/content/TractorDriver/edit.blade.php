@@ -1,50 +1,50 @@
 
-<!-- Modal -->
+<!-- Modal Edit Tractor Driver -->
 <div class="modal fade" id="modalditTractorDriver{{ $tractorDriver->id }}" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalCenterTitle">{{ __('Tractor Driver Modification') }}</h5>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-transparent border-bottom pb-3">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar avatar-xs bg-label-success rounded p-1 d-flex align-items-center justify-content-center">
+            <i class="bx bx-edit-alt fs-6"></i>
+          </div>
+          <h5 class="modal-title mb-0 fw-semibold">{{ __('Modify Tractor Driver') }}</h5>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form action="{{ route('services.tractor-driver.update', $tractorDriver->id) }}" method="POST">
         @csrf
         @method('PATCH')
-        <div class="modal-body">
-          <div class="row">
-            <div class="row g-2">
-              <div class="col-md-6 mb-3">
-                <label for="fullname" class="form-label">{{ __('Name driver') }}</label>
-                <div class="input-group input-group-merge">
-                  <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
-                  <input type="text" id="fullname-search" name="fullname" class="form-control @error('fullname') is-invalid @enderror" placeholder="{{ __('Enter Name') }}"
-                  autocomplete="on" list="listFullName" value="{{ $tractorDriver->fullname }}" />
-                  <datalist id="listFullName"></datalist>
-                </div>
-                @error('fullname')
-                  <span class="alert alert-danger " role="alert">
-                    {{ $message }}
-                  </span>
-                @enderror
+        <div class="modal-body py-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="fullname-edit-{{ $tractorDriver->id }}" class="form-label text-muted small fw-semibold">{{ __('Driver Name') }}</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text bg-lighter"><i class="bx bx-user text-muted"></i></span>
+                <input type="text" id="fullname-edit-{{ $tractorDriver->id }}" name="fullname" class="form-control @error('fullname') is-invalid @enderror" value="{{ $tractorDriver->fullname }}" required />
               </div>
-              <div class="col-md-6 mb-3">
-                <label for="phone" class="form-label">{{ __('Phone') }}</label>
-                <div class="input-group input-group-merge">
-                  <span id="basic-icon-default-phone2" class="input-group-text"><i class="bx bx-phone"></i></span>
-                  <input dir="rtl" type="tel" id="phone" name="phone" max="10"  class="form-control phone-mask @error('phone') is-invalid @enderror" placeholder="0655 44 33 22" value="{{ $tractorDriver->phone }}" />
-                </div>
-                @error('phone')
-                  <span class="alert alert-danger " role="alert">
-                    {{ $message }}
-                  </span>
-                @enderror
+              @error('fullname')
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="col-md-6">
+              <label for="phone-edit-{{ $tractorDriver->id }}" class="form-label text-muted small fw-semibold">{{ __('Phone Number') }}</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text bg-lighter"><i class="bx bx-phone text-muted"></i></span>
+                <input type="tel" id="phone-edit-{{ $tractorDriver->id }}" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ $tractorDriver->phone }}" required />
               </div>
+              @error('phone')
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+              @enderror
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer bg-transparent border-top pt-3">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
-          <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+          <button type="submit" class="btn btn-primary d-flex align-items-center gap-1 shadow-sm">
+            <i class="bx bx-save"></i>
+            <span>{{ __('Save Changes') }}</span>
+          </button>
         </div>
       </form>
     </div>

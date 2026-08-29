@@ -6,7 +6,7 @@
         <h5 class="modal-title" id="modalToggleLabel">{{ __('Delete building material') }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ route('building-materals.destroy', $category->id) }}" method="POST">
+      <form action="{{ route('services.building-materials.destroy', $category->id) }}" method="POST">
         @csrf
         @method('DELETE')
         <div class="modal-body">

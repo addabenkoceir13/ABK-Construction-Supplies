@@ -1,87 +1,112 @@
-<!-- Modal -->
+<!-- Modal Edit Fuel Receipt -->
 <div class="modal fade" id="modalEditFuelStation-{{ $fuelStation->id }}" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalCenterTitle">{{ __('Edit Fuel Receipt') }}</h5>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-transparent border-bottom pb-3">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar avatar-xs bg-label-success rounded p-1 d-flex align-items-center justify-content-center">
+            <i class="bx bx-edit-alt fs-6"></i>
+          </div>
+          <h5 class="modal-title mb-0 fw-semibold">{{ __('Modify Fuel Receipt') }}</h5>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form action="{{ route('fuel-stations.update', $fuelStation->id) }}" method="POST">
         @csrf
         @method('PATCH')
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="vehicle_id" class="form-label">{{ __('Type vehicle') }}</label>
-                  <select id="vehicle_id" class="form-select" name="vehicle_id" >
-                    <option value="">{{ __('Choose a type vehicle') }}</option>
-                    @foreach ($vehicles as $vehicle)
-                      <option value="{{ $vehicle->id }}" {{ $vehicle->id == $fuelStation->vehicle_id ? 'selected' : '' }}>{{ $vehicle->name }}</option>
-                    @endforeach
-                  </select>
-                  @error('vehicle_id')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
+        <div class="modal-body py-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="vehicle_id-{{ $fuelStation->id }}" class="form-label text-muted small fw-semibold">{{ __('Vehicle') }}</label>
+              <select id="vehicle_id-{{ $fuelStation->id }}" class="form-select @error('vehicle_id') is-invalid @enderror" name="vehicle_id" required>
+                <option value="">{{ __('Choose a vehicle') }}</option>
+                @foreach ($vehicles as $vehicle)
+                  <option value="{{ $vehicle->id }}" {{ $vehicle->id == $fuelStation->vehicle_id ? 'selected' : '' }}>
+                    {{ $vehicle->name }} | {{ $vehicle->license_plate }}
+                  </option>
+                @endforeach
+              </select>
+              @error('vehicle_id')
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="col-md-6">
+              <label for="type_fuel-{{ $fuelStation->id }}" class="form-label text-muted small fw-semibold">{{ __('Fuel Type') }}</label>
+              <select id="type_fuel-{{ $fuelStation->id }}" class="form-select @error('type_fuel') is-invalid @enderror" name="type_fuel" required>
+                <option value="">{{ __('Select fuel type') }}</option>
+                <option value="diesel" {{ strtolower($fuelStation->type_fuel) == 'diesel' ? 'selected' : '' }}>{{ __('Diesel (Gasoil)') }}</option>
+                <option value="gasoline" {{ strtolower($fuelStation->type_fuel) == 'gasoline' ? 'selected' : '' }}>{{ __('Gasoline (Essence)') }}</option>
+                <option value="gas" {{ strtolower($fuelStation->type_fuel) == 'gas' ? 'selected' : '' }}>{{ __('Gas (GPL/Sirghaz)') }}</option>
+              </select>
+              @error('type_fuel')
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="col-md-4">
+              <label for="name_owner-{{ $fuelStation->id }}" class="form-label text-muted small fw-semibold">{{ __('Station Owner / Vendor') }}</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text bg-lighter"><i class="bx bx-store text-muted"></i></span>
+                <input type="text" id="name_owner-{{ $fuelStation->id }}" name="name_owner" class="form-control @error('name_owner') is-invalid @enderror" value="{{ $fuelStation->name_owner }}">
               </div>
-            <div class="col-md-6 mb-3">
-              <label for="name_owner" class="form-label">{{ __('Name Owner') }}</label>
-              <input type="text" id="name_owner" name="name_owner" class="form-control @error('name_owner') is-invalid @enderror" value="{{ $fuelStation->name_owner }}" placeholder="{{ __('Enter Name Owner') }}">
               @error('name_owner')
-                  <span class="text-danger">{{ $message }}</span>
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
               @enderror
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="name_driver" class="form-label">{{ __('Name Driver') }}</label>
-              <input type="text" id="name_driver" name="name_driver" class="form-control @error('name_driver') is-invalid @enderror" value="{{ $fuelStation->name_driver }}" placeholder="{{ __('Enter Name Driver') }}">
+            <div class="col-md-4">
+              <label for="name_driver-{{ $fuelStation->id }}" class="form-label text-muted small fw-semibold">{{ __('Driver Name') }}</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text bg-lighter"><i class="bx bx-user text-muted"></i></span>
+                <input type="text" id="name_driver-{{ $fuelStation->id }}" name="name_driver" class="form-control @error('name_driver') is-invalid @enderror" value="{{ $fuelStation->name_driver }}">
+              </div>
               @error('name_driver')
-                  <span class="text-danger">{{ $message }}</span>
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
               @enderror
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="name_distributor" class="form-label">{{ __('Name Distributor') }}</label>
-              <input type="text" id="name_distributor" name="name_distributor" class="form-control @error('name_distributor') is-invalid @enderror" value="{{ $fuelStation->name_distributor }}" placeholder="{{ __('Enter Name Distributor') }}">
+            <div class="col-md-4">
+              <label for="name_distributor-{{ $fuelStation->id }}" class="form-label text-muted small fw-semibold">{{ __('Distributor / Pump Attendant') }}</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text bg-lighter"><i class="bx bx-id-card text-muted"></i></span>
+                <input type="text" id="name_distributor-{{ $fuelStation->id }}" name="name_distributor" class="form-control @error('name_distributor') is-invalid @enderror" value="{{ $fuelStation->name_distributor }}">
+              </div>
               @error('name_distributor')
-                  <span class="text-danger">{{ $message }}</span>
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
               @enderror
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{{ __('Filing Datetime') }}</label>
-              <input type="datetime-local"  name="filing_datetime" class="form-control @error('filing_datetime') is-invalid @enderror" value="{{ $fuelStation->filing_datetime }}" placeholder="{{ __('Enter Filing Datetime') }}">
+            <div class="col-md-4">
+              <label class="form-label text-muted small fw-semibold">{{ __('Filing Datetime') }}</label>
+              <input type="datetime-local" name="filing_datetime" class="form-control @error('filing_datetime') is-invalid @enderror" value="{{ $fuelStation->filing_datetime }}">
               @error('filing_datetime')
-                  <span class="text-danger">{{ $message }}</span>
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
               @enderror
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="type_fuel" class="form-label">{{ __('Fuel type') }}</label>
-                <select id="type_fuel" class="form-select" name="type_fuel" >
-                  <option value="">{{ __('Select fuel type') }}</option>
-                  <option value="diesel" {{ $fuelStation->type_fuel == 'diesel' ? 'selected' : '' }}>{{ __('Diesel') }}</option>
-                  <option value="gasoline" {{ $fuelStation->type_fuel == 'gasoline' ? 'selected' : '' }}>{{ __('Gasoline') }}</option>
-                  <option value="gas" {{ $fuelStation->type_fuel == 'gas' ? 'selected' : '' }}>{{ __('Gas') }}</option>
-                </select>
-                @error('type_fuel')
-                  <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{{ __('Liter') }}</label>
-              <input type="number" min="0" step="0.01"  name="liter" class="form-control @error('liter') is-invalid @enderror" value="{{ $fuelStation->liter }}" placeholder="{{ __('Enter Liter') }}">
+            <div class="col-md-4">
+              <label class="form-label text-muted small fw-semibold">{{ __('Liters') }}</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text bg-lighter"><i class="bx bx-water text-muted"></i></span>
+                <input type="number" min="0" step="0.01" name="liter" class="form-control @error('liter') is-invalid @enderror" value="{{ $fuelStation->liter }}" required>
+              </div>
               @error('liter')
-                  <span class="text-danger">{{ $message }}</span>
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
               @enderror
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{{ __('Amount') }}</label>
-              <input type="number" min="0" step="0.01"  name="amount" class="form-control @error('amount') is-invalid @enderror" value="{{ $fuelStation->amount }}" placeholder="{{ __('Enter amount') }}">
+            <div class="col-md-4">
+              <label class="form-label text-muted small fw-semibold">{{ __('Total Amount (DZ)') }}</label>
+              <div class="input-group input-group-merge">
+                <span class="input-group-text bg-lighter"><i class="bx bx-money text-muted"></i></span>
+                <input type="number" min="0" step="0.01" name="amount" class="form-control @error('amount') is-invalid @enderror" value="{{ $fuelStation->amount }}" required>
+              </div>
               @error('amount')
-                  <span class="text-danger">{{ $message }}</span>
+                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
               @enderror
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer bg-transparent border-top pt-3">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
-          <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+          <button type="submit" class="btn btn-primary d-flex align-items-center gap-1 shadow-sm">
+            <i class="bx bx-save"></i>
+            <span>{{ __('Save Changes') }}</span>
+          </button>
         </div>
       </form>
     </div>

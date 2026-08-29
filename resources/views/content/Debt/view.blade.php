@@ -1,125 +1,232 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', __('Debts'))
+@section('title', __('View Debt') . ' - ' . $debt->fullname)
 
 @section('content')
-<h4 class="fw-bold py-3 mb-4">
-  <span class="text-muted fw-light"><a href="{{ route('debt.index') }}">{{ __('Debts') }}</a> / </span>
-  {{ __('View Debt') }}
-</h4>
+@php
+    $totalDebt = (float)$debt->total_debt_amount;
+    $restDebt = (float)($debt->rest_debt_amount ?? 0);
+    $paidAmount = max(0, $totalDebt - $restDebt);
+    $progressPercent = $totalDebt > 0 ? min(100, round(($paidAmount / $totalDebt) * 100)) : 0;
+@endphp
 
-<div class="col-12">
-  <div class="card mb-4">
-    <h5 class="card-header">{{ __('View Debt') }}</h5>
-    <div class="card-body">
-      <h5 class="mb-3"><i class='bx bx-info-circle me-1' ></i>{{ __('information Client') }}</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class="bx bx-user mx-1"></i>{{ __('Customer Name') }} : </small>
-              <span class="me-2">{{ $debt->fullname }}</span>
-            </h5>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class="bx bx-phone mx-1"></i>{{ __('Customer Phone') }} : </small>
-              <span>{{ $debt->phone }}</span>
-            </h5>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class='bx bx-calendar mx-1'></i>{{ __('Date first Debt') }} : </small>
-              <span>{{ $debt->date_debut_debt }}</span>
-            </h5>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class='bx bx-money mx-1'></i>{{ __('Total debt') }} : </small>
-              <span>{{ number_format($debt->total_debt_amount,2)  }} {{ __('DZ') }}</span>
-            </h5>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class='bx bx-calendar mx-1'></i>{{ __('Date last debt') }} : </small>
-              <span>{{ is_null($debt->date_end_debt) ? '   /   ' : $debt->date_end_debt }}</span>
-            </h5>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class='bx bx-money mx-1'></i>{{ __('Remaining debt') }} : </small>
-              <span>{{ is_null($debt->rest_debt_amount) ? 0.00 : number_format($debt->rest_debt_amount,2)  }} {{ __('DZ') }}</span>
-            </h5>
-          </div>
+<!-- Page Header & Action Bar -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+  <div>
+    <h4 class="fw-bold mb-1">
+      <span class="text-muted fw-light"><a href="{{ route('debt.index') }}" class="text-muted text-decoration-none">{{ __('Customer Debts') }}</a> /</span> {{ __('Debt Dossier') }}
+    </h4>
+    <p class="text-muted mb-0 small">{{ __('Complete statement of debt, products breakdown, and payment progress.') }}</p>
+  </div>
+  <div class="d-flex flex-wrap gap-2 mt-2 mt-sm-0">
+    <a href="{{ route('debt.index') }}" class="btn btn-outline-secondary d-flex align-items-center gap-1 shadow-sm">
+      <i class="bx bx-arrow-back"></i>
+      <span>{{ __('Back') }}</span>
+    </a>
+    <a href="{{ route('debt.edit', $debt->id) }}" class="btn btn-outline-primary d-flex align-items-center gap-1 shadow-sm">
+      <i class="bx bx-edit-alt"></i>
+      <span>{{ __('Edit Debt') }}</span>
+    </a>
+    <button type="button" onclick="window.print()" class="btn btn-primary d-flex align-items-center gap-1 shadow-sm">
+      <i class="bx bx-printer"></i>
+      <span>{{ __('Print Statement') }}</span>
+    </button>
+  </div>
+</div>
 
-          <div class="col-md-6 mb-3">
-            <h5>
-              @if ($debt->status == 'unpaid')
-                <small class="text-light fw-semibold"><i class='bx bx-checkbox mx-1'></i>{{ __('Status') }} : </small>
-                <span class="badge bg-label-warning">{{ __('Unpaid') }}</span>
-              @else
-                <small class="text-light fw-semibold"><i class='bx bx-checkbox-checked mx-1' ></i>{{ __('Status') }} : </small>
-                <span class="badge bg-label-success">{{ __('Paid') }}</span>
-              @endif
-            </h5>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class='bx bx-message-alt mx-1'></i>{{ __('Note') }} : </small>
-              <span>{{ is_null($debt->note) ? '/' : $debt->note }} </span>
-            </h5>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class='bx bx-calendar mx-1'></i>{{ __('Date created') }} : </small>
-              <span>{{ $debt->created_at }}</span>
-            </h5>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h5>
-              <small class="text-light fw-semibold"><i class='bx bx-calendar mx-1'></i>{{ __('Date updated') }} : </small>
-              <span>{{  $debt->updated_at }} </span>
-            </h5>
-          </div>
-
+<!-- Financial KPI Summary Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-lg-3 col-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body p-3 d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-muted small fw-semibold d-block">{{ __('Total Debt') }}</span>
+          <h4 class="card-title mb-0 fw-bold text-primary">{{ number_format($totalDebt, 2) }} <small class="fs-6 text-muted">DZ</small></h4>
         </div>
+        <div class="avatar avatar-md bg-label-primary rounded p-2 d-flex align-items-center justify-content-center">
+          <i class="bx bx-wallet fs-4"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 col-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body p-3 d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-muted small fw-semibold d-block">{{ __('Amount Paid') }}</span>
+          <h4 class="card-title mb-0 fw-bold text-success">{{ number_format($paidAmount, 2) }} <small class="fs-6 text-muted">DZ</small></h4>
+        </div>
+        <div class="avatar avatar-md bg-label-success rounded p-2 d-flex align-items-center justify-content-center">
+          <i class="bx bx-check-circle fs-4"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 col-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body p-3 d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-muted small fw-semibold d-block">{{ __('Remaining Balance') }}</span>
+          <h4 class="card-title mb-0 fw-bold text-danger">{{ number_format($restDebt, 2) }} <small class="fs-6 text-muted">DZ</small></h4>
+        </div>
+        <div class="avatar avatar-md bg-label-danger rounded p-2 d-flex align-items-center justify-content-center">
+          <i class="bx bx-time-five fs-4"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 col-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="text-muted small fw-semibold">{{ __('Settlement Rate') }}</span>
+          <span class="fw-bold text-heading small">{{ $progressPercent }}%</span>
+        </div>
+        <div class="progress" style="height: 8px;">
+          <div class="progress-bar bg-success" role="progressbar" style="width: {{ $progressPercent }}%" aria-valuenow="{{ $progressPercent }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="mt-2 text-center">
+          @if ($debt->status == 'paid')
+            <span class="badge bg-label-success rounded-pill px-3 py-1">
+              <i class="bx bx-check-circle me-1"></i>{{ __('Fully Paid') }}
+            </span>
+          @else
+            <span class="badge bg-label-warning rounded-pill px-3 py-1">
+              <i class="bx bx-time-five me-1"></i>{{ __('Outstanding Balance') }}
+            </span>
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Customer Information Card -->
+  <div class="col-lg-4 col-12">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-transparent border-bottom py-3 d-flex align-items-center gap-2">
+        <div class="avatar avatar-xs bg-label-primary rounded p-1 d-flex align-items-center justify-content-center">
+          <i class="bx bx-user fs-6"></i>
+        </div>
+        <h6 class="card-title mb-0 fw-semibold">{{ __('Client Dossier') }}</h6>
+      </div>
+      <div class="card-body pt-4">
+        <div class="text-center mb-4">
+          <div class="avatar avatar-xl bg-label-primary rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center fw-bold fs-3">
+            {{ strtoupper(mb_substr($debt->fullname, 0, 1)) }}
+          </div>
+          <h5 class="fw-bold mb-0 text-heading">{{ $debt->fullname }}</h5>
+          <p class="text-muted small mb-0">{{ __('Registered Customer') }}</p>
+        </div>
+
+        <ul class="list-group list-group-flush border rounded-3 p-2">
+          <li class="list-group-item d-flex justify-content-between align-items-center px-2 py-2 border-0 border-bottom">
+            <span class="text-muted small d-flex align-items-center gap-1">
+              <i class="bx bx-phone text-primary"></i> {{ __('Phone') }}
+            </span>
+            @if($debt->phone)
+              <a href="tel:{{ $debt->phone }}" class="fw-semibold text-primary text-decoration-none">{{ $debt->phone }}</a>
+            @else
+              <span class="text-muted">-</span>
+            @endif
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center px-2 py-2 border-0 border-bottom">
+            <span class="text-muted small d-flex align-items-center gap-1">
+              <i class="bx bx-calendar text-primary"></i> {{ __('First Debt Date') }}
+            </span>
+            <span class="fw-semibold text-heading">{{ $debt->date_debut_debt }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center px-2 py-2 border-0 border-bottom">
+            <span class="text-muted small d-flex align-items-center gap-1">
+              <i class="bx bx-calendar-check text-primary"></i> {{ __('Last Debt Date') }}
+            </span>
+            <span class="fw-semibold text-heading">{{ $debt->date_end_debt ?? '-' }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center px-2 py-2 border-0 border-bottom">
+            <span class="text-muted small d-flex align-items-center gap-1">
+              <i class="bx bx-time text-primary"></i> {{ __('Created At') }}
+            </span>
+            <span class="text-muted small">{{ $debt->created_at->format('Y-m-d H:i') }}</span>
+          </li>
+          <li class="list-group-item px-2 py-2 border-0">
+            <span class="text-muted small d-block mb-1">
+              <i class="bx bx-message-square-detail text-primary"></i> {{ __('Notes / Remarks') }}
+            </span>
+            <p class="mb-0 text-heading small bg-light p-2 rounded">{{ $debt->note ?: __('No additional notes provided.') }}</p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <div class="divider divider-primary">
-    <div class="divider-text"><i class='bx bx-cube-alt'></i></div>
-  </div>
+  <!-- Products Breakdown Table Card -->
+  <div class="col-lg-8 col-12">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-header bg-transparent border-bottom py-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar avatar-xs bg-label-primary rounded p-1 d-flex align-items-center justify-content-center">
+            <i class="bx bx-cube-alt fs-6"></i>
+          </div>
+          <h6 class="card-title mb-0 fw-semibold">{{ __('Purchased Materials & Services') }}</h6>
+        </div>
+        <span class="badge bg-label-primary rounded-pill">{{ count($debt->getDebtProduct) }} {{ __('Items') }}</span>
+      </div>
 
-  <div class="card mb-3">
-    <h5 class="card-header mb-4"><i class='bx bx-info-circle me-1' ></i>{{ __('View Debt') }}</h5>
-    <div class="card-body">
-      <div class="row g-1 product-row-edit">
-          @foreach ($debt->getDebtProduct  as $item)
-            <div class="col-md-3 mb-3">
-              <h5>
-                <small class="text-light fw-semibold"><i class='bx bxs-checkbox mx-1'></i>{{ __('Name Product') }} : </small>
-                <span>{{ $item->name_category }}</span>
-              </h5>
-            </div>
-            <div class="col-md-3 mb-3">
-              <h5>
-                <small class="text-light fw-semibold"><i class='bx bxs-checkbox mx-1'></i>{{ __('Quantity') }} : </small>
-                <span>{{  $item->quantity }} {{ $item->getSubcategory->display_name  }}</span>
-              </h5>
-            </div>
-            <div class="col-md-3 mb-3">
-              <h5>
-                <small class="text-light fw-semibold"><i class='bx bx-money mx-1'></i>{{ __('Amount Due') }} : </small>
-                <span>{{ $item->amount }} {{ __('DZ') }}</span>
-              </h5>
-            </div>
-            <div class="col-md-3 mb-3">
-              <h5>
-                <small class="text-light fw-semibold"><i class='bx bx-calendar mx-1'></i>{{ __('Date Debut Debt') }} : </small>
-                <span>{{ $item->date_debt }}</span>
-              </h5>
-            </div>
-          @endforeach
+      <div class="table-responsive text-nowrap">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="text-center" style="width: 50px;">#</th>
+              <th><i class="bx bx-cube me-1 text-primary"></i>{{ __('Material / Product') }}</th>
+              <th class="text-center"><i class="bx bx-tag me-1 text-primary"></i>{{ __('Quantity / Unit') }}</th>
+              <th><i class="bx bx-calendar me-1 text-primary"></i>{{ __('Date') }}</th>
+              <th class="text-end"><i class="bx bx-money me-1 text-primary"></i>{{ __('Amount') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse ($debt->getDebtProduct as $item)
+              <tr>
+                <td class="text-center text-muted fw-semibold">{{ $loop->iteration }}</td>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="avatar avatar-xs bg-label-primary rounded p-1 d-flex align-items-center justify-content-center">
+                      <i class="bx bx-package"></i>
+                    </div>
+                    <span class="fw-semibold text-heading">{{ $item->name_category }}</span>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <span class="badge bg-label-info rounded-pill px-3 py-2 fw-semibold">
+                    {{ $item->quantity }} {{ $item->getSubcategory->display_name ?? '' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="text-muted small">
+                    <i class="bx bx-calendar me-1 text-primary"></i>
+                    <span>{{ $item->date_debt }}</span>
+                  </div>
+                </td>
+                <td class="text-end">
+                  <span class="fw-bold text-primary fs-6">{{ number_format($item->amount, 2) }} DZ</span>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="5" class="text-center py-4 text-muted">
+                  <i class="bx bx-folder-open fs-2 d-block mb-1"></i>
+                  {{ __('No products listed for this debt record') }}
+                </td>
+              </tr>
+            @endforelse
+          </tbody>
+          <tfoot class="table-light border-top">
+            <tr>
+              <th colspan="4" class="text-end fw-bold text-heading">{{ __('Total Debt Amount:') }}</th>
+              <th class="text-end fw-bold text-primary fs-5">{{ number_format($totalDebt, 2) }} DZ</th>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
   </div>

@@ -56,7 +56,7 @@ class CategoryController extends Controller
         try {
           $this->category->create($request->all());
           toastr()->success(__('Building materials successfully created'));
-          return redirect()->route('building-materals.index');
+          return redirect()->route('services.building-materials.index');
         }
         catch (\Exception $e) {
           toastr()->error($e->getMessage());
@@ -108,7 +108,7 @@ class CategoryController extends Controller
         try {
           $this->category->update($id, $request->all());
           toastr()->success(__('Building materials successfully Modified'));
-          return redirect()->route('building-materals.index');
+          return redirect()->route('services.building-materials.index');
 
         }
         catch (\Exception $e) {
@@ -128,7 +128,7 @@ class CategoryController extends Controller
         try {
           $this->category->delete($id);
           toastr()->success(__('Building materials successfully deleted'));
-          return redirect()->route('building-materals.index');
+          return redirect()->route('services.building-materials.index');
         }
         catch (\Exception $e) {
           toastr()->error($e->getMessage());

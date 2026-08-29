@@ -1,466 +1,417 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', __('Dashboard - Analytics'))
+@section('title', __('Executive Dashboard - Analytics'))
 
 @section('vendor-style')
-<link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}">
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="{{ asset('assets/vendor/libs/apex-charts/apex-charts.css') }}">
 <style>
-    .stat-card:hover {
-        transform: translateY(-5px);
-        transition: all 0.3s ease;
-    }
-    .progress-bar-animated {
-        animation: progress-animation 1.5s ease-in-out;
-    }
-    @keyframes progress-animation {
-        0% { width: 0; }
-        100% { width: actual; }
-    }
+  .kpi-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(149, 157, 165, 0.2) !important;
+  }
 </style>
 @endsection
 
+@section('content')
+@php
+    $debtPaidPercent = $TotalDebt > 0 ? min(100, round(($TotalPaidDebt / $TotalDebt) * 100, 1)) : 0;
+    $fuelPaidPercent = $TotalFuel > 0 ? min(100, round(($TotalPaidFuel / $TotalFuel) * 100, 1)) : 0;
+@endphp
+
+<!-- 1. Header Banner -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+  <div>
+    <h4 class="fw-bold mb-1">
+      <span class="text-muted fw-light">{{ __('Management') }} /</span> {{ __('Executive Dashboard') }}
+    </h4>
+    <p class="text-muted mb-0 small">{{ __('Overview of company revenues, debt settlements, vehicle fleet, and fuel consumption analytics.') }}</p>
+  </div>
+  <div class="d-flex align-items-center gap-2 mt-2 mt-sm-0">
+    <div class="bg-white shadow-sm border rounded-pill px-3 py-2 text-muted small d-flex align-items-center gap-2">
+      <i class="bx bx-calendar text-primary"></i>
+      <span>{{ date('l, d F Y') }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Primary KPI Stat Cards -->
+<div class="row g-3 mb-4">
+  <!-- Total Debt -->
+  <div class="col-sm-6 col-xl-3 col-12">
+    <div class="card shadow-sm border-0 kpi-card h-100">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <span class="text-muted small fw-semibold d-block mb-1">{{ __('Total Customer Debts') }}</span>
+            <h4 class="card-title mb-0 fw-bold text-primary">{{ number_format($TotalDebt, 2) }} <small class="fs-6 text-muted">DZ</small></h4>
+          </div>
+          <div class="avatar avatar-md bg-label-primary rounded p-2 d-flex align-items-center justify-content-center">
+            <i class="bx bx-wallet fs-4"></i>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <span>{{ __('Collected:') }} <strong class="text-success">{{ number_format($TotalPaidDebt, 2) }}</strong></span>
+            <span>{{ $debtPaidPercent }}%</span>
+          </div>
+          <div class="progress" style="height: 6px;">
+            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $debtPaidPercent }}%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Outstanding Balance -->
+  <div class="col-sm-6 col-xl-3 col-12">
+    <div class="card shadow-sm border-0 kpi-card h-100">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <span class="text-muted small fw-semibold d-block mb-1">{{ __('Outstanding Balance') }}</span>
+            <h4 class="card-title mb-0 fw-bold text-danger">{{ number_format($TotalRestDebt, 2) }} <small class="fs-6 text-muted">DZ</small></h4>
+          </div>
+          <div class="avatar avatar-md bg-label-danger rounded p-2 d-flex align-items-center justify-content-center">
+            <i class="bx bx-error-circle fs-4"></i>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <span>{{ __('Unsettled:') }} <strong class="text-danger">{{ number_format($TotalRestDebt, 2) }} DZ</strong></span>
+            <span class="text-danger">{{ number_format(100 - $debtPaidPercent, 1) }}%</span>
+          </div>
+          <div class="progress" style="height: 6px;">
+            <div class="progress-bar bg-danger" role="progressbar" style="width: {{ 100 - $debtPaidPercent }}%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fuel Expenditures -->
+  <div class="col-sm-6 col-xl-3 col-12">
+    <div class="card shadow-sm border-0 kpi-card h-100">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <span class="text-muted small fw-semibold d-block mb-1">{{ __('Total Fuel Expenses') }}</span>
+            <h4 class="card-title mb-0 fw-bold text-warning">{{ number_format($TotalFuel, 2) }} <small class="fs-6 text-muted">DZ</small></h4>
+          </div>
+          <div class="avatar avatar-md bg-label-warning rounded p-2 d-flex align-items-center justify-content-center">
+            <i class="bx bx-gas-pump fs-4"></i>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <span>{{ __('Paid:') }} <strong class="text-success">{{ number_format($TotalPaidFuel, 2) }}</strong></span>
+            <span>{{ $fuelPaidPercent }}%</span>
+          </div>
+          <div class="progress" style="height: 6px;">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $fuelPaidPercent }}%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Liters -->
+  <div class="col-sm-6 col-xl-3 col-12">
+    <div class="card shadow-sm border-0 kpi-card h-100">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <span class="text-muted small fw-semibold d-block mb-1">{{ __('Total Liters Refilled') }}</span>
+            <h4 class="card-title mb-0 fw-bold text-info">{{ number_format($TotalLiter, 2) }} <small class="fs-6 text-muted">L</small></h4>
+          </div>
+          <div class="avatar avatar-md bg-label-info rounded p-2 d-flex align-items-center justify-content-center">
+            <i class="bx bx-water fs-4"></i>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <span>Diesel: <strong>{{ number_format($getTotalLiterTypeDiesl, 0) }}L</strong></span>
+            <span>Essence: <strong>{{ number_format($TotalLiterGasoline, 0) }}L</strong></span>
+          </div>
+          <div class="progress" style="height: 6px;">
+            <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Financial Analytics & Charts Row -->
+<div class="row g-4 mb-4">
+  <!-- Debt Progress Radial Chart -->
+  <div class="col-lg-6 col-12">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-transparent border-bottom py-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar avatar-xs bg-label-primary rounded p-1 d-flex align-items-center justify-content-center">
+            <i class="bx bx-pie-chart-alt fs-6"></i>
+          </div>
+          <h6 class="card-title mb-0 fw-semibold">{{ __('Debt Settlement Breakdown') }}</h6>
+        </div>
+        <span class="badge bg-label-success">{{ $debtPaidPercent }}% {{ __('Recovered') }}</span>
+      </div>
+      <div class="card-body d-flex flex-column justify-content-center">
+        <div id="debt-progress-chart" style="min-height: 280px;"></div>
+        <div class="row text-center mt-2 g-2">
+          <div class="col-6 border-end">
+            <span class="text-muted small d-block">{{ __('Paid Debts') }}</span>
+            <strong class="text-success fs-6">{{ number_format($TotalPaidDebt, 2) }} DZ</strong>
+          </div>
+          <div class="col-6">
+            <span class="text-muted small d-block">{{ __('Remaining Outstanding') }}</span>
+            <strong class="text-danger fs-6">{{ number_format($TotalRestDebt, 2) }} DZ</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fuel Type Distribution Donut Chart -->
+  <div class="col-lg-6 col-12">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-transparent border-bottom py-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar avatar-xs bg-label-warning rounded p-1 d-flex align-items-center justify-content-center">
+            <i class="bx bx-doughnut-chart fs-6"></i>
+          </div>
+          <h6 class="card-title mb-0 fw-semibold">{{ __('Fuel Volume by Type (Liters)') }}</h6>
+        </div>
+        <span class="badge bg-label-warning">{{ number_format($TotalLiter, 0) }} {{ __('Total Liters') }}</span>
+      </div>
+      <div class="card-body d-flex flex-column justify-content-center">
+        <div id="fuel-distribution-chart" style="min-height: 280px;"></div>
+        <div class="row text-center mt-2 g-2">
+          <div class="col-4 border-end">
+            <span class="text-muted small d-block">{{ __('Diesel') }}</span>
+            <strong class="text-primary fs-6">{{ number_format($getTotalLiterTypeDiesl, 1) }} L</strong>
+          </div>
+          <div class="col-4 border-end">
+            <span class="text-muted small d-block">{{ __('Gasoline') }}</span>
+            <strong class="text-warning fs-6">{{ number_format($TotalLiterGasoline, 1) }} L</strong>
+          </div>
+          <div class="col-4">
+            <span class="text-muted small d-block">{{ __('Gas (Sirghaz)') }}</span>
+            <strong class="text-danger fs-6">{{ number_format($TotalLiterGas, 1) }} L</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Timelines Row -->
+<div class="row g-4 mb-4">
+  <!-- Debt Evolution Timeline -->
+  <div class="col-lg-6 col-12">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-transparent border-bottom py-3 d-flex align-items-center gap-2">
+        <div class="avatar avatar-xs bg-label-primary rounded p-1 d-flex align-items-center justify-content-center">
+          <i class="bx bx-line-chart fs-6"></i>
+        </div>
+        <h6 class="card-title mb-0 fw-semibold">{{ __('Debt Dynamics Timeline') }}</h6>
+      </div>
+      <div class="card-body">
+        <div id="debt-timeline-chart" style="min-height: 300px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monthly Fuel Timeline -->
+  <div class="col-lg-6 col-12">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-transparent border-bottom py-3 d-flex align-items-center gap-2">
+        <div class="avatar avatar-xs bg-label-info rounded p-1 d-flex align-items-center justify-content-center">
+          <i class="bx bx-bar-chart-alt-2 fs-6"></i>
+        </div>
+        <h6 class="card-title mb-0 fw-semibold">{{ __('Monthly Fuel Consumption Trends') }}</h6>
+      </div>
+      <div class="card-body">
+        <div id="fuel-timeline-chart" style="min-height: 300px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Quick Navigation Shortcuts -->
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-transparent border-bottom py-3 d-flex align-items-center gap-2">
+    <div class="avatar avatar-xs bg-label-secondary rounded p-1 d-flex align-items-center justify-content-center">
+      <i class="bx bx-grid-alt fs-6"></i>
+    </div>
+    <h6 class="card-title mb-0 fw-semibold">{{ __('Management Shortcuts') }}</h6>
+  </div>
+  <div class="card-body py-4">
+    <div class="row g-3">
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="{{ route('debt.index') }}" class="card text-center p-3 border text-decoration-none kpi-card shadow-sm h-100">
+          <i class="bx bx-user fs-2 text-primary mb-2"></i>
+          <span class="fw-semibold text-heading small">{{ __('Customer Debts') }}</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="{{ route('debt-supplier.index') }}" class="card text-center p-3 border text-decoration-none kpi-card shadow-sm h-100">
+          <i class="bx bxs-truck fs-2 text-info mb-2"></i>
+          <span class="fw-semibold text-heading small">{{ __('Supplier Debts') }}</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="{{ route('fuel-stations.index') }}" class="card text-center p-3 border text-decoration-none kpi-card shadow-sm h-100">
+          <i class="bx bx-gas-pump fs-2 text-warning mb-2"></i>
+          <span class="fw-semibold text-heading small">{{ __('Fuel Receipts') }}</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="{{ route('services.building-materials.index') }}" class="card text-center p-3 border text-decoration-none kpi-card shadow-sm h-100">
+          <i class="bx bx-cube-alt fs-2 text-success mb-2"></i>
+          <span class="fw-semibold text-heading small">{{ __('Building Materials') }}</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="{{ route('services.vehicle.index') }}" class="card text-center p-3 border text-decoration-none kpi-card shadow-sm h-100">
+          <i class="bx bx-car fs-2 text-danger mb-2"></i>
+          <span class="fw-semibold text-heading small">{{ __('Vehicle Fleet') }}</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="{{ route('services.tractor-driver.index') }}" class="card text-center p-3 border text-decoration-none kpi-card shadow-sm h-100">
+          <i class="bx bx-user-pin fs-2 text-dark mb-2"></i>
+          <span class="fw-semibold text-heading small">{{ __('Tractor Drivers') }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
+
 @section('vendor-script')
-<script src="{{asset('assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      // Debt Progress Chart
-      const debtProgress = new ApexCharts(document.querySelector("#debt-progress"), {
-          series: [{{ $TotalPaidDebt }}, {{ $TotalRestDebt }}],
-          chart: { type: 'donut', height: 350 },
-          labels: ['{{ __("Paid Debt") }}', '{{ __("Outstanding Debt") }}'],
-          colors: ['#00E396', '#FF4560'],
-          legend: { position: 'bottom' },
-          responsive: [{
-              breakpoint: 480,
-              options: { chart: { width: 200 } }
-          }]
-      }).render();
-
-      // Fuel Type Distribution
-      const fuelChart = new ApexCharts(document.querySelector("#fuel-chart"), {
-          series: [{{ $TotalLiterGasoline }}, {{ $getTotalLiterTypeDiesl }}, {{ $TotalLiterGas }}],
-          chart: { type: 'pie', height: 350 },
-          labels: ['{{ __("Diesel") }}', '{{ __("Gasoline") }}', '{{ __("Gas") }}'],
-          colors: ['#FFB64D', '#546E7A', '#E91E63'],
-          legend: { position: 'bottom' },
-          responsive: [{
-              breakpoint: 480,
-              options: { chart: { width: 200 } }
-          }]
-      }).render();
-
-      // Debt Timeline
-      const timelineData = @json($debtTimeline);
-      const debtTimeline = new ApexCharts(document.querySelector("#debt-timeline"), {
-          series: [{
-              name: '{{ __("Total Debt") }}',
-              data: timelineData.map(item => item.total)
-          }, {
-              name: '{{ __("Paid") }}',
-              data: timelineData.map(item => item.paid)
-          }, {
-              name: '{{ __("Remaining") }}',
-              data: timelineData.map(item => item.remaining)
-          }],
-          chart: { type: 'area', height: 350 },
-          colors: ['#3F51B5', '#4CAF50', '#FF9800'],
-          xaxis: {
-              categories: timelineData.map(item => `${item.year}-${item.month}`),
-              type: 'datetime'
-          },
-          stroke: { curve: 'smooth' },
-          tooltip: { x: { format: 'MMM yyyy' } }
-      }).render();
-
-      // Monthly Fuel Consumption
-      const fuelMonthly = @json($fuelMonthly);
-      const fuelTypes = [...new Set(fuelMonthly.map(item => item.type_fuel))];
-
-      const fuelSeries = fuelTypes.map(type => ({
-          name: type,
-          data: fuelMonthly
-              .filter(item => item.type_fuel === type)
-              .map(item => item.total_liters)
-      }));
-
-      const fuelTimeline = new ApexCharts(document.querySelector("#fuel-timeline"), {
-          series: fuelSeries,
-          chart: { type: 'line', height: 350 },
-          colors: ['#FFB64D', '#546E7A', '#E91E63'],
-          xaxis: {
-              categories: [...new Set(fuelMonthly.map(item => `${item.year}-${item.month}`))],
-              type: 'datetime'
-          },
-          stroke: { curve: 'smooth' },
-          tooltip: { x: { format: 'MMM yyyy' } }
-      }).render();
-  });
-</script>
+<script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 @endsection
 
 @section('page-script')
 <script>
-    // ApexCharts initialization
-    document.addEventListener('DOMContentLoaded', function() {
-        // Debt Progress Chart
-        const debtProgress = new ApexCharts(document.querySelector("#debt-progress"), {
-            series: [{{ ($TotalPaidDebt/$TotalDebt)*100 }}],
-            chart: { height: 100, type: 'radialBar' },
-            plotOptions: { radialBar: { hollow: { size: '65%' } } },
-            colors: ['#7367F0'],
-            labels: ['Paid Debt']
-        }).render();
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Debt Settlement Donut Chart
+  const debtDonutOptions = {
+    series: [{{ $TotalPaidDebt }}, {{ $TotalRestDebt }}],
+    labels: ['{{ __("Paid Debt") }}', '{{ __("Remaining Debt") }}'],
+    chart: {
+      type: 'donut',
+      height: 280,
+      fontFamily: 'inherit'
+    },
+    colors: ['#28c76f', '#ea5455'],
+    stroke: { width: 0 },
+    legend: { position: 'bottom' },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '65%',
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: '{{ __("Total") }}',
+              formatter: () => '{{ number_format($TotalDebt, 0) }} DZ'
+            }
+          }
+        }
+      }
+    },
+    tooltip: {
+      y: { formatter: (val) => val.toLocaleString() + ' DZ' }
+    }
+  };
+  new ApexCharts(document.querySelector("#debt-progress-chart"), debtDonutOptions).render();
 
-        // Fuel Type Chart
-        const fuelChart = new ApexCharts(document.querySelector("#fuel-chart"), {
-            series: [{{ $getTotalLiterTypeDiesl }}, {{ $TotalLiterGasoline }}, {{ $TotalLiterGas }}],
-            chart: { type: 'donut', height: 300 },
-            labels: ['{{ __("Diesel") }}', '{{ __("Gasoline") }}', '{{ __("Gas") }}'],
-            colors: ['#00CFE8', '#FF9F43', '#EA5455'],
-            legend: { position: 'bottom' }
-        }).render();
-    });
+  // 2. Fuel Distribution Pie Chart
+  const fuelPieOptions = {
+    series: [{{ $getTotalLiterTypeDiesl }}, {{ $TotalLiterGasoline }}, {{ $TotalLiterGas }}],
+    labels: ['{{ __("Diesel") }}', '{{ __("Gasoline") }}', '{{ __("Gas") }}'],
+    chart: {
+      type: 'pie',
+      height: 280,
+      fontFamily: 'inherit'
+    },
+    colors: ['#7367f0', '#ff9f43', '#ea5455'],
+    stroke: { width: 0 },
+    legend: { position: 'bottom' },
+    tooltip: {
+      y: { formatter: (val) => val.toLocaleString() + ' Liters' }
+    }
+  };
+  new ApexCharts(document.querySelector("#fuel-distribution-chart"), fuelPieOptions).render();
+
+  // 3. Debt Evolution Timeline Area Chart
+  const rawTimeline = @json($debtTimeline);
+  const timelineCategories = rawTimeline.map(item => `${item.year}-${String(item.month).padStart(2, '0')}`);
+  const timelineSeries = [
+    {
+      name: '{{ __("Total Debt") }}',
+      data: rawTimeline.map(item => item.total)
+    },
+    {
+      name: '{{ __("Paid") }}',
+      data: rawTimeline.map(item => item.paid)
+    },
+    {
+      name: '{{ __("Remaining") }}',
+      data: rawTimeline.map(item => item.remaining)
+    }
+  ];
+
+  const debtTimelineOptions = {
+    series: timelineSeries,
+    chart: {
+      type: 'area',
+      height: 300,
+      toolbar: { show: false },
+      fontFamily: 'inherit'
+    },
+    colors: ['#7367f0', '#28c76f', '#ea5455'],
+    stroke: { curve: 'smooth', width: 2 },
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.5, opacityTo: 0.05 } },
+    xaxis: { categories: timelineCategories },
+    yaxis: { labels: { formatter: (val) => val.toLocaleString() } },
+    tooltip: { y: { formatter: (val) => val.toLocaleString() + ' DZ' } }
+  };
+  new ApexCharts(document.querySelector("#debt-timeline-chart"), debtTimelineOptions).render();
+
+  // 4. Monthly Fuel Consumption Chart
+  const rawFuelMonthly = @json($fuelMonthly);
+  const fuelMonths = [...new Set(rawFuelMonthly.map(item => `${item.year}-${String(item.month).padStart(2, '0')}`))];
+  const fuelTypes = [...new Set(rawFuelMonthly.map(item => item.type_fuel))];
+
+  const fuelMonthlySeries = fuelTypes.map(type => ({
+    name: type,
+    data: fuelMonths.map(month => {
+      const entry = rawFuelMonthly.find(item => `${item.year}-${String(item.month).padStart(2, '0')}` === month && item.type_fuel === type);
+      return entry ? entry.total_liters : 0;
+    })
+  }));
+
+  const fuelTimelineOptions = {
+    series: fuelMonthlySeries.length > 0 ? fuelMonthlySeries : [{ name: 'Liters', data: [] }],
+    chart: {
+      type: 'bar',
+      height: 300,
+      toolbar: { show: false },
+      fontFamily: 'inherit'
+    },
+    colors: ['#7367f0', '#ff9f43', '#ea5455'],
+    plotOptions: { bar: { borderRadius: 4, columnWidth: '45%' } },
+    xaxis: { categories: fuelMonths },
+    yaxis: { labels: { formatter: (val) => val.toLocaleString() } },
+    tooltip: { y: { formatter: (val) => val.toLocaleString() + ' L' } }
+  };
+  new ApexCharts(document.querySelector("#fuel-timeline-chart"), fuelTimelineOptions).render();
+});
 </script>
-@endsection
-
-@section('content')
-<div class="row g-4">
-    <!-- Summary Cards -->
-    <div class="col-12">
-        <div class="row g-4">
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="card stat-card bg-primary text-white">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="mb-1">{{ number_format($TotalDebt, 2) }}</h2>
-                                <span>{{ __('Total Debt') }}</span>
-                            </div>
-                            <i class='bx bx-credit-card bx-lg'></i>
-                        </div>
-                        <div class="mt-3">
-                            <div class="d-flex justify-content-between small">
-                                <span>{{ __('Paid') }}</span>
-                                <span>{{ number_format($TotalPaidDebt, 2) }}</span>
-                            </div>
-                            <div class="progress bg-dark bg-opacity-25 mt-1" style="height: 4px;">
-                                <div class="progress-bar bg-white"
-                                     style="width: {{ ($TotalPaidDebt/$TotalDebt)*100 }}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="card stat-card bg-warning text-dark">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="mb-1">{{ number_format($TotalFuel, 2) }}</h2>
-                                <span>{{ __('Total Fuel') }}</span>
-                            </div>
-                            <i class='bx bx-gas-pump bx-lg'></i>
-                        </div>
-                        <div class="mt-3">
-                            <div class="d-flex justify-content-between small">
-                                <span>{{ __('Liters') }}</span>
-                                <span>{{ number_format($TotalLiter, 2) }}</span>
-                            </div>
-                            <div id="fuel-chart"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="card stat-card bg-success text-white">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="mb-1">{{ number_format($TotalLiter, 2) }}</h2>
-                                <span>{{ __('Total Liters') }}</span>
-                            </div>
-                            <i class='bx bx-water bx-lg'></i>
-                        </div>
-                        <div class="mt-3">
-                            <div class="row text-center">
-                                <div class="col-4 border-end">
-                                    <div class="font-weight-bold text-xs">Diesel</div>
-                                    <div class="text-sm">{{ number_format($getTotalLiterTypeDiesl, 2) }}</div>
-                                </div>
-                                <div class="col-4 border-end">
-                                    <div class="font-weight-bold text-xs">Gasoline</div>
-                                    <div class="text-sm">{{ number_format($TotalLiterGasoline, 2) }}</div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="font-weight-bold text-xs">Gas</div>
-                                    <div class="text-sm">{{ number_format($TotalLiterGas, 2) }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="card stat-card bg-info text-white">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="mb-1">{{ number_format($TotalAmountTypeDiesel + $TotalAmountGasoline, 2) }}</h2>
-                                <span>{{ __('Fuel Costs') }}</span>
-                            </div>
-                            <i class='bx bx-dollar bx-lg'></i>
-                        </div>
-                        <div class="mt-3">
-                            <div id="debt-progress"></div>
-                            <div class="text-center small mt-2">
-                                {{ number_format(($TotalPaidDebt/$TotalDebt)*100, 1) }}% Paid
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Detailed Statistics -->
-    <div class="col-12 col-lg-8">
-        <div class="card">
-            <div class="card-header bg-dark text-white">
-                <h5 class="card-title mb-0">{{ __('Financial Overview') }}</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-md-6">
-                        <div class="border p-3 mb-3 rounded">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="text-muted small">{{ __('Total Debt') }}</div>
-                                    <h3 class="mb-0">{{ number_format($TotalDebt, 2) }}</h3>
-                                </div>
-                                <div class="avatar bg-primary text-white p-3 rounded-circle">
-                                    <i class='bx bx-money'></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <div class="border p-3 mb-3 rounded">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="text-muted small">{{ __('Fuel Expenses') }}</div>
-                                    <h3 class="mb-0">{{ number_format($TotalFuel, 2) }}</h3>
-                                </div>
-                                <div class="avatar bg-warning text-dark p-3 rounded-circle">
-                                    <i class='bx bx-gas-pump'></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="card bg-gradient-dark border-0 text-white">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-6 col-md-3 text-center">
-                                        <div class="text-muted small">{{ __('Diesel Cost') }}</div>
-                                        <h4 class="mb-0">{{ number_format($TotalAmountTypeDiesel, 2) }}</h4>
-                                        <div class="text-success small">
-                                            <i class='bx bx-up-arrow-alt'></i> {{ number_format(($TotalAmountTypeDiesel/$TotalFuel)*100, 1) }}%
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-md-3 text-center">
-                                        <div class="text-muted small">{{ __('Gasoline Cost') }}</div>
-                                        <h4 class="mb-0">{{ number_format($TotalAmountGasoline, 2) }}</h4>
-                                        <div class="text-warning small">
-                                            <i class='bx bx-down-arrow-alt'></i> {{ number_format(($TotalAmountGasoline/$TotalFuel)*100, 1) }}%
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-md-3 text-center">
-                                        <div class="text-muted small">{{ __('Paid Fuel') }}</div>
-                                        <h4 class="mb-0">{{ number_format($TotalPaidFuel, 2) }}</h4>
-                                        <div class="text-info small">
-                                            <i class='bx bx-trending-up'></i> {{ number_format(($TotalPaidFuel/$TotalFuel)*100, 1) }}%
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-md-3 text-center">
-                                        <div class="text-muted small">{{ __('Unpaid Fuel') }}</div>
-                                        <h4 class="mb-0">{{ number_format($TotalUnPaidFuel, 2) }}</h4>
-                                        <div class="text-danger small">
-                                            <i class='bx bx-trending-down'></i> {{ number_format(($TotalUnPaidFuel/$TotalFuel)*100, 1) }}%
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Side Statistics -->
-    <div class="col-12 col-lg-4">
-        <div class="card">
-            <div class="card-header bg-dark text-white">
-                <h5 class="card-title mb-0">{{ __('Quick Stats') }}</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class='bx bx-water text-info me-2'></i>
-                            {{ __('Diesel Liters') }}
-                        </div>
-                        <span class="badge bg-info">{{ number_format($getTotalLiterTypeDiesl, 2) }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class='bx bx-zap text-warning me-2'></i>
-                            {{ __('Gasoline Liters') }}
-                        </div>
-                        <span class="badge bg-warning">{{ number_format($TotalLiterGasoline, 2) }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class='bx bx-wind text-danger me-2'></i>
-                            {{ __('Gas Liters') }}
-                        </div>
-                        <span class="badge bg-danger">{{ number_format($TotalLiterGas, 2) }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class='bx bx-check-circle text-success me-2'></i>
-                            {{ __('Paid Debt') }}
-                        </div>
-                        <span class="badge bg-success">{{ number_format($TotalPaidDebt, 2) }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class='bx bx-error-circle text-danger me-2'></i>
-                            {{ __('Outstanding Debt') }}
-                        </div>
-                        <span class="badge bg-danger">{{ number_format($TotalRestDebt, 2) }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Activity -->
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">{{ __('Fuel Cost Distribution') }}</h5>
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class='bx bx-dots-vertical-rounded'></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">{{ __('Refresh') }}</a></li>
-                        <li><a class="dropdown-item" href="#">{{ __('Export') }}</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-3 mb-4">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-sm bg-label-info me-3">
-                                <i class='bx bx-oil'></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small">{{ __('Diesel Cost') }}</div>
-                                <h5 class="mb-0">{{ number_format($TotalAmountTypeDiesel, 2) }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3 mb-4">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-sm bg-label-warning me-3">
-                                <i class='bx bx-gas-pump'></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small">{{ __('Gasoline Cost') }}</div>
-                                <h5 class="mb-0">{{ number_format($TotalAmountGasoline, 2) }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3 mb-4">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-sm bg-label-success me-3">
-                                <i class='bx bx-check'></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small">{{ __('Paid Fuel') }}</div>
-                                <h5 class="mb-0">{{ number_format($TotalPaidFuel, 2) }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3 mb-4">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-sm bg-label-danger me-3">
-                                <i class='bx bx-x'></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small">{{ __('Unpaid Fuel') }}</div>
-                                <h5 class="mb-0">{{ number_format($TotalUnPaidFuel, 2) }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-  <div class="col-12 col-lg-6 mb-4">
-      <div class="card">
-          <div class="card-header">
-              <h5 class="card-title mb-0">{{ __('Debt Progress') }}</h5>
-          </div>
-          <div class="card-body">
-              <div id="debt-progress"></div>
-          </div>
-      </div>
-  </div>
-
-  <div class="col-12 col-lg-6 mb-4">
-      <div class="card">
-          <div class="card-header">
-              <h5 class="card-title mb-0">{{ __('Fuel Type Distribution') }}</h5>
-          </div>
-          <div class="card-body">
-              <div id="fuel-chart"></div>
-          </div>
-      </div>
-  </div>
-
-  <div class="col-12 mb-4">
-      <div class="card">
-          <div class="card-header">
-              <h5 class="card-title mb-0">{{ __('Debt Timeline') }}</h5>
-          </div>
-          <div class="card-body">
-              <div id="debt-timeline"></div>
-          </div>
-      </div>
-  </div>
-
-  <div class="col-12 mb-4">
-      <div class="card">
-          <div class="card-header">
-              <h5 class="card-title mb-0">{{ __('Monthly Fuel Consumption') }}</h5>
-          </div>
-          <div class="card-body">
-              <div id="fuel-timeline"></div>
-          </div>
-      </div>
-  </div>
-</div>
 @endsection
