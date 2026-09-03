@@ -9,6 +9,7 @@ use App\Http\Controllers\Print\PrinterController;
 use App\Http\Controllers\Supplier\SupplierController;
 use App\Http\Controllers\TractorDriver\TractorDriverController;
 use App\Http\Controllers\Vehicle\VehicleController;
+use App\Http\Controllers\Profile\ProfileController;
 use App\Models\Debt;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
@@ -66,6 +67,12 @@ Route::group(['middleware' => ['auth']], function () {
   Route::resource('debt-supplier', DebtWithSupplierController::class);
   Route::patch('debt-supplier/pays/{debt}', [DebtWithSupplierController::class, 'payDebt'])->name('debt-supplier.pay');
   Route::get('debt-supplier/status/paid', [DebtWithSupplierController::class, 'indexPaid'])->name('debt-supplier.index-paid');
+
+  // User Profile Routes
+  Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+  Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+  Route::delete('/profile/avatar', [ProfileController::class, 'removeAvatar'])->name('profile.avatar.remove');
+  Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
   Route::post('debt/search', [DebtController::class, 'searchName'])->name('debt.search');
 

@@ -21,6 +21,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
+        'fname',
+        'lname',
+        'phone',
+        'avatar',
         'email',
         'password',
     ];
@@ -43,4 +48,30 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get avatar URL with fallback.
+     *
+     * @return string
+     */
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar && file_exists(public_path($this->avatar))) {
+            return asset($this->avatar);
+        }
+        return asset('assets/img/avatars/1.png');
+    }
+
+    /**
+     * Get formatted display name.
+     *
+     * @return string
+     */
+    public function getDisplayNameAttribute()
+    {
+        if ($this->fname || $this->lname) {
+            return trim(($this->fname ?? '') . ' ' . ($this->lname ?? ''));
+        }
+        return $this->name ?? $this->username ?? 'Admin';
+    }
 }

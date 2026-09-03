@@ -104,21 +104,27 @@ $navbarDetached = ($navbarDetached ?? '');
           <li class="nav-item navbar-dropdown dropdown-user dropdown">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
               <div class="avatar avatar-online">
-                <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle">
+                <img src="{{ auth()->user()->avatar_url ?? asset('assets/img/avatars/1.png') }}" alt="avatar" class="w-px-40 h-auto rounded-circle object-fit-cover">
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
-                <a class="dropdown-item" href="javascript:void(0);">
-                  <div class="d-flex">
+                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                  <div class="d-flex align-items-center">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar avatar-online">
-                        <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle">
+                        <img src="{{ auth()->user()->avatar_url ?? asset('assets/img/avatars/1.png') }}" alt="avatar" class="w-px-40 h-auto rounded-circle object-fit-cover">
                       </div>
                     </div>
                     <div class="flex-grow-1">
-                      <span class="fw-semibold d-block">{{ auth()->user()->name }}</span>
-                      <small class="text-muted">{{ __('Admin') }}</small>
+                      <span class="fw-semibold d-block text-heading">{{ auth()->user()->display_name }}</span>
+                      <small class="text-muted">
+                        @if(auth()->user()->username)
+                          {{ '@' . auth()->user()->username }}
+                        @else
+                          {{ __('Admin') }}
+                        @endif
+                      </small>
                     </div>
                   </div>
                 </a>
@@ -127,14 +133,14 @@ $navbarDetached = ($navbarDetached ?? '');
                 <div class="dropdown-divider"></div>
               </li>
               <li>
-                <a class="dropdown-item" href="javascript:void(0);">
-                  <i class="bx bx-user me-2"></i>
+                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                  <i class="bx bx-user me-2 text-primary"></i>
                   <span class="align-middle">{{ __('My Profile') }}</span>
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="javascript:void(0);">
-                  <i class='bx bx-cog me-2'></i>
+                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                  <i class='bx bx-cog me-2 text-secondary'></i>
                   <span class="align-middle">{{ __('Settings') }}</span>
                 </a>
               </li>

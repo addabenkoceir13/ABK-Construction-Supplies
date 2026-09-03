@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="light-style layout-menu-fixed" data-theme="theme-default" data-assets-path="{{ asset('/assets') . '/' }}" data-base-url="{{url('/')}}" data-framework="laravel" data-template="vertical-menu-laravel-template-free"
+<html class="{{ (Session::get('theme') == 'dark') ? 'dark-style' : 'light-style' }} layout-menu-fixed" data-theme="{{ (Session::get('theme') == 'dark') ? 'dark' : 'theme-default' }}" data-bs-theme="{{ (Session::get('theme') == 'dark') ? 'dark' : 'light' }}" data-assets-path="{{ asset('/assets') . '/' }}" data-base-url="{{url('/')}}" data-framework="laravel" data-template="vertical-menu-laravel-template-free"
 @if (Session::get('locale') == 'ar') dir="rtl" lang="ar" @endif>
 
 <head>

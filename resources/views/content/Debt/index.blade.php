@@ -54,52 +54,103 @@
 {{-- JS for Create Modal dynamic product rows --}}
 <script>
   $(document).ready(function() {
+      function updateProductRowsUI() {
+          let count = $('#product-container-create .product-row-create').length;
+          $('#modal-product-counter').text(count);
+
+          $('#product-container-create .product-row-create').each(function(index) {
+              $(this).find('.row-num').text(index + 1);
+              if (count === 1) {
+                  $(this).find('.remove-row-create').prop('disabled', true).addClass('opacity-50');
+              } else {
+                  $(this).find('.remove-row-create').prop('disabled', false).removeClass('opacity-50');
+              }
+          });
+      }
+
+      function updateLiveTotal() {
+          let total = 0;
+          $('#product-container-create .amount-due-input').each(function() {
+              let val = parseFloat($(this).val()) || 0;
+              total += val;
+          });
+          $('#modal-live-total-display').html(total.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' <span class="fs-6 fw-bold live-total-currency">DZ</span>');
+      }
+
+      // Live total on amount input
+      $(document).on('input', '.amount-due-input', function() {
+          updateLiveTotal();
+      });
+
       // Function to add new product row in Create Modal
       $('#add-product-create').click(function() {
+          let newIndex = $('#product-container-create .product-row-create').length + 1;
           let productRowCreate = `
-          <div class="row g-1 product-row-create border-top pt-2 mt-2">
-              <div class="col-md-3 mb-3">
-                  <label for="name-product" class="form-label">{{ __('Name Product') }}</label>
-                  <select id="name-product" class="form-select name-product" name="name_product[]" required>
-                      <option value="">{{ __('Choose a product') }}</option>
-                      @foreach ($categories as $category)
-                        <option value="{{ $category->name }}" data-id="{{ $category->id }}">{{ $category->name }}</option>
-                      @endforeach
+          <div class="product-row-create product-item-card p-3 rounded-3 border position-relative" data-row-index="${newIndex}">
+              <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-bottom-divider">
+                <span class="badge rounded-pill px-2 py-1 fs-tiny fw-semibold item-badge-num">
+                  <i class="bx bx-cube-alt text-primary me-1"></i>{{ __('المادة رقم') }} <span class="row-num">${newIndex}</span>
+                </span>
+                <button type="button" class="btn btn-icon btn-xs btn-outline-danger remove-row-create rounded-circle" title="{{ __('حذف هذه المادة') }}">
+                  <i class="bx bx-trash fs-6"></i>
+                </button>
+              </div>
+
+              <div class="row g-2 align-items-end">
+                <div class="col-md-6 col-lg-3">
+                  <label class="form-label text-muted small fw-semibold mb-1">{{ __('اسم المنتوج / الفئة') }} <span class="text-danger">*</span></label>
+                  <select class="form-select name-product custom-select-styled" name="name_product[]" required>
+                    <option value="">{{ __('اختر المنتوج...') }}</option>
+                    @foreach ($categories as $category)
+                      <option value="{{ $category->name }}" data-id="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
                   </select>
-              </div>
-              <div id="inpute-create" class="col-md-3 mb-3 inpute-create">
-              </div>
-              <div class="col-md-3 mb-3">
-                  <label for="amount_due" class="form-label">{{ __('Amount Due') }}</label>
-                  <div class="input-group input-group-merge">
-                      <span class="input-group-text">{{ __('DZ') }}</span>
-                      <input type="number" class="form-control" name="amount_due[]" placeholder="100" min="0" aria-label="Amount (to the nearest DZ)" required>
-                      <span class="input-group-text">.00</span>
+                </div>
+                <div class="col-md-6 col-lg-3 inpute-create">
+                </div>
+                <div class="col-md-6 col-lg-3">
+                  <label class="form-label text-muted small fw-semibold mb-1">{{ __('المبلغ المستحق') }} <span class="text-danger">*</span></label>
+                  <div class="input-group input-group-merge custom-input-group">
+                    <span class="input-group-text border-end-0 text-success fw-bold">DZ</span>
+                    <input type="number" class="form-control border-start-0 ps-1 amount-due-input" name="amount_due[]" min="0" step="0.01" placeholder="1000" required>
+                    <span class="input-group-text text-muted">.00</span>
                   </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                  <label for="date_debut_debt" class="form-label">{{ __('Date Debut Debt') }}</label>
-                  <div class="input-group input-group-merge">
-                    <span class="input-group-text"><i class='bx bx-calendar-check'></i></span>
-                    <input type="date" name="date_debt[]" class="form-control" min="2020-01-01" value="{{ $dateToday }}" required>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                  <label class="form-label text-muted small fw-semibold mb-1">{{ __('تاريخ الدين') }} <span class="text-danger">*</span></label>
+                  <div class="input-group input-group-merge custom-input-group">
+                    <span class="input-group-text border-end-0"><i class='bx bx-calendar text-muted'></i></span>
+                    <input type="date" name="date_debt[]" class="form-control border-start-0 ps-1" min="2020-01-01" value="{{ $dateToday }}" required>
                   </div>
-              </div>
-              <div class="col-md-12 mb-2 text-end">
-                  <button type="button" class="btn btn-sm btn-outline-danger remove-row-create">
-                    <i class="bx bx-trash me-1"></i>{{ __('Delete') }}
-                  </button>
+                </div>
               </div>
           </div>`;
 
-          $('#product-container-create').append(productRowCreate);
+          let $row = $(productRowCreate);
+          $('#product-container-create').append($row);
+          updateProductRowsUI();
+          updateLiveTotal();
       });
 
-      // Function to remove product row
+      // Function to remove product row with animation
       $(document).on('click', '.remove-row-create', function() {
-          $(this).closest('.product-row-create').remove();
+          let $row = $(this).closest('.product-row-create');
+          let count = $('#product-container-create .product-row-create').length;
+          if (count > 1) {
+              $row.addClass('product-card-removing');
+              setTimeout(function() {
+                  $row.remove();
+                  updateProductRowsUI();
+                  updateLiveTotal();
+              }, 250);
+          }
       });
 
-      $(document).on('change', '#name-product', function() {
+      // Initial setup
+      updateProductRowsUI();
+      updateLiveTotal();
+
+      $(document).on('change', '#name-product, .name-product', function() {
         var selectedOption = $(this).find('option:selected');
         var id = selectedOption.data('id');
         var container = $(this).closest('.product-row-create').find('.inpute-create');
@@ -123,10 +174,10 @@
                     let InputCreate = `
                         <div>
                             <input type="hidden" name="subcategory_ids[]" value="${response.data[0].id}">
-                            <label for="quantity" class="form-label">{{ __('Quantity') }}</label>
-                            <div class="input-group input-group-merge">
-                              <input type="number" id="quantity" step="0.01" name="quantity[]" class="form-control" min="0" placeholder="{{ __('Enter Quantity') }}" required>
-                              <span class="input-group-text">${response.data[0].name}</span>
+                            <label for="quantity" class="form-label text-muted small fw-semibold mb-1">{{ __('الكمية / القياس') }} <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-merge custom-input-group">
+                              <input type="number" id="quantity" step="0.01" name="quantity[]" class="form-control border-start-0 ps-1" min="0" placeholder="{{ __('أدخل الكمية') }}" required>
+                              <span class="input-group-text unit-addon text-primary fw-semibold">${response.data[0].name}</span>
                             </div>
                         </div>
                     `;
@@ -135,9 +186,9 @@
                     let datas = response.data;
                     let InputCreate = `
                         <input type="hidden" name="subcategory_ids[]" class="subcategory_id" value="">
-                        <label class="form-label">{{ __('Quantity') }}</label>
-                        <select class="form-select subcategory-select" name="quantity[]" required>
-                            <option value="">{{ __('Choose a quantity') }}</option>
+                        <label class="form-label text-muted small fw-semibold mb-1">{{ __('الكمية / النوع') }} <span class="text-danger">*</span></label>
+                        <select class="form-select subcategory-select custom-select-styled" name="quantity[]" required>
+                            <option value="">{{ __('اختر النوع...') }}</option>
                     `;
                     for (let index = 0; index < datas.length; index++) {
                         InputCreate += `<option value="${datas[index].name}" data-id="${datas[index].id}">${datas[index].name}</option>`;
