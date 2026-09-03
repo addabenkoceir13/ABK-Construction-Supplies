@@ -47,12 +47,21 @@ final class DebtSearchQuery
         }
 
         foreach ($tokens as $token) {
-            $query->where('fullname_normalized', 'like', '%' . $this->escapeLike($token) . '%');
+            $escapedToken = $this->escapeLike($token);
+            $query->where(function (Builder $q) use ($escapedToken) {
+                $q->where('fullname_normalized', 'like', '%' . $escapedToken . '%')
+                  ->orWhere('fullname', 'like', '%' . $escapedToken . '%');
+            });
         }
 
+        $escapedNormalized = $this->escapeLike($normalized);
         $query->orderByRaw(
-            'CASE WHEN fullname_normalized = ? THEN 0 WHEN fullname_normalized LIKE ? THEN 1 ELSE 2 END',
-            [$normalized, $this->escapeLike($normalized) . '%']
+            'CASE 
+                WHEN fullname_normalized = ? OR fullname = ? THEN 0 
+                WHEN fullname_normalized LIKE ? OR fullname LIKE ? THEN 1 
+                ELSE 2 
+             END',
+            [$normalized, $name, $escapedNormalized . '%', $this->escapeLike($name ?? '') . '%']
         );
     }
 
@@ -64,7 +73,13 @@ final class DebtSearchQuery
             return;
         }
 
-        $query->where('phone_normalized', 'like', '%' . $this->escapeLike($normalized) . '%');
+        $escapedNormalized = $this->escapeLike($normalized);
+        $escapedRaw = $this->escapeLike($phone ?? '');
+
+        $query->where(function (Builder $q) use ($escapedNormalized, $escapedRaw) {
+            $q->where('phone_normalized', 'like', '%' . $escapedNormalized . '%')
+              ->orWhere('phone', 'like', '%' . $escapedRaw . '%');
+        });
     }
 
     private function escapeLike(string $value): string
