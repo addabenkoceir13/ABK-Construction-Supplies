@@ -14,19 +14,23 @@ class LoginBasic extends Controller
   }
 
   public function login(Request $request){
-    //dd($request);
     $request->validate([
       'email' => 'required|email',
       'password' => 'required',
     ]);
 
     $credentials = $request->only('email', 'password');
+    $remember = $request->filled('remember');
 
-    if (Auth::attempt($credentials)) {
+    if (Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate();
         return redirect()->intended('/')
                     ->withSuccess(__('Signed in'));
     }
 
-    return redirect("/auth/login-basic")->withSuccess(__('Login details are not valid'));
+    return redirect("/auth/login-basic")
+              ->withInput($request->only('email'))
+              ->withErrors(['email' => __('Login details are not valid')])
+              ->with('error', __('Login details are not valid'));
   }
 }

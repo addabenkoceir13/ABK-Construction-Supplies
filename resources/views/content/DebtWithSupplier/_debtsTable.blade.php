@@ -30,7 +30,7 @@
                 {{ strtoupper(mb_substr($debt->fullname, 0, 1)) }}
               </div>
               <div>
-                <span class="fw-semibold text-heading d-block">{{ $debt->fullname }}</span>
+                <span class="fw-semibold text-heading d-block debt-customer-name">{{ $debt->fullname }}</span>
                 @if($debt->phone)
                   <small class="text-muted d-flex align-items-center gap-1">
                     <i class="bx bx-phone fs-7"></i>
@@ -41,19 +41,19 @@
             </div>
           </td>
           <td>
-            <div class="debt-products-list d-flex flex-column gap-1" style="min-width: 240px; max-width: 320px;">
+            <div class="debt-products-list d-flex flex-column gap-1" style="min-width: 240px; max-width: 340px;">
               @foreach ($debt->getDebtProduct as $item)
                 <div class="d-flex align-items-center justify-content-between bg-lighter rounded px-2 py-1 small">
                   <div class="d-flex align-items-center gap-1">
                     <span class="badge bg-label-secondary rounded-pill py-1">{{ $item->name_category }}</span>
                     <span class="text-muted small">× {{ $item->quantity }}</span>
                   </div>
-                  <span class="fw-semibold text-dark ms-2">{{ number_format($item->amount, 2) }} {{ __('DZ') }}</span>
+                  <span class="fw-semibold debt-product-amount ms-2">{{ number_format($item->amount, 2) }} {{ __('DZ') }}</span>
                 </div>
               @endforeach
               <div class="d-flex justify-content-between align-items-center pt-1 border-top mt-1 px-1">
                 <span class="small fw-bold text-muted">{{ __('Total') }}:</span>
-                <span class="badge bg-label-primary fs-7 fw-bold">{{ number_format($debt->total_debt_amount, 2) }} {{ __('DZ') }}</span>
+                <span class="badge bg-label-primary debt-total-amount fw-bold">{{ number_format($debt->total_debt_amount, 2) }} {{ __('DZ') }}</span>
               </div>
             </div>
           </td>

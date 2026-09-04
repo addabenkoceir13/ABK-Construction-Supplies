@@ -28,21 +28,23 @@ use Illuminate\Support\Facades\Session;
 */
 
 $controller_path = 'App\Http\Controllers';
-Session::put('theme', 'dark');
-Session::put('locale', 'ar');
+if (!Session::has('theme')) {
+  Session::put('theme', 'dark');
+}
+if (!Session::has('locale')) {
+  Session::put('locale', 'ar');
+}
 
-Route::group(['middleware' => ['auth']], function () {
-  Route::get('/theme/{theme}', function($theme){
-    Session::put('theme',$theme);
-    return redirect()->back();
-  });
+Route::get('/theme/{theme}', function($theme){
+  Session::put('theme', $theme);
+  return redirect()->back();
+})->name('theme.switch');
 
-  Route::get('/lang/{lang}', function($lang){
-    Session::put('locale', $lang);
-    App::setLocale($lang);
-    return redirect()->back();
-  });
-});
+Route::get('/lang/{lang}', function($lang){
+  Session::put('locale', $lang);
+  App::setLocale($lang);
+  return redirect()->back();
+})->name('lang.switch');
 
 // Main Page & Analytics Routes
 Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('auth');

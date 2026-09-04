@@ -32,7 +32,23 @@
         <small class="text-muted">{{ __('Total records:') }} <strong class="text-primary">{{ $debts->total() }}</strong></small>
       </div>
     </div>
-    <div>
+    <div class="d-flex align-items-center gap-2">
+      {{-- Font Size Switcher --}}
+      <div class="d-flex align-items-center gap-1 font-size-controls">
+        <span class="text-muted small me-1 d-none d-sm-inline" style="font-size: 0.82rem;"><i class="bx bx-font-size me-1 text-primary"></i>{{ __('حجم الخط:') }}</span>
+        <div class="btn-group btn-group-sm" role="group" aria-label="{{ __('حجم خط الجدول') }}">
+          <button type="button" class="btn btn-outline-secondary font-size-btn" data-size="sm" title="{{ __('خط أصغر (13px)') }}">
+            <span class="fw-bold" style="font-size: 11px;">A-</span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary font-size-btn active" data-size="md" title="{{ __('خط افتراضي (15px)') }}">
+            <span class="fw-bold" style="font-size: 13px;">A</span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary font-size-btn" data-size="lg" title="{{ __('خط أكبر (17px)') }}">
+            <span class="fw-bold" style="font-size: 15px;">A+</span>
+          </button>
+        </div>
+      </div>
+
       <button type="button" class="btn btn-primary d-flex align-items-center gap-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAddDebt">
         <i class="bx bx-plus-circle"></i>
         <span>{{ __('Add Debt') }}</span>
@@ -51,9 +67,29 @@
 @section('page-script')
 <script src="{{asset('assets/js/pages-account-settings-account.js')}}"></script>
 
-{{-- JS for Create Modal dynamic product rows --}}
+{{-- JS for Create Modal dynamic product rows & Font Size Switcher --}}
 <script>
   $(document).ready(function() {
+      // Font Size Switcher Logic
+      function applyTableFontSize(size) {
+          $('#debts-table-region, #debts-table-region .table-responsive, .table-responsive').removeClass('table-size-sm table-size-md table-size-lg').addClass('table-size-' + size);
+          $('.font-size-btn').removeClass('active');
+          $('.font-size-btn[data-size="' + size + '"]').addClass('active');
+      }
+
+      let currentFontSize = localStorage.getItem('app_table_font_size') || 'md';
+      applyTableFontSize(currentFontSize);
+
+      $(document).on('click', '.font-size-btn', function() {
+          let size = $(this).data('size');
+          localStorage.setItem('app_table_font_size', size);
+          applyTableFontSize(size);
+      });
+
+      $(document).ajaxComplete(function() {
+          let size = localStorage.getItem('app_table_font_size') || 'md';
+          $('#debts-table-region, #debts-table-region .table-responsive, .table-responsive').removeClass('table-size-sm table-size-md table-size-lg').addClass('table-size-' + size);
+      });
       function updateProductRowsUI() {
           let count = $('#product-container-create .product-row-create').length;
           $('#modal-product-counter').text(count);
