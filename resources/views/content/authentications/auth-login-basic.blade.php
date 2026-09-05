@@ -641,19 +641,84 @@
 
   .auth-feedback-alert.alert-danger-custom {
     background: rgba(255, 62, 29, 0.12);
-    border: 1px solid rgba(255, 62, 29, 0.35);
+    border: 1.5px solid rgba(255, 62, 29, 0.35);
     color: #ff3e1d;
+  }
+
+  .auth-feedback-alert.alert-warning-custom {
+    background: rgba(255, 171, 0, 0.12);
+    border: 1.5px solid rgba(255, 171, 0, 0.45);
+    color: #ffab00;
   }
 
   .auth-feedback-alert.alert-success-custom {
     background: rgba(113, 221, 55, 0.12);
-    border: 1px solid rgba(113, 221, 55, 0.35);
+    border: 1.5px solid rgba(113, 221, 55, 0.35);
     color: #71dd37;
   }
 
   .auth-feedback-alert i {
     font-size: 1.4rem;
     flex-shrink: 0;
+  }
+
+  /* Lockout Banner Card with Glowing Pulse */
+  .auth-lockout-card {
+    background: rgba(255, 62, 29, 0.14);
+    border: 1.5px solid rgba(255, 62, 29, 0.45);
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 30px rgba(255, 62, 29, 0.25);
+    animation: pulseLockout 2s infinite ease-in-out;
+  }
+
+  @keyframes pulseLockout {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 62, 29, 0.2); }
+    50% { box-shadow: 0 0 35px rgba(255, 62, 29, 0.5); }
+  }
+
+  .lockout-icon-pulse {
+    animation: iconShake 1.2s infinite ease-in-out;
+  }
+
+  @keyframes iconShake {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15) rotate(4deg); }
+  }
+
+  .lockout-timer-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    border: 1px solid rgba(255, 171, 0, 0.4);
+    margin-bottom: 12px;
+  }
+
+  .light-style .lockout-timer-pill {
+    background: rgba(255, 255, 255, 0.85);
+    color: #1e293b;
+  }
+
+  .lockout-progress-track {
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .lockout-progress-bar {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #ffab00, #ff3e1d);
+    transition: width 1s linear;
   }
 
   @keyframes shakeAlert {
@@ -1012,7 +1077,39 @@
       </div>
 
       <!-- Feedback / Alert Notifications -->
-      @if (session('error'))
+      @php
+        $activeLockoutSeconds = session('lockout_seconds', $lockoutSeconds ?? 0);
+        $isLockout = session('lockout', false) || $activeLockoutSeconds > 0;
+      @endphp
+
+      @if ($isLockout)
+        <!-- Lockout Banner Card with Live Countdown -->
+        <div class="auth-lockout-card" id="lockoutBanner" role="alert">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="bx bxs-lock-alt lockout-icon-pulse text-danger" style="font-size: 1.6rem;"></i>
+            <strong class="text-danger" style="font-size: 1.05rem;">تم حظر تسجيل الدخول مؤقتاً!</strong>
+          </div>
+          <p class="mb-2" style="font-size: 0.88rem; line-height: 1.5; color: var(--auth-text-body);">
+            {{ session('error') ?? 'تم تجاوز الحد الأقصى للمحاولات (3 محاولات). تم تجميد تسجيل الدخول لحماية الحساب.' }}
+          </p>
+          <div class="lockout-timer-pill">
+            <i class="bx bx-time-five text-warning"></i>
+            <span>الوقت المتبقي: </span>
+            <strong id="lockoutCountdownText" class="text-warning">01:30</strong>
+          </div>
+          <div class="lockout-progress-track">
+            <div class="lockout-progress-bar" id="lockoutProgressBar"></div>
+          </div>
+        </div>
+      @elseif (session('remaining_attempts'))
+        <!-- Remaining Attempts Warning -->
+        <div class="auth-feedback-alert alert-warning-custom" role="alert">
+          <i class="bx bx-shield-quarter"></i>
+          <div>
+            <strong>{{ session('error') }}</strong>
+          </div>
+        </div>
+      @elseif (session('error'))
         <div class="auth-feedback-alert alert-danger-custom" role="alert">
           <i class="bx bx-error-circle"></i>
           <div>{{ session('error') }}</div>
@@ -1159,6 +1256,115 @@
           }, 50);
         }
       });
+    }
+
+    // Web Audio API Pleasant Unlock Chime
+    function playUnlockChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+
+        // High crystal chime (E5 -> G#5 -> B5)
+        const notes = [
+          { freq: 659.25, time: 0, dur: 0.35, gain: 0.22 },
+          { freq: 830.61, time: 0.12, dur: 0.45, gain: 0.25 },
+          { freq: 987.77, time: 0.24, dur: 0.75, gain: 0.3 }
+        ];
+
+        notes.forEach(n => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(n.freq, ctx.currentTime + n.time);
+          gain.gain.setValueAtTime(n.gain, ctx.currentTime + n.time);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + n.time + n.dur);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + n.time);
+          osc.stop(ctx.currentTime + n.time + n.dur);
+        });
+      } catch (err) {
+        console.log('Audio chime not supported or muted:', err);
+      }
+    }
+
+    // Real-Time Decrementing Countdown & Auto-Reflash
+    let lockoutSecs = {{ (int) $activeLockoutSeconds }};
+    const maxLockoutSecs = {{ (int) ($activeLockoutSeconds > 0 ? $activeLockoutSeconds : (config('auth.login_throttle.decay_seconds', 90))) }};
+
+    if (lockoutSecs > 0) {
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const submitBtn = document.getElementById('btnSubmitLogin');
+      const submitText = document.getElementById('btnSubmitText');
+      const timerDisplay = document.getElementById('lockoutCountdownText');
+      const progressBar = document.getElementById('lockoutProgressBar');
+      const lockoutBanner = document.getElementById('lockoutBanner');
+
+      // Freeze inputs and button
+      if (emailInput) emailInput.disabled = true;
+      if (passwordInput) passwordInput.disabled = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('disabled');
+        submitBtn.style.pointerEvents = 'none';
+        submitBtn.style.opacity = '0.65';
+      }
+
+      function formatTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = s % 60;
+        return `${m < 10 ? '0' : ''}${m}:${sec < 10 ? '0' : ''}${sec}`;
+      }
+
+      function stepTimer() {
+        if (timerDisplay) {
+          timerDisplay.textContent = formatTime(lockoutSecs);
+        }
+        if (submitText) {
+          submitText.textContent = `مغلق مؤقتاً (${formatTime(lockoutSecs)}) 🔒`;
+        }
+        if (progressBar) {
+          const pct = Math.max(0, (lockoutSecs / maxLockoutSecs) * 100);
+          progressBar.style.width = `${pct}%`;
+        }
+
+        if (lockoutSecs <= 0) {
+          clearInterval(lockoutInterval);
+
+          // 1. Play unlock sound
+          playUnlockChime();
+
+          // 2. Transform banner to unlock celebration
+          if (lockoutBanner) {
+            lockoutBanner.className = 'auth-feedback-alert alert-success-custom';
+            lockoutBanner.innerHTML = '<i class="bx bx-check-circle" style="font-size:1.6rem"></i><div><strong>انتهت فترة الحظر!</strong> يمكنك المحاولة الآن. جاري تنشيط النموذج...</div>';
+          }
+
+          // 3. Re-enable inputs and button
+          if (emailInput) emailInput.disabled = false;
+          if (passwordInput) passwordInput.disabled = false;
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('disabled');
+            submitBtn.style.pointerEvents = 'auto';
+            submitBtn.style.opacity = '1';
+          }
+          if (submitText) submitText.textContent = '{{ __("Sign in") }}';
+
+          // 4. Reflash page smoothly
+          setTimeout(() => {
+            window.location.href = "{{ url('/auth/login-basic') }}";
+          }, 1200);
+          return;
+        }
+
+        lockoutSecs--;
+      }
+
+      stepTimer();
+      const lockoutInterval = setInterval(stepTimer, 1000);
     }
   });
 </script>

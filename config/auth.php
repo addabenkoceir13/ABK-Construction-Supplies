@@ -108,4 +108,19 @@ return [
 
     'password_timeout' => 10800,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Login Throttle & Rate Limiting Settings
+    |--------------------------------------------------------------------------
+    |
+    | Defines maximum failed login attempts allowed before lockout and the
+    | decay duration in seconds before attempts are reset.
+    |
+    */
+
+    'login_throttle' => [
+        'max_attempts' => (int) env('LOGIN_MAX_ATTEMPTS', 3),
+        'decay_seconds' => (int) env('LOGIN_DECAY_SECONDS', 90),
+    ],
+
 ];

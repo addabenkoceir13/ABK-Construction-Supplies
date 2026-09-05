@@ -97,8 +97,14 @@ Route::group(['middleware' => ['auth']], function () {
 Route::get('/auth/login-basic', 'App\Http\Controllers\authentications\LoginBasic@index')->name('login');
 Route::get('/auth/register-basic', 'App\Http\Controllers\authentications\RegisterBasic@index')->name('auth-register-basic');
 Route::post('/auth/register-action', 'App\Http\Controllers\authentications\RegisterBasic@register');
-Route::post('/auth/login-action', 'App\Http\Controllers\authentications\LoginBasic@login');
+Route::post('/auth/login-action', 'App\Http\Controllers\authentications\LoginBasic@login')->name('auth.login.action');
+
+// Password Reset & OTP flow
 Route::get('/auth/forgot-password-basic', 'App\Http\Controllers\authentications\ForgotPasswordBasic@index')->name('auth-reset-password-basic');
+Route::post('/auth/password/send-code', 'App\Http\Controllers\authentications\ForgotPasswordBasic@sendCode')->name('password.send-code');
+Route::post('/auth/password/verify-otp', 'App\Http\Controllers\authentications\ForgotPasswordBasic@verifyOtp')->name('password.verify-otp');
+Route::post('/auth/password/reset', 'App\Http\Controllers\authentications\ForgotPasswordBasic@resetPassword')->name('password.reset-action');
+
 Route::get('/auth/logout', 'App\Http\Controllers\authentications\LogoutBasic@logout')->name('auth-logout');
 
 Route::get('list/debt/supplier/', function() {
