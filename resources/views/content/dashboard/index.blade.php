@@ -12,7 +12,7 @@
   }
   .kpi-stat-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(115, 103, 240, 0.15) !important;
+    box-shadow: 0 8px 24px rgba(209, 74, 40, 0.15) !important;
   }
   .chart-card {
     border-radius: 0.75rem;
@@ -29,7 +29,7 @@
   }
   .quick-action-card:hover {
     transform: translateY(-3px);
-    background-color: rgba(115, 103, 240, 0.05);
+    background-color: rgba(209, 74, 40, 0.05);
   }
   .avatar-stat {
     width: 48px;
@@ -41,16 +41,18 @@
 @section('content')
 <!-- 1. Executive Dashboard Header & Overview Bar -->
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-  <div>
-    <h4 class="fw-bold mb-1 d-flex align-items-center gap-2">
-      <span class="avatar avatar-sm bg-label-primary rounded p-1 d-flex align-items-center justify-content-center">
-        <i class="bx bx-pie-chart-alt-2 fs-5"></i>
-      </span>
-      <span>{{ __('Executive Analytics & Business Intelligence') }}</span>
-    </h4>
-    <p class="text-muted mb-0 small">
-      {{ __('Real-time financial performance, debt collection tracking, fuel consumption, and fleet logistics.') }}
-    </p>
+  <div class="d-flex align-items-center gap-3">
+    <div class="p-1 bg-white rounded-3 shadow-sm border d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
+      <img src="{{ asset('assets/logo/abk-bg-transparent.jpeg') }}" alt="ABK Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 6px;">
+    </div>
+    <div>
+      <h4 class="fw-bold mb-1 d-flex align-items-center gap-2">
+        <span>{{ __('Executive Analytics & Business Intelligence') }}</span>
+      </h4>
+      <p class="text-muted mb-0 small">
+        {{ __('Real-time financial performance, debt collection tracking, fuel consumption, and fleet logistics.') }}
+      </p>
+    </div>
   </div>
   <div class="d-flex flex-wrap gap-2">
     <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 shadow-sm" onclick="window.location.reload();">

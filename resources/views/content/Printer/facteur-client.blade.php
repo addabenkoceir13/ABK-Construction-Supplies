@@ -7,6 +7,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ __('طباعة الفاتورة') }} - #{{ str_pad($debt->id, 5, '0', STR_PAD_LEFT) }}</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
+
     <!-- Google Fonts: Cairo & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -450,7 +454,7 @@
             <div class="row align-items-center pb-4 mb-4 border-bottom">
                 <div class="col-sm-7 mb-3 mb-sm-0">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="{{ asset('assets/img/logos/logo-v2.jpg') }}" alt="ABK Logo" class="company-logo">
+                        <img src="{{ asset('assets/logo/abk-bg-transparent.jpeg') }}" alt="ABK Logo" class="company-logo">
                         <div>
                             <h1 class="company-name">مؤسسة عدة بن قصير</h1>
                             <div class="company-subtitle">لمستلزمات البناء ومواد التشييد بالجملة والتجزئة</div>

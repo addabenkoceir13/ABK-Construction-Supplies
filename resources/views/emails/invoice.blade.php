@@ -112,6 +112,9 @@
 <body>
     <div class="email-container">
         <div class="email-header">
+            <div style="width: 70px; height: 70px; margin: 0 auto 12px auto; background: #ffffff; border-radius: 14px; padding: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                <img src="{{ asset('assets/logo/abk-bg-transparent.jpeg') }}" alt="ABK Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
             <h1>مؤسسة عدة بن قصير لمستلزمات البناء</h1>
             <p>تفاصيل الفاتورة #{{ str_pad($debt->id, 5, '0', STR_PAD_LEFT) }}/{{ $debt->created_at ? $debt->created_at->format('Y') : date('Y') }}</p>
         </div>

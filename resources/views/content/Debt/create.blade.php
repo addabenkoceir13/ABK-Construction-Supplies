@@ -196,7 +196,7 @@
 
   .modal-top-accent {
     height: 5px;
-    background: linear-gradient(90deg, #696cff 0%, #71dd37 50%, #03c3ec 100%);
+    background: linear-gradient(90deg, #D14A28 0%, #F2A20C 50%, #4E9CC0 100%);
   }
 
   .custom-modal-body {
@@ -212,7 +212,7 @@
 
   .product-item-card {
     transition: all 0.25s ease-in-out;
-    border-inline-start: 4px solid #696cff !important;
+    border-inline-start: 4px solid #D14A28 !important;
     animation: productCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
@@ -284,7 +284,7 @@
   [data-bs-theme="dark"] .custom-debt-modal .product-item-card:hover,
   .custom-debt-modal.theme-dark .product-item-card:hover {
     background-color: #373955 !important;
-    border-color: #696cff !important;
+    border-color: #D14A28 !important;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
   }
 
@@ -317,9 +317,9 @@
   .custom-debt-modal.theme-dark .custom-input-group .form-control:focus,
   .custom-debt-modal.theme-dark .custom-select-styled:focus {
     background-color: #2b2c40 !important;
-    border-color: #696cff !important;
+    border-color: #D14A28 !important;
     color: #ffffff !important;
-    box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.2) !important;
+    box-shadow: 0 0 0 0.2rem rgba(209, 74, 40, 0.2) !important;
   }
 
   .dark-style .custom-debt-modal .custom-select-styled option,
@@ -460,7 +460,7 @@
   .custom-debt-modal.theme-light .product-item-card:hover,
   html:not(.dark-style):not([data-bs-theme="dark"]) .custom-debt-modal:not(.theme-dark) .product-item-card:hover {
     box-shadow: 0 4px 14px rgba(67, 89, 113, 0.08) !important;
-    border-color: #696cff !important;
+    border-color: #D14A28 !important;
   }
 
   .light-style .custom-debt-modal .custom-input-group .input-group-text,
@@ -498,15 +498,15 @@
   html:not(.dark-style):not([data-bs-theme="dark"]) .custom-debt-modal:not(.theme-dark) .custom-input-group .form-control:focus,
   html:not(.dark-style):not([data-bs-theme="dark"]) .custom-debt-modal:not(.theme-dark) .custom-select-styled:focus {
     background-color: #ffffff !important;
-    border-color: #696cff !important;
-    box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.15) !important;
+    border-color: #D14A28 !important;
+    box-shadow: 0 0 0 0.2rem rgba(209, 74, 40, 0.15) !important;
   }
 
   .light-style .custom-debt-modal .live-total-preview-card,
   [data-bs-theme="light"] .custom-debt-modal .live-total-preview-card,
   .custom-debt-modal.theme-light .live-total-preview-card,
   html:not(.dark-style):not([data-bs-theme="dark"]) .custom-debt-modal:not(.theme-dark) .live-total-preview-card {
-    background: linear-gradient(135deg, rgba(113, 221, 55, 0.08) 0%, rgba(105, 108, 255, 0.05) 100%) !important;
+    background: linear-gradient(135deg, rgba(113, 221, 55, 0.08) 0%, rgba(209, 74, 40, 0.05) 100%) !important;
     border-color: rgba(113, 221, 55, 0.25) !important;
   }
 

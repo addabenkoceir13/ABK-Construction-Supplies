@@ -16,9 +16,9 @@ $navbarDetached = ($navbarDetached ?? '');
       <!--  Brand demo (display only for navbar-full and hide on below xl) -->
       @if(isset($navbarFull))
       <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
-        <a href="{{url('/')}}" class="app-brand-link gap-2">
-          <span class="app-brand-logo demo">
-            @include('_partials.macros',["width"=>25,"withbg"=>'#696cff'])
+        <a href="{{url('/')}}" class="app-brand-link gap-2 align-items-center">
+          <span class="app-brand-logo demo d-flex align-items-center">
+            <img src="{{ asset('assets/logo/abk-bg-transparent.jpeg') }}" alt="ABK Logo" style="height: 34px; width: auto; max-width: 40px; object-fit: contain; border-radius: 6px;">
           </span>
           <span class="app-brand-text demo menu-text fw-bolder">{{config('variables.templateName')}}</span>
         </a>
@@ -27,12 +27,22 @@ $navbarDetached = ($navbarDetached ?? '');
 
       <!-- ! Not required for layout-without-menu -->
       @if(!isset($navbarHideToggle))
-      <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0{{ isset($menuHorizontal) ? ' d-xl-none ' : '' }} {{ isset($contentNavbar) ?' d-xl-none ' : '' }}">
+      <div class="layout-menu-toggle navbar-nav align-items-xl-center me-2 me-xl-0{{ isset($menuHorizontal) ? ' d-xl-none ' : '' }} {{ isset($contentNavbar) ?' d-xl-none ' : '' }}">
         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
           <i class="bx bx-menu bx-sm"></i>
         </a>
       </div>
       @endif
+
+      <!-- Mobile Brand Logo (visible on mobile/tablet screens when menu is collapsed) -->
+      <div class="d-flex d-xl-none align-items-center me-3">
+        <a href="{{ url('/') }}" class="d-flex align-items-center gap-2 text-decoration-none">
+          <img src="{{ asset('assets/logo/abk-bg-transparent.jpeg') }}" alt="ABK Logo" style="height: 32px; width: auto; max-width: 38px; object-fit: contain; border-radius: 6px;">
+          <span class="fw-bold text-heading d-none d-sm-inline" style="font-size: 0.92rem;">
+            {{ config('app.locale') == 'en' ? 'ABK Supplies' : 'ع.ب.ق للبناء' }}
+          </span>
+        </a>
+      </div>
 
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <!-- Search -->
@@ -50,54 +60,57 @@ $navbarDetached = ($navbarDetached ?? '');
             <a class="github-button" href="https://github.com/themeselection/sneat-html-laravel-admin-template-free" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star themeselection/sneat-html-laravel-admin-template-free on GitHub">Star</a>
           </li> --}}
 
-          <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
-            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-              <i class='bx bx-globe bx-sm'></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li>
-                <a class="dropdown-item {{Session::get('locale') == 'en' ? 'active' :''}}" href="{{url('lang/en')}}" data-language="en">
-                  <span class="align-middle">{{ __('English') }}</span>
-                </a>
-              </li>
-              {{-- <li>
-                <a class="dropdown-item " href="{{url('lang/fr')}}" data-language="fr">
-                  <span class="align-middle">French</span>
-                </a>
-              </li>
-              <li> --}}
-                <a class="dropdown-item {{Session::get('locale') == 'ar' ? 'active' :''}}" href="{{url('lang/ar')}}" data-language="de">
-                  <span class="align-middle">{{ __('Arabic') }}</span>
-                </a>
-              </li>
-            </ul>
+          <!-- Language Direct Switch Button -->
+          <li class="nav-item me-2 me-sm-3 d-flex align-items-center">
+            <div class="nav-lang-segmented-switch" 
+                 onclick="if(event.target === this) { window.location.href = '{{ Session::get('locale') == 'ar' ? url('lang/en') : url('lang/ar') }}'; }"
+                 title="{{ Session::get('locale') == 'ar' ? 'التبديل إلى الإنجليزية / Switch to English' : 'Switch to Arabic / التبديل إلى العربية' }}">
+              <a href="{{ url('lang/ar') }}" 
+                 class="lang-pill {{ Session::get('locale') == 'ar' ? 'active' : '' }}" 
+                 title="العربية">
+                <span>عربي</span>
+              </a>
+              <a href="{{ url('lang/en') }}" 
+                 class="lang-pill {{ Session::get('locale') == 'en' ? 'active' : '' }}" 
+                 title="English">
+                <span>EN</span>
+              </a>
+            </div>
           </li>
 
-          <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
-            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-              @if (Session::get('theme') == 'dark')
-              <i class='bx bx-moon bx-sm'></i>
-              @else
-              <i class='bx bx-sun bx-sm'></i>
-              @endif
+          <!-- Font Size Direct Switcher (All Tables & Pages) -->
+          <li class="nav-item me-2 me-sm-3 d-flex align-items-center">
+            <div class="nav-font-size-switch" role="group" aria-label="{{ __('حجم الخط لجميع الجداول والصفحات') }}" title="{{ __('حجم الخط: A- صغير / A افتراضي / A+ كبير') }}">
+              <button type="button" class="font-size-btn" data-size="sm" title="{{ __('خط أصغر / مضغوط (13px)') }}">
+                <span>A-</span>
+              </button>
+              <button type="button" class="font-size-btn active" data-size="md" title="{{ __('خط افتراضي (15px)') }}">
+                <span>A</span>
+              </button>
+              <button type="button" class="font-size-btn" data-size="lg" title="{{ __('خط أكبر وأوضح (17px)') }}">
+                <span>A+</span>
+              </button>
+            </div>
+          </li>
+
+          <!-- Dark / Light Mode Direct Toggle Switch Button -->
+          <li class="nav-item me-2 me-sm-3 d-flex align-items-center">
+            <a href="{{ Session::get('theme') == 'dark' ? url('theme/light') : url('theme/dark') }}" 
+               class="nav-theme-toggle-switch {{ Session::get('theme') == 'dark' ? 'is-dark' : 'is-light' }}" 
+               title="{{ Session::get('theme') == 'dark' ? __('تبديل إلى الوضع الفاتح') : __('تبديل إلى الوضع الداكن') }}"
+               aria-label="{{ __('Toggle Dark / Light Mode') }}">
+              <span class="theme-toggle-track">
+                <span class="theme-toggle-icon icon-sun"><i class="bx bx-sun"></i></span>
+                <span class="theme-toggle-icon icon-moon"><i class="bx bx-moon"></i></span>
+                <span class="theme-toggle-thumb">
+                  @if (Session::get('theme') == 'dark')
+                    <i class="bx bxs-moon" style="color: #F2A20C;"></i>
+                  @else
+                    <i class="bx bxs-sun text-warning"></i>
+                  @endif
+                </span>
+              </span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
-              <li>
-                <a class="dropdown-item" href="{{url('theme/light')}}" data-theme="light">
-                  <span class="align-middle"><i class='bx bx-sun me-2'></i>{{ __('Light') }}</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{{url('theme/dark')}}" data-theme="dark">
-                  <span class="align-middle"><i class="bx bx-moon me-2"></i>{{ __('Dark') }}</span>
-                </a>
-              </li>
-              {{-- <li>
-                <a class="dropdown-item" href="javascript:void(0);" data-theme="system">
-                  <span class="align-middle"><i class="bx bx-desktop me-2"></i>System</span>
-                </a>
-              </li> --}}
-            </ul>
           </li>
 
           <!-- User -->

@@ -483,7 +483,7 @@
 
   .profile-hero-banner {
     height: 140px;
-    background: linear-gradient(135deg, #696cff 0%, #3f42b6 60%, #1e2058 100%);
+    background: linear-gradient(135deg, #D14A28 0%, #b3391b 60%, #1e2058 100%);
     overflow: hidden;
   }
 
@@ -527,7 +527,7 @@
   .profile-avatar-badge {
     width: 32px;
     height: 32px;
-    background: #696cff;
+    background: #D14A28;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -624,9 +624,9 @@
 
   .dark-style .custom-profile-input .form-control:focus {
     background-color: #2b2c40 !important;
-    border-color: #696cff !important;
+    border-color: #D14A28 !important;
     color: #ffffff !important;
-    box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.2) !important;
+    box-shadow: 0 0 0 0.2rem rgba(209, 74, 40, 0.2) !important;
   }
 
   .dark-style .custom-profile-input ::placeholder {
@@ -681,8 +681,8 @@
   }
 
   html:not(.dark-style) .custom-profile-input .form-control:focus {
-    border-color: #696cff !important;
-    box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.15) !important;
+    border-color: #D14A28 !important;
+    box-shadow: 0 0 0 0.2rem rgba(209, 74, 40, 0.15) !important;
   }
 
   @keyframes profileFadeIn {

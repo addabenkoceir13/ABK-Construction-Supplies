@@ -1,0 +1,702 @@
+// ==============================================================================
+// A.B.K Construction Supplies - Master Brand Identity & Theme Stylesheet
+// ==============================================================================
+
+// 1. Core Brand Colors
+$primary: #D14A28;  // Red/Rust (Primary buttons, active sidebar items, highlights)
+$warning: #F2A20C;  // Orange (Accent, secondary actions, badges, alerts)
+$info:    #4E9CC0;  // Blue (Tertiary, charts, informational indicators)
+
+// 2. Color Shade Variations & Hover Calculations
+$primary-light: lighten($primary, 38%);
+$primary-hover: darken($primary, 8%);
+$primary-active: darken($primary, 12%);
+$primary-subtle-bg: rgba(209, 74, 40, 0.12);
+$primary-subtle-border: rgba(209, 74, 40, 0.28);
+$primary-focus-shadow: rgba(209, 74, 40, 0.25);
+
+$warning-light: lighten($warning, 36%);
+$warning-hover: darken($warning, 8%);
+$warning-active: darken($warning, 12%);
+$warning-subtle-bg: rgba(242, 162, 12, 0.14);
+$warning-subtle-border: rgba(242, 162, 12, 0.3);
+
+$info-light: lighten($info, 36%);
+$info-hover: darken($info, 8%);
+$info-active: darken($info, 12%);
+$info-subtle-bg: rgba(78, 156, 192, 0.14);
+$info-subtle-border: rgba(78, 156, 192, 0.3);
+
+// 3. CSS Custom Properties (:root / Light Mode)
+:root,
+[data-bs-theme="light"],
+.light-style {
+  --bs-primary: #{$primary};
+  --bs-primary-rgb: 209, 74, 40;
+  --bs-primary-hover: #{$primary-hover};
+  --bs-primary-active: #{$primary-active};
+  --bs-primary-text: #{$primary};
+  --bs-primary-bg-subtle: #{$primary-subtle-bg};
+  --bs-primary-border-subtle: #{$primary-subtle-border};
+
+  --bs-warning: #{$warning};
+  --bs-warning-rgb: 242, 162, 12;
+  --bs-warning-hover: #{$warning-hover};
+  --bs-warning-text: #b77604;
+  --bs-warning-bg-subtle: #{$warning-subtle-bg};
+  --bs-warning-border-subtle: #{$warning-subtle-border};
+
+  --bs-info: #{$info};
+  --bs-info-rgb: 78, 156, 192;
+  --bs-info-hover: #{$info-hover};
+  --bs-info-text: #327595;
+  --bs-info-bg-subtle: #{$info-subtle-bg};
+  --bs-info-border-subtle: #{$info-subtle-border};
+
+  // Custom App Brand Variables
+  --brand-rust: #D14A28;
+  --brand-orange: #F2A20C;
+  --brand-blue: #4E9CC0;
+  --brand-focus-ring: rgba(209, 74, 40, 0.25);
+}
+
+// 4. Dark Mode Custom Properties ([data-bs-theme="dark"] & .dark-style)
+[data-bs-theme="dark"],
+.dark-style {
+  --bs-primary: #{$primary};
+  --bs-primary-rgb: 209, 74, 40;
+  // High contrast legible text in dark mode (accessible rust-coral)
+  --bs-primary-text: #e2613d;
+  --bs-primary-hover: #{lighten($primary, 6%)};
+  --bs-primary-active: #{$primary-hover};
+  --bs-primary-bg-subtle: rgba(209, 74, 40, 0.22);
+  --bs-primary-border-subtle: rgba(209, 74, 40, 0.45);
+
+  --bs-warning: #{$warning};
+  --bs-warning-rgb: 242, 162, 12;
+  --bs-warning-text: #f5b22b;
+  --bs-warning-bg-subtle: rgba(242, 162, 12, 0.2);
+  --bs-warning-border-subtle: rgba(242, 162, 12, 0.4);
+
+  --bs-info: #{$info};
+  --bs-info-rgb: 78, 156, 192;
+  --bs-info-text: #6cb6d8;
+  --bs-info-bg-subtle: rgba(78, 156, 192, 0.2);
+  --bs-info-border-subtle: rgba(78, 156, 192, 0.4);
+
+  --brand-focus-ring: rgba(209, 74, 40, 0.35);
+}
+
+// 5. Global Elements, Buttons, & Interactive Highlights
+.btn-primary {
+  background-color: $primary !important;
+  border-color: $primary !important;
+  color: #ffffff !important;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(209, 74, 40, 0.35);
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  &.show {
+    background-color: $primary-hover !important;
+    border-color: $primary-hover !important;
+    color: #ffffff !important;
+    box-shadow: 0 0.25rem 0.5rem 0 rgba(209, 74, 40, 0.45);
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: rgba($primary, 0.6) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+  }
+}
+
+.btn-outline-primary {
+  color: $primary !important;
+  border-color: $primary !important;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    background-color: $primary !important;
+    border-color: $primary !important;
+    color: #ffffff !important;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(209, 74, 40, 0.35);
+  }
+}
+
+.btn-warning {
+  background-color: $warning !important;
+  border-color: $warning !important;
+  color: #ffffff !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $warning-hover !important;
+    border-color: $warning-hover !important;
+    color: #ffffff !important;
+  }
+}
+
+.btn-info {
+  background-color: $info !important;
+  border-color: $info !important;
+  color: #ffffff !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $info-hover !important;
+    border-color: $info-hover !important;
+    color: #ffffff !important;
+  }
+}
+
+// 6. Form Controls & Focus State
+.form-control:focus,
+.form-select:focus {
+  border-color: $primary !important;
+  box-shadow: 0 0 0 0.25rem var(--brand-focus-ring) !important;
+}
+
+.form-check-input:checked {
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+.form-check-input:focus {
+  border-color: $primary !important;
+  box-shadow: 0 0 0 0.25rem var(--brand-focus-ring) !important;
+}
+
+// 7. Active Navigation & Sidebar Highlights (Sneat Integration)
+.bg-menu-theme {
+  .menu-inner > .menu-item.active > .menu-link {
+    color: $primary !important;
+    background-color: rgba(209, 74, 40, 0.14) !important;
+    font-weight: 600;
+
+    .menu-icon {
+      color: $primary !important;
+    }
+  }
+
+  .menu-inner > .menu-item.active:before {
+    background: $primary !important;
+  }
+
+  .menu-sub > .menu-item.active > .menu-link:not(.menu-toggle):before {
+    background-color: $primary !important;
+    border: 3px solid rgba(209, 74, 40, 0.2) !important;
+  }
+}
+
+// 8. Badges & Labels
+.bg-label-primary {
+  background-color: rgba(209, 74, 40, 0.12) !important;
+  color: $primary !important;
+}
+
+[data-bs-theme="dark"],
+.dark-style {
+  .bg-label-primary {
+    background-color: rgba(209, 74, 40, 0.24) !important;
+    color: #e2613d !important;
+  }
+  .text-primary {
+    color: #e2613d !important;
+  }
+}
+
+.bg-label-warning {
+  background-color: rgba(242, 162, 12, 0.14) !important;
+  color: #c98205 !important;
+}
+
+.bg-label-info {
+  background-color: rgba(78, 156, 192, 0.14) !important;
+  color: $info !important;
+}
+
+// 9. Pagination & Progress Bars
+.pagination .page-item.active .page-link {
+  background-color: $primary !important;
+  border-color: $primary !important;
+  color: #ffffff !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(209, 74, 40, 0.4);
+}
+
+.progress-bar {
+  &.bg-primary {
+    background-color: $primary !important;
+  }
+  &.bg-warning {
+    background-color: $warning !important;
+  }
+  &.bg-info {
+    background-color: $info !important;
+  }
+}
+
+// 10. Links & Text Colors
+a.text-primary,
+.text-primary {
+  color: $primary !important;
+}
+
+a:hover {
+  color: $primary-hover;
+}
+
+// 11. Customizer / Brand Accents
+.app-brand .layout-menu-toggle {
+  background-color: $primary !important;
+}
+
+// 12. Navbar Direct Switch Buttons (Theme Mode & Language)
+.nav-theme-toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+  transition: transform 0.2s ease;
+
+  .theme-toggle-track {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+  }
+
+  .theme-toggle-icon {
+    font-size: 13px;
+    z-index: 1;
+    pointer-events: none;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+
+    &.icon-sun {
+      color: #F2A20C;
+    }
+    &.icon-moon {
+      color: #4E9CC0;
+    }
+  }
+
+  .theme-toggle-thumb {
+    position: absolute;
+    top: 1.5px;
+    inset-inline-start: 3px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: inset-inline-start 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    z-index: 2;
+  }
+
+  // Light State (Active mode is Light)
+  &.is-light {
+    .theme-toggle-track {
+      background: #eef1f6;
+      border: 1.5px solid #d9dee3;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    .theme-toggle-thumb {
+      inset-inline-start: 3px;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    .icon-sun {
+      opacity: 0;
+    }
+    .icon-moon {
+      opacity: 0.85;
+    }
+  }
+
+  // Dark State (Active mode is Dark)
+  &.is-dark {
+    .theme-toggle-track {
+      background: #232333;
+      border: 1.5px solid #444564;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+    .theme-toggle-thumb {
+      inset-inline-start: 31px;
+      background: #2b2c40;
+      border: 1px solid rgba(242, 162, 12, 0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+    .icon-sun {
+      opacity: 0.85;
+    }
+    .icon-moon {
+      opacity: 0;
+    }
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    .theme-toggle-track {
+      border-color: #D14A28;
+      box-shadow: 0 0 12px rgba(209, 74, 40, 0.28);
+    }
+    .theme-toggle-thumb {
+      transform: scale(1.08);
+    }
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+// Language Segmented Switch Button
+.nav-lang-segmented-switch {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border-radius: 9999px;
+  background: #eef1f6;
+  border: 1.5px solid #d9dee3;
+  transition: all 0.3s ease;
+  user-select: none;
+  box-sizing: border-box;
+
+  .lang-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #697a8d;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 36px;
+    line-height: 1.3;
+
+    &:hover:not(.active) {
+      color: #D14A28;
+      background: rgba(209, 74, 40, 0.1);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, #D14A28 0%, #b3391b 100%);
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(209, 74, 40, 0.4);
+      cursor: default;
+    }
+  }
+
+  &:hover {
+    border-color: rgba(209, 74, 40, 0.45);
+    box-shadow: 0 0 12px rgba(209, 74, 40, 0.2);
+  }
+}
+
+// Dark Mode overrides for navbar switches
+[data-bs-theme="dark"],
+.dark-style {
+  .nav-lang-segmented-switch {
+    background: #232333;
+    border-color: #444564;
+
+    .lang-pill {
+      color: #a1acb8;
+
+      &:hover:not(.active) {
+        color: #e2613d;
+        background: rgba(209, 74, 40, 0.18);
+      }
+    }
+  }
+}
+
+// ========================================================
+// 13. Global Font Size System (All Tables & Each Page)
+// ========================================================
+
+// Navbar Font Size Switcher Control
+.nav-font-size-switch {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border-radius: 9999px;
+  background: #eef1f6;
+  border: 1.5px solid #d9dee3;
+  transition: all 0.3s ease;
+  user-select: none;
+  box-sizing: border-box;
+
+  .font-size-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #697a8d;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 28px;
+    line-height: 1.3;
+    cursor: pointer;
+
+    &:hover:not(.active) {
+      color: #D14A28;
+      background: rgba(209, 74, 40, 0.1);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, #D14A28 0%, #b3391b 100%);
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(209, 74, 40, 0.4);
+      cursor: default;
+    }
+  }
+
+  &:hover {
+    border-color: rgba(209, 74, 40, 0.45);
+    box-shadow: 0 0 12px rgba(209, 74, 40, 0.2);
+  }
+}
+
+// Dark Mode for Navbar Font Switcher
+[data-bs-theme="dark"],
+.dark-style {
+  .nav-font-size-switch {
+    background: #232333;
+    border-color: #444564;
+
+    .font-size-btn {
+      color: #a1acb8;
+
+      &:hover:not(.active) {
+        color: #e2613d;
+        background: rgba(209, 74, 40, 0.18);
+      }
+    }
+  }
+}
+
+// Base Polish for All Tables Across the App
+table.table,
+.table {
+  transition: font-size 0.2s ease;
+
+  th {
+    letter-spacing: 0.25px;
+    font-weight: 700;
+  }
+  td {
+    vertical-align: middle;
+  }
+}
+
+// --------------------------------------------------------
+// Tier 1: Small / Compact (sm)
+// --------------------------------------------------------
+html.font-size-sm,
+.font-size-sm {
+  --bs-body-font-size: 0.85rem;
+
+  body {
+    font-size: 0.85rem;
+  }
+
+  .card-body,
+  .form-control,
+  .form-select,
+  .input-group-text,
+  .dropdown-item,
+  .list-group-item {
+    font-size: 0.84rem;
+  }
+
+  // All Tables in Small Mode
+  table,
+  .table,
+  .dataTable,
+  .table-responsive table {
+    font-size: 0.8125rem !important; // 13px
+
+    th {
+      font-size: 0.8125rem !important;
+      padding: 0.45rem 0.65rem !important;
+    }
+    td {
+      font-size: 0.8125rem !important;
+      padding: 0.45rem 0.65rem !important;
+    }
+    .badge {
+      font-size: 0.72rem !important;
+      padding: 0.3em 0.65em !important;
+    }
+    .btn-sm,
+    .btn-icon {
+      font-size: 0.75rem !important;
+      padding: 0.25rem 0.45rem !important;
+    }
+  }
+
+  .dataTables_wrapper {
+    font-size: 0.8125rem;
+
+    .dataTables_filter input,
+    .dataTables_length select {
+      font-size: 0.8125rem;
+      padding: 0.25rem 0.5rem;
+    }
+    .dataTables_info,
+    .dataTables_paginate {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// --------------------------------------------------------
+// Tier 2: Normal / Default (md)
+// --------------------------------------------------------
+html.font-size-md,
+.font-size-md {
+  --bs-body-font-size: 0.9375rem;
+
+  table,
+  .table,
+  .dataTable,
+  .table-responsive table {
+    font-size: 0.9rem !important; // ~14.5px-15px
+
+    th {
+      font-size: 0.875rem !important;
+      padding: 0.65rem 0.85rem !important;
+    }
+    td {
+      font-size: 0.9rem !important;
+      padding: 0.65rem 0.85rem !important;
+    }
+    .badge {
+      font-size: 0.78rem !important;
+    }
+  }
+}
+
+// --------------------------------------------------------
+// Tier 3: Large / Readable (lg)
+// --------------------------------------------------------
+html.font-size-lg,
+.font-size-lg {
+  --bs-body-font-size: 1.05rem;
+
+  body {
+    font-size: 1.05rem;
+  }
+
+  .card-body,
+  .form-control,
+  .form-select,
+  .input-group-text,
+  .dropdown-item,
+  .list-group-item {
+    font-size: 1.02rem;
+  }
+
+  // All Tables in Large Mode
+  table,
+  .table,
+  .dataTable,
+  .table-responsive table {
+    font-size: 1.0625rem !important; // ~17px
+
+    th {
+      font-size: 1.02rem !important;
+      padding: 0.85rem 1.05rem !important;
+    }
+    td {
+      font-size: 1.0625rem !important;
+      padding: 0.85rem 1.05rem !important;
+    }
+    .badge {
+      font-size: 0.88rem !important;
+      padding: 0.4em 0.85em !important;
+    }
+    .btn-sm,
+    .btn-icon {
+      font-size: 0.88rem !important;
+      padding: 0.35rem 0.65rem !important;
+    }
+    .avatar.avatar-sm {
+      width: 2rem !important;
+      height: 2rem !important;
+    }
+  }
+
+  .dataTables_wrapper {
+    font-size: 1rem;
+
+    .dataTables_filter input,
+    .dataTables_length select {
+      font-size: 1rem;
+      padding: 0.4rem 0.75rem;
+    }
+    .dataTables_info,
+    .dataTables_paginate {
+      font-size: 0.95rem;
+    }
+  }
+}
+
+// Direct support for .table-size-sm, .table-size-md, .table-size-lg containers
+.table-size-sm table,
+.table-responsive.table-size-sm table,
+table.table-size-sm {
+  font-size: 0.8125rem !important;
+  th, td {
+    font-size: 0.8125rem !important;
+    padding: 0.45rem 0.65rem !important;
+  }
+}
+
+.table-size-md table,
+.table-responsive.table-size-md table,
+table.table-size-md {
+  font-size: 0.9rem !important;
+  th, td {
+    font-size: 0.875rem !important;
+    padding: 0.65rem 0.85rem !important;
+  }
+}
+
+.table-size-lg table,
+.table-responsive.table-size-lg table,
+table.table-size-lg {
+  font-size: 1.0625rem !important;
+  th, td {
+    font-size: 1.02rem !important;
+    padding: 0.85rem 1.05rem !important;
+  }
+}

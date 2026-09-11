@@ -24,7 +24,7 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .email-header {
-      background: linear-gradient(135deg, #696cff 0%, #4338ca 100%);
+      background: linear-gradient(135deg, #D14A28 0%, #b3391b 100%);
       padding: 30px 25px;
       text-align: center;
       color: #ffffff;
@@ -107,14 +107,14 @@
       width: 100%;
       box-sizing: border-box;
       text-align: center;
-      background: linear-gradient(135deg, #696cff 0%, #4f46e5 100%);
+      background: linear-gradient(135deg, #D14A28 0%, #F2A20C 100%);
       color: #ffffff !important;
       text-decoration: none;
       padding: 14px 20px;
       border-radius: 10px;
       font-weight: 700;
       font-size: 15px;
-      box-shadow: 0 6px 18px rgba(105, 108, 255, 0.35);
+      box-shadow: 0 6px 18px rgba(209, 74, 40, 0.35);
     }
     .email-footer {
       background: #0f172a;
@@ -129,7 +129,9 @@
 <body>
   <div class="email-container">
     <div class="email-header">
-      <div class="header-badge">🛡️</div>
+      <div style="width: 68px; height: 68px; margin: 0 auto 12px auto; background: #ffffff; border-radius: 16px; padding: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        <img src="{{ asset('assets/logo/abk-bg-transparent.jpeg') }}" alt="ABK Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;">
+      </div>
       <h1 class="email-title">تنبيه أمان: تسجيل دخول جديد</h1>
       <p class="email-subtitle">A.B.K Construction Supplies • عدة بن قصير سفيان</p>
     </div>

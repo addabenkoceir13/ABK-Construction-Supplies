@@ -108,6 +108,20 @@
         <small class="text-muted">{{ __('Total Drivers:') }} <strong class="text-primary">{{ $tractorDrivers->count() }}</strong></small>
       </div>
     </div>
+    <div class="d-flex align-items-center gap-1 font-size-controls ms-auto">
+      <span class="text-muted small me-1 d-none d-sm-inline" style="font-size: 0.82rem;"><i class="bx bx-font-size me-1 text-primary"></i>{{ __('حجم الخط:') }}</span>
+      <div class="btn-group btn-group-sm" role="group" aria-label="{{ __('حجم خط الجدول') }}">
+        <button type="button" class="btn btn-outline-secondary font-size-btn" data-size="sm" title="{{ __('خط أصغر (13px)') }}">
+          <span class="fw-bold" style="font-size: 11px;">A-</span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary font-size-btn active" data-size="md" title="{{ __('خط افتراضي (15px)') }}">
+          <span class="fw-bold" style="font-size: 13px;">A</span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary font-size-btn" data-size="lg" title="{{ __('خط أكبر (17px)') }}">
+          <span class="fw-bold" style="font-size: 15px;">A+</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   @include('content.TractorDriver.create')

@@ -72,17 +72,20 @@
   $(document).ready(function() {
       // Font Size Switcher Logic
       function applyTableFontSize(size) {
-          $('#debts-table-region, #debts-table-region .table-responsive, .table-responsive').removeClass('table-size-sm table-size-md table-size-lg').addClass('table-size-' + size);
-          $('.font-size-btn').removeClass('active');
-          $('.font-size-btn[data-size="' + size + '"]').addClass('active');
+          if (typeof window.applyAppFontSize === 'function') {
+              window.applyAppFontSize(size);
+          } else {
+              $('#debts-table-region, #debts-table-region .table-responsive, .table-responsive').removeClass('table-size-sm table-size-md table-size-lg').addClass('table-size-' + size);
+              $('.font-size-btn').removeClass('active');
+              $('.font-size-btn[data-size="' + size + '"]').addClass('active');
+          }
       }
 
-      let currentFontSize = localStorage.getItem('app_table_font_size') || 'md';
+      let currentFontSize = localStorage.getItem('app_font_size') || localStorage.getItem('app_table_font_size') || 'md';
       applyTableFontSize(currentFontSize);
 
       $(document).on('click', '.font-size-btn', function() {
           let size = $(this).data('size');
-          localStorage.setItem('app_table_font_size', size);
           applyTableFontSize(size);
       });
 

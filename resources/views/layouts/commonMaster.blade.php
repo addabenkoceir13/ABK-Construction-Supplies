@@ -18,13 +18,23 @@
   <!-- Canonical SEO -->
   <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}">
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+  <link rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
+  <link rel="shortcut icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
+  <link rel="apple-touch-icon" href="{{ asset('assets/logo/favicon.png') }}" />
 
   <!-- Include Styles -->
   @include('layouts/sections/styles')
 
   <!-- Include Scripts for customizer, helper, analytics, config -->
   @include('layouts/sections/scriptsIncludes')
+
+  <!-- Prevent Font Size FOUC (All Pages & Tables) -->
+  <script>
+    (function() {
+      var savedSize = localStorage.getItem('app_font_size') || localStorage.getItem('app_table_font_size') || 'md';
+      document.documentElement.classList.add('font-size-' + savedSize);
+    })();
+  </script>
 </head>
 
 <body>

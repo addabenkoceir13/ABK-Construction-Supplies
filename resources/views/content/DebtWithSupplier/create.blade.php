@@ -210,7 +210,7 @@
 
   .modal-top-accent-supplier {
     height: 5px;
-    background: linear-gradient(90deg, #03c3ec 0%, #696cff 50%, #71dd37 100%);
+    background: linear-gradient(90deg, #4E9CC0 0%, #D14A28 50%, #F2A20C 100%);
   }
 
   .custom-modal-body {

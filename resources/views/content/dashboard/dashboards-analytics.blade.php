@@ -21,10 +21,10 @@
       <div class="d-flex align-items-end row">
         <div class="col-sm-7">
           <div class="card-body">
-            <h5 class="card-title text-primary">Congratulations John! 🎉</h5>
-            <p class="mb-4">You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in your profile.</p>
+            <h5 class="card-title text-primary">{{ __('Welcome to') }} {{ config('variables.templateName') }}! 🏗️</h5>
+            <p class="mb-4">{{ __('Smart management platform for construction materials, fleet transport, and fuel tracking.') }}</p>
 
-            <a href="{{ url('tldr') }}" class="btn btn-sm btn-outline-primary">View Badges</a>
+            <a href="{{ route('services.building-materials.index') }}" class="btn btn-sm btn-outline-primary">{{ __('Explore Services') }}</a>
           </div>
         </div>
         <div class="col-sm-5 text-center text-sm-left">

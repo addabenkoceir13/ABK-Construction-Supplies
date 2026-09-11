@@ -9,31 +9,31 @@
    * Theme Tokens & Keyframe Animations (Same as Login)
    * ---------------------------------------------------- */
   :root {
-    --auth-primary: #696cff;
-    --auth-primary-glow: rgba(105, 108, 255, 0.45);
-    --auth-secondary: #03c3ec;
-    --auth-accent: #ffab00; /* Construction Amber */
+    --auth-primary: #D14A28;
+    --auth-primary-glow: rgba(209, 74, 40, 0.45);
+    --auth-secondary: #4E9CC0;
+    --auth-accent: #F2A20C; /* Brand Accent Orange */
     --auth-card-bg: rgba(22, 28, 45, 0.85);
     --auth-card-border: rgba(255, 255, 255, 0.12);
-    --auth-card-shadow: 0 25px 65px -15px rgba(0, 0, 0, 0.65), 0 0 40px rgba(105, 108, 255, 0.18);
+    --auth-card-shadow: 0 25px 65px -15px rgba(0, 0, 0, 0.65), 0 0 40px rgba(209, 74, 40, 0.18);
     --auth-text-title: #ffffff;
     --auth-text-body: #a5b4fc;
     --auth-input-bg: rgba(15, 20, 36, 0.65);
     --auth-input-border: rgba(255, 255, 255, 0.14);
-    --auth-input-focus-border: #696cff;
+    --auth-input-focus-border: #D14A28;
     --auth-input-color: #f1f5f9;
   }
 
   /* Light Style Theme Overrides */
   .light-style {
     --auth-card-bg: rgba(255, 255, 255, 0.9);
-    --auth-card-border: rgba(105, 108, 255, 0.2);
-    --auth-card-shadow: 0 25px 65px -15px rgba(105, 108, 255, 0.22), 0 0 30px rgba(105, 108, 255, 0.1);
+    --auth-card-border: rgba(209, 74, 40, 0.2);
+    --auth-card-shadow: 0 25px 65px -15px rgba(209, 74, 40, 0.22), 0 0 30px rgba(209, 74, 40, 0.1);
     --auth-text-title: #222943;
     --auth-text-body: #566a7f;
     --auth-input-bg: rgba(248, 250, 252, 0.92);
-    --auth-input-border: rgba(105, 108, 255, 0.25);
-    --auth-input-focus-border: #696cff;
+    --auth-input-border: rgba(209, 74, 40, 0.25);
+    --auth-input-focus-border: #D14A28;
     --auth-input-color: #334155;
   }
 
@@ -94,7 +94,7 @@
     left: -10%;
     width: 550px;
     height: 550px;
-    background: radial-gradient(circle, #696cff 0%, rgba(105, 108, 255, 0) 70%);
+    background: radial-gradient(circle, #D14A28 0%, rgba(209, 74, 40, 0) 70%);
   }
 
   .mesh-orb-2 {
@@ -102,7 +102,7 @@
     right: -10%;
     width: 650px;
     height: 650px;
-    background: radial-gradient(circle, #03c3ec 0%, rgba(3, 195, 236, 0) 70%);
+    background: radial-gradient(circle, #F2A20C 0%, rgba(242, 162, 12, 0) 70%);
     animation-delay: -5s;
   }
 
@@ -111,7 +111,7 @@
     right: 15%;
     width: 420px;
     height: 420px;
-    background: radial-gradient(circle, #ffab00 0%, rgba(255, 171, 0, 0) 70%);
+    background: radial-gradient(circle, #4E9CC0 0%, rgba(78, 156, 192, 0) 70%);
     opacity: 0.35;
     animation-delay: -9s;
   }
@@ -411,10 +411,10 @@
   }
 
   .truck-unit-secondary {
-    background: linear-gradient(135deg, #696cff 0%, #4338ca 100%);
+    background: linear-gradient(135deg, #D14A28 0%, #b83d1e 100%);
     padding: 5px 12px;
     border-radius: 10px 14px 6px 6px;
-    box-shadow: 0 4px 15px rgba(105, 108, 255, 0.35);
+    box-shadow: 0 4px 15px rgba(209, 74, 40, 0.35);
     color: #fff;
     animation: truckSuspension 0.45s ease-in-out infinite alternate;
   }
@@ -463,10 +463,10 @@
 
   .auth-quick-btn:hover {
     color: #fff;
-    background: #696cff;
-    border-color: #696cff;
+    background: #D14A28;
+    border-color: #D14A28;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(105, 108, 255, 0.4);
+    box-shadow: 0 6px 20px rgba(209, 74, 40, 0.4);
   }
 
   /* ----------------------------------------------------
@@ -511,7 +511,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #ffab00 0%, #696cff 50%, #03c3ec 100%);
+    background: linear-gradient(90deg, #F2A20C 0%, #D14A28 50%, #4E9CC0 100%);
     background-size: 200% 100%;
     animation: gradientShift 6s ease infinite;
   }
@@ -561,31 +561,40 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(105, 108, 255, 0.15);
-    border: 1.5px solid currentColor;
+    background: var(--auth-input-bg);
+    border: 2px solid var(--auth-input-border);
     font-size: 0.82rem;
     font-weight: 700;
+    transition: all 0.3s ease;
+  }
+
+  .step-node.active .step-bubble {
+    background: var(--auth-primary);
+    border-color: var(--auth-primary);
+    color: #fff;
+    box-shadow: 0 0 12px var(--auth-primary-glow);
   }
 
   .step-node.completed .step-bubble {
-    background: #71dd37;
-    color: #111827;
-    border-color: #71dd37;
+    background: #10b981;
+    border-color: #10b981;
+    color: #fff;
   }
 
-  .step-divider-line {
-    width: 28px;
+  .step-line {
+    width: 32px;
     height: 2px;
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--auth-input-border);
     border-radius: 2px;
+    transition: background 0.3s ease;
   }
 
-  .light-style .step-divider-line {
-    background: rgba(105, 108, 255, 0.2);
+  .step-line.active {
+    background: var(--auth-primary);
   }
 
   /* ----------------------------------------------------
-   * Brand Header & Badges
+   * Brand Header
    * ---------------------------------------------------- */
   .auth-brand-wrapper {
     display: flex;
@@ -597,17 +606,21 @@
 
   .brand-logo-pod {
     position: relative;
-    width: 76px;
-    height: 76px;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(255, 171, 0, 0.2) 0%, rgba(105, 108, 255, 0.2) 100%);
-    border: 2px solid rgba(255, 171, 0, 0.45);
+    background: #ffffff;
+    border: 2px solid rgba(209, 74, 40, 0.4);
     border-radius: 22px;
-    margin-bottom: 1rem;
-    box-shadow: 0 10px 30px rgba(255, 171, 0, 0.25);
+    margin-bottom: 1.15rem;
+    box-shadow: 0 10px 30px rgba(209, 74, 40, 0.3);
     transition: transform 0.3s ease;
+  }
+
+  .brand-logo-pod:hover {
+    transform: rotate(5deg) scale(1.05);
   }
 
   .brand-logo-pod::after {
@@ -615,7 +628,7 @@
     position: absolute;
     inset: -6px;
     border-radius: 26px;
-    border: 1.5px dashed rgba(105, 108, 255, 0.5);
+    border: 1.5px dashed rgba(242, 162, 12, 0.5);
     animation: rotateDashed 20s linear infinite;
   }
 
@@ -626,7 +639,7 @@
 
   .brand-logo-pod i {
     font-size: 2.6rem;
-    background: linear-gradient(135deg, #ffab00 0%, #696cff 100%);
+    background: linear-gradient(135deg, #F2A20C 0%, #D14A28 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -643,10 +656,10 @@
     align-items: center;
     gap: 6px;
     padding: 3px 12px;
-    background: rgba(105, 108, 255, 0.12);
-    border: 1px solid rgba(105, 108, 255, 0.3);
+    background: rgba(209, 74, 40, 0.12);
+    border: 1px solid rgba(209, 74, 40, 0.3);
     border-radius: 20px;
-    color: #696cff;
+    color: #D14A28;
     font-size: 0.78rem;
     font-weight: 700;
     margin-bottom: 0.65rem;
@@ -686,18 +699,18 @@
   }
 
   .channel-card:hover {
-    border-color: rgba(105, 108, 255, 0.6);
+    border-color: rgba(209, 74, 40, 0.6);
     transform: translateY(-2px);
   }
 
   .channel-card.active {
-    background: rgba(105, 108, 255, 0.12);
-    border-color: #696cff;
-    box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.25);
+    background: rgba(209, 74, 40, 0.12);
+    border-color: #D14A28;
+    box-shadow: 0 0 0 3px rgba(209, 74, 40, 0.25);
   }
 
   .light-style .channel-card.active {
-    background: rgba(105, 108, 255, 0.08);
+    background: rgba(209, 74, 40, 0.08);
   }
 
   .channel-icon-pod {
@@ -714,9 +727,9 @@
   }
 
   .channel-card.active .channel-icon-pod {
-    background: #696cff;
+    background: #D14A28;
     color: #ffffff;
-    box-shadow: 0 4px 14px rgba(105, 108, 255, 0.4);
+    box-shadow: 0 4px 14px rgba(209, 74, 40, 0.4);
   }
 
   .channel-card-title {
@@ -740,7 +753,7 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: #696cff;
+    background: #D14A28;
     color: #fff;
     display: none;
     align-items: center;
@@ -788,12 +801,12 @@
   .auth-input-container:focus-within {
     border-color: var(--auth-input-focus-border);
     background: rgba(25, 32, 54, 0.85);
-    box-shadow: 0 0 0 4px rgba(105, 108, 255, 0.22);
+    box-shadow: 0 0 0 4px rgba(209, 74, 40, 0.22);
   }
 
   .light-style .auth-input-container:focus-within {
     background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(105, 108, 255, 0.18);
+    box-shadow: 0 0 0 4px rgba(209, 74, 40, 0.18);
   }
 
   .auth-input-prefix-icon {
@@ -801,7 +814,7 @@
     align-items: center;
     justify-content: center;
     padding: 0 14px;
-    color: #696cff;
+    color: #D14A28;
     font-size: 1.25rem;
     pointer-events: none;
   }
@@ -840,7 +853,7 @@
   }
 
   .auth-password-toggle-btn:hover {
-    color: #696cff;
+    color: #D14A28;
   }
 
   /* ----------------------------------------------------
@@ -869,9 +882,9 @@
   }
 
   .otp-digit-field:focus {
-    border-color: #696cff;
+    border-color: #D14A28;
     background: rgba(25, 32, 54, 0.9);
-    box-shadow: 0 0 0 4px rgba(105, 108, 255, 0.25);
+    box-shadow: 0 0 0 4px rgba(209, 74, 40, 0.25);
     transform: scale(1.05);
   }
 
@@ -897,9 +910,9 @@
     gap: 6px;
     padding: 6px 14px;
     border-radius: 20px;
-    background: rgba(255, 171, 0, 0.12);
-    border: 1px solid rgba(255, 171, 0, 0.35);
-    color: #ffab00;
+    background: rgba(242, 162, 12, 0.12);
+    border: 1px solid rgba(242, 162, 12, 0.35);
+    color: #F2A20C;
     font-size: 0.8rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -908,7 +921,7 @@
   }
 
   .demo-otp-pill:hover {
-    background: rgba(255, 171, 0, 0.2);
+    background: rgba(242, 162, 12, 0.2);
     transform: scale(1.02);
   }
 
@@ -938,7 +951,7 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: linear-gradient(135deg, #696cff 0%, #4f46e5 50%, #3730a3 100%);
+    background: linear-gradient(135deg, #D14A28 0%, #b83d1e 50%, #942f15 100%);
     color: #ffffff !important;
     border: none;
     border-radius: 14px;
@@ -946,13 +959,13 @@
     font-weight: 700;
     cursor: pointer;
     overflow: hidden;
-    box-shadow: 0 10px 25px -5px rgba(105, 108, 255, 0.5), 0 4px 12px rgba(105, 108, 255, 0.35);
+    box-shadow: 0 10px 25px -5px rgba(209, 74, 40, 0.5), 0 4px 12px rgba(209, 74, 40, 0.35);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .auth-submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 16px 32px -6px rgba(105, 108, 255, 0.65);
+    box-shadow: 0 16px 32px -6px rgba(209, 74, 40, 0.65);
   }
 
   .auth-submit-btn::after {
@@ -964,6 +977,7 @@
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
     transform: skewX(-25deg);
+    transition: none;
   }
 
   .auth-submit-btn:hover::after {
@@ -995,24 +1009,34 @@
   }
 
   /* ----------------------------------------------------
-   * Alerts & Messages
+   * Alerts & Notifications
    * ---------------------------------------------------- */
   .auth-feedback-alert {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding: 12px 16px;
     border-radius: 14px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     font-size: 0.88rem;
-    font-weight: 500;
-    animation: shakeAlert 0.4s ease-in-out;
+    animation: shakeAlert 0.4s ease;
+  }
+
+  .auth-feedback-alert i {
+    font-size: 1.3rem;
+    flex-shrink: 0;
   }
 
   .auth-feedback-alert.alert-danger-custom {
     background: rgba(255, 62, 29, 0.12);
     border: 1px solid rgba(255, 62, 29, 0.35);
-    color: #ff3e1d;
+    color: #ff7259;
+  }
+
+  .auth-feedback-alert.alert-warning-custom {
+    background: rgba(242, 162, 12, 0.12);
+    border: 1px solid rgba(242, 162, 12, 0.35);
+    color: #F2A20C;
   }
 
   .auth-feedback-alert.alert-success-custom {
@@ -1040,7 +1064,7 @@
   }
 
   .auth-back-link:hover {
-    color: #696cff;
+    color: #D14A28;
     transform: translateX(-4px);
   }
 
@@ -1157,8 +1181,8 @@
 
       <!-- Header & Brand -->
       <div class="auth-brand-wrapper">
-        <div class="brand-logo-pod">
-          <i class="bx bx-shield-quarter"></i>
+        <div class="brand-logo-pod p-2">
+          <img src="{{ asset('assets/logo/abk-bg-transparent.jpeg') }}" alt="ABK Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 14px;">
         </div>
 
         <h1 class="brand-main-title">

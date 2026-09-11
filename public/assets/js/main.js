@@ -116,3 +116,61 @@ let menu, animate;
   // Auto update menu collapsed/expanded based on the themeConfig
   window.Helpers.setCollapsed(true, false);
 })();
+
+// Global Font Size Manager (All Tables & Each Page)
+//------------------------------------------------------------------
+(function () {
+  window.applyAppFontSize = function (size) {
+    size = ['sm', 'md', 'lg'].includes(size) ? size : 'md';
+    try {
+      localStorage.setItem('app_font_size', size);
+      localStorage.setItem('app_table_font_size', size);
+    } catch (e) {}
+
+    // 1. Update <html> root classes
+    document.documentElement.classList.remove('font-size-sm', 'font-size-md', 'font-size-lg');
+    document.documentElement.classList.add('font-size-' + size);
+
+    // 2. Update all table containers across the DOM
+    var tableTargets = document.querySelectorAll('#debts-table-region, .table-responsive, table, .dataTable');
+    tableTargets.forEach(function (el) {
+      el.classList.remove('table-size-sm', 'table-size-md', 'table-size-lg');
+      el.classList.add('table-size-' + size);
+    });
+
+    // 3. Update all font-size-btn buttons across the page and navbar
+    document.querySelectorAll('.font-size-btn').forEach(function (btn) {
+      if (btn.getAttribute('data-size') === size) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  };
+
+  // Event delegation for any .font-size-btn clicked
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.font-size-btn');
+    if (btn) {
+      var size = btn.getAttribute('data-size');
+      if (size) {
+        window.applyAppFontSize(size);
+      }
+    }
+  });
+
+  // Apply on DOM load
+  var initSize = 'md';
+  try {
+    initSize = localStorage.getItem('app_font_size') || localStorage.getItem('app_table_font_size') || 'md';
+  } catch (e) {}
+  window.applyAppFontSize(initSize);
+
+  // Auto re-apply after dynamic AJAX updates (DataTables, pagination, modals)
+  if (typeof jQuery !== 'undefined') {
+    jQuery(document).ajaxComplete(function () {
+      var currentSize = localStorage.getItem('app_font_size') || 'md';
+      window.applyAppFontSize(currentSize);
+    });
+  }
+})();

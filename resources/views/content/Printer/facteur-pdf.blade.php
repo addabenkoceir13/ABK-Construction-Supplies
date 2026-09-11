@@ -301,7 +301,7 @@
         $total = is_numeric($debt->total_debt_amount) ? (float)$debt->total_debt_amount : 0;
         $rest = is_numeric($debt->rest_debt_amount) ? (float)$debt->rest_debt_amount : ($total - $paid);
         $invoiceNo = str_pad($debt->id, 5, '0', STR_PAD_LEFT) . '/' . ($debt->created_at ? $debt->created_at->format('Y') : date('Y'));
-        $logoPath = public_path('assets/img/logos/logo-v2.jpg');
+        $logoPath = public_path('assets/logo/abk-bg-transparent.jpeg');
     @endphp
 
     <!-- HEADER SECTION -->
